@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0d0b14">
+<title>Endless Maze</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header id="hud">
+    <div class="row">
+      <span id="hud-floor" class="tag">B1</span>
+      <div class="bar"><div id="hp-fill"></div><span id="hp-text">30/30</span></div>
+      <span id="hud-lvl" class="tag">Lv1</span>
+    </div>
+    <div class="row small">
+      <div class="bar xp"><div id="xp-fill"></div></div>
+    </div>
+    <div class="row small stats">
+      <span>⚔ <b id="st-atk">5</b></span>
+      <span>🛡 <b id="st-def">1</b></span>
+      <span>✦ <b id="st-crit">5%</b></span>
+      <span>◉ <b id="st-gold">0</b></span>
+      <span>☠ <b id="st-kills">0</b></span>
+    </div>
+  </header>
+
+  <div id="view-wrap">
+    <canvas id="view" width="160" height="120"></canvas>
+    <div id="flash"></div>
+  </div>
+
+  <div id="log"></div>
+
+  <div id="controls">
+    <canvas id="minimap" width="93" height="93"></canvas>
+    <div id="pad">
+      <button data-cmd="tl">↺</button>
+      <button data-cmd="fw" data-repeat>▲</button>
+      <button data-cmd="tr">↻</button>
+      <button data-cmd="sl" data-repeat>◀</button>
+      <button data-cmd="bk" data-repeat>▼</button>
+      <button data-cmd="sr" data-repeat>▶</button>
+    </div>
+    <div id="acts">
+      <button data-cmd="atk" class="atk">攻擊</button>
+      <button data-cmd="pot" class="pot">藥水<small id="pot-n">×2</small></button>
+      <button data-cmd="wait" class="wait">等待</button>
+    </div>
+  </div>
+
+  <div id="overlay" class="show">
+    <div class="panel" id="panel"></div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

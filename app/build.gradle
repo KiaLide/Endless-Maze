@@ -1,0 +1,50 @@
+plugins {
+    id 'com.android.application'
+}
+
+def ciBuild = (System.getenv('GITHUB_RUN_NUMBER') ?: '1').toInteger()
+
+android {
+    namespace 'com.kialide.endlessmaze'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.kialide.endlessmaze'
+        minSdk 26
+        targetSdk 35
+        versionCode ciBuild
+        versionName "1.0.${ciBuild}"
+    }
+
+    // 遊戲本體就是 ../web 資料夾，直接打包成 assets
+    sourceSets {
+        main {
+            assets.srcDirs = ['../web']
+        }
+    }
+
+    // 固定的簽章金鑰：讓每次 CI 編出來的 APK 都能直接覆蓋安裝更新
+    signingConfigs {
+        shared {
+            storeFile file('abyss.keystore')
+            storePassword 'pixelabyss'
+            keyAlias 'abyss'
+            keyPassword 'pixelabyss'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.shared
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.shared
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
