@@ -43,10 +43,13 @@ function modal(html, buttons = [], cls = '') {
 
 // ============ 場景渲染（簡易光線投射） ============
 const VIEW_W = 160, VIEW_H = 160;
-const MAP = ['#######', '###.###', '###.###', '#.....#', '###.###', '###.###', '###.###', '#######'];
+// 十字路口：玩家停在路口前，前、左、右三條通道都延伸到霧裡，看不到盡頭
+const MAP_N = 31, MAP_C = 15;
+const MAP = Array.from({length: MAP_N}, (_, y) => Array.from({length: MAP_N}, (_, x) => (x === MAP_C || y === MAP_C) && x > 0 && y > 0 && x < MAP_N - 1 && y < MAP_N - 1 ? '.' : '#').join(''));
+const CAM0 = {x: MAP_C + 0.5, y: MAP_C + 2.5, a: -Math.PI / 2};
 const TEX = {};
 let view, vctx, vimg;
-const cam = {x: 3.5, y: 5.6, a: -Math.PI / 2, bob: 0, fade: 0, region: 0};
+const cam = {x: CAM0.x, y: CAM0.y, a: CAM0.a, bob: 0, fade: 0, region: 0};
 const scene = {mon: null, monScale: 2.6, monShake: 0, monFlash: 0, monDead: 0, ev: null, wpnKick: 0, playerHit: 0, special: 0};
 
 function texFrom(key) {
@@ -59,8 +62,14 @@ function texFrom(key) {
 function regionTex(r) {
   if (TEX[r]) return TEX[r];
   const k = REGIONS[r].key;
-  TEX[r] = {wall: texFrom(`scene:${k}:0`), floor: texFrom(`scene:${k}:1`), ceil: texFrom(`scene:${k}:2`), fog: hex(REGIONS[r].fog), sky: hex(REGIONS[r].sky)};
+  const floor = texFrom(`scene:${k}:1`), ceil = texFrom(`scene:${k}:2`);
+  TEX[r] = {wall: texFrom(`scene:${k}:0`), floor, ceil, floorAvg: avgColor(floor), ceilAvg: avgColor(ceil), fog: hex(REGIONS[r].fog), sky: hex(REGIONS[r].sky)};
   return TEX[r];
+}
+function avgColor(t) {
+  const c = [0, 0, 0];
+  for (let i = 0; i < t.length; i += 4) { c[0] += t[i]; c[1] += t[i + 1]; c[2] += t[i + 2]; }
+  return c.map(v => v / (t.length / 4));
 }
 function hex(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
 function cell(x, y) { const r = MAP[Math.floor(y)]; return !r || r[Math.floor(x)] !== '.'; }
@@ -82,12 +91,14 @@ function renderView() {
     const rowDist = (H * 0.5) / p;
     const sx = (dirX - plX) * rowDist / W * 2, sy = (dirY - plY) * rowDist / W * 2;
     let fx = cam.x + rowDist * (dirX - plX), fy = cam.y + rowDist * (dirY - plY);
-    const tex = isFloor ? T.floor : T.ceil;
+    const tex = isFloor ? T.floor : T.ceil, avg = isFloor ? T.floorAvg : T.ceilAvg;
     const s = shade(rowDist, isFloor ? 1 : 0.45);
+    const m = clamp((rowDist - 1.5) / 2.5, 0, 1); // 越遠越接近平均色，避免條紋
     for (let x = 0; x < W; x++) {
       const tx = (Math.floor(fx * 32) & 31), ty = (Math.floor(fy * 32) & 31);
       const ti = (ty * 32 + tx) * 4, i = (y * W + x) * 4;
-      d[i] = tex[ti] * s + T.fog[0] * (1 - s); d[i + 1] = tex[ti + 1] * s + T.fog[1] * (1 - s); d[i + 2] = tex[ti + 2] * s + T.fog[2] * (1 - s); d[i + 3] = 255;
+      for (let c = 0; c < 3; c++) d[i + c] = (tex[ti + c] * (1 - m) + avg[c] * m) * s + T.fog[c] * (1 - s);
+      d[i + 3] = 255;
       fx += sx; fy += sy;
     }
   }
@@ -101,7 +112,7 @@ function renderView() {
     if (rx < 0) { stepX = -1; sdx = (cam.x - mx) * ddx; } else { stepX = 1; sdx = (mx + 1 - cam.x) * ddx; }
     if (ry < 0) { stepY = -1; sdy = (cam.y - my) * ddy; } else { stepY = 1; sdy = (my + 1 - cam.y) * ddy; }
     let hit = false, guard = 0;
-    while (!hit && guard++ < 40) {
+    while (!hit && guard++ < 64) {
       if (sdx < sdy) { sdx += ddx; mx += stepX; side = 0; } else { sdy += ddy; my += stepY; side = 1; }
       if (cell(mx + 0.5, my + 0.5)) hit = true;
     }
@@ -171,14 +182,16 @@ function tween(ms, fn) {
 const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 async function animateMove(dir) {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const x0 = 3.5, y0 = 5.6, a0 = -Math.PI / 2;
+  const {x: x0, y: y0, a: a0} = CAM0;
   if (dir === 'f') {
-    await tween(reduce ? 120 : 500, t => { cam.y = y0 - ease(t) * 1.6; cam.bob = t * Math.PI * 2; });
+    // 穿過路口繼續往前走
+    await tween(reduce ? 120 : 500, t => { cam.y = y0 - ease(t) * 3.2; cam.bob = t * Math.PI * 2; });
   } else {
-    await tween(reduce ? 80 : 280, t => { cam.y = y0 - ease(t) * 2.1; cam.bob = t * Math.PI; });
+    // 走到路口中央、轉身、走進岔路
+    await tween(reduce ? 80 : 260, t => { cam.y = y0 - ease(t) * 2.0; cam.bob = t * Math.PI; });
     const sgn = dir === 'l' ? -1 : 1;
     await tween(reduce ? 80 : 300, t => { cam.a = a0 + sgn * ease(t) * Math.PI / 2; });
-    await tween(reduce ? 120 : 500, t => { cam.x = x0 + sgn * ease(t) * 1.2; cam.bob = Math.PI + t * Math.PI * 2; });
+    await tween(reduce ? 120 : 500, t => { cam.x = x0 + sgn * ease(t) * 1.6; cam.bob = Math.PI + t * Math.PI * 2; });
   }
   await tween(120, t => cam.fade = t);
   cam.x = x0; cam.y = y0; cam.a = a0; cam.bob = 0;
