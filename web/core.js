@@ -194,6 +194,15 @@ function makeDrop(kind) {
   }
   return {type: 'item', item: rollItemId(kind === 'elite' ? 'elite' : 'normal')};
 }
+// 道具售價基準（未乘樓層係數 F）；賣回給暗商為售價的 40%
+function itemBasePrice(id) {
+  const it = ITEMS[id];
+  if (id.startsWith('女神')) return 600;
+  if (it.category === '永久') return 300;
+  if (it.category === '回復') return {小藥水: 25, 中藥水: 60, 大藥水: 120}[id] || 40;
+  return {小: 20, 中: 45, 大: 90}[id.slice(-1)] || 30;
+}
+function itemSellValue(id) { return Math.max(1, Math.round(itemBasePrice(id) * floorF(G.floor) * 0.4)); }
 function sellValue(type, item) {
   if (type === 'acc') return Math.round(15 * floorF(G.floor));
   return item.tier * 3;
