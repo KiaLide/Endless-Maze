@@ -15,7 +15,21 @@
   },
   "weapon_type": "長劍",
   "image_original": "images/original/swordsman.jpg",
-  "image_pixel": "images/pixel/swordsman.png"
+  "image_pixel": "images/pixel/swordsman.png",
+  "armor_affinity": {
+   "good": [
+    "atk",
+    "def"
+   ],
+   "normal": [
+    "hp",
+    "spd"
+   ],
+   "poor": [
+    "crit",
+    "eva"
+   ]
+  }
  },
  {
   "id": "knight",
@@ -33,7 +47,21 @@
   },
   "weapon_type": "長槍",
   "image_original": "images/original/knight.jpg",
-  "image_pixel": "images/pixel/knight.png"
+  "image_pixel": "images/pixel/knight.png",
+  "armor_affinity": {
+   "good": [
+    "def",
+    "hp"
+   ],
+   "normal": [
+    "atk",
+    "crit"
+   ],
+   "poor": [
+    "spd",
+    "eva"
+   ]
+  }
  },
  {
   "id": "rogue",
@@ -51,7 +79,21 @@
   },
   "weapon_type": "匕首",
   "image_original": "images/original/rogue.jpg",
-  "image_pixel": "images/pixel/rogue.png"
+  "image_pixel": "images/pixel/rogue.png",
+  "armor_affinity": {
+   "good": [
+    "crit",
+    "eva"
+   ],
+   "normal": [
+    "atk",
+    "spd"
+   ],
+   "poor": [
+    "hp",
+    "def"
+   ]
+  }
  },
  {
   "id": "wizard",
@@ -69,7 +111,21 @@
   },
   "weapon_type": "法杖",
   "image_original": "images/original/wizard.jpg",
-  "image_pixel": "images/pixel/wizard.png"
+  "image_pixel": "images/pixel/wizard.png",
+  "armor_affinity": {
+   "good": [
+    "atk",
+    "spd"
+   ],
+   "normal": [
+    "crit",
+    "eva"
+   ],
+   "poor": [
+    "hp",
+    "def"
+   ]
+  }
  },
  {
   "id": "berserker",
@@ -87,7 +143,21 @@
   },
   "weapon_type": "戰斧",
   "image_original": "images/original/berserker.jpg",
-  "image_pixel": "images/pixel/berserker.png"
+  "image_pixel": "images/pixel/berserker.png",
+  "armor_affinity": {
+   "good": [
+    "atk",
+    "hp"
+   ],
+   "normal": [
+    "def",
+    "crit"
+   ],
+   "poor": [
+    "spd",
+    "eva"
+   ]
+  }
  },
  {
   "id": "fencer",
@@ -105,7 +175,21 @@
   },
   "weapon_type": "細劍",
   "image_original": "images/original/fencer.jpg",
-  "image_pixel": "images/pixel/fencer.png"
+  "image_pixel": "images/pixel/fencer.png",
+  "armor_affinity": {
+   "good": [
+    "spd",
+    "eva"
+   ],
+   "normal": [
+    "atk",
+    "crit"
+   ],
+   "poor": [
+    "hp",
+    "def"
+   ]
+  }
  },
  {
   "id": "cleric",
@@ -123,7 +207,21 @@
   },
   "weapon_type": "聖杖",
   "image_original": "images/original/cleric.jpg",
-  "image_pixel": "images/pixel/cleric.png"
+  "image_pixel": "images/pixel/cleric.png",
+  "armor_affinity": {
+   "good": [
+    "hp",
+    "def"
+   ],
+   "normal": [
+    "spd",
+    "eva"
+   ],
+   "poor": [
+    "atk",
+    "crit"
+   ]
+  }
  },
  {
   "id": "witch",
@@ -141,7 +239,21 @@
   },
   "weapon_type": "魔杖",
   "image_original": "images/original/witch.jpg",
-  "image_pixel": "images/pixel/witch.png"
+  "image_pixel": "images/pixel/witch.png",
+  "armor_affinity": {
+   "good": [
+    "atk",
+    "eva"
+   ],
+   "normal": [
+    "spd",
+    "crit"
+   ],
+   "poor": [
+    "hp",
+    "def"
+   ]
+  }
  },
  {
   "id": "ranger",
@@ -159,7 +271,21 @@
   },
   "weapon_type": "弓",
   "image_original": "images/original/ranger.jpg",
-  "image_pixel": "images/pixel/ranger.png"
+  "image_pixel": "images/pixel/ranger.png",
+  "armor_affinity": {
+   "good": [
+    "crit",
+    "spd"
+   ],
+   "normal": [
+    "atk",
+    "eva"
+   ],
+   "poor": [
+    "hp",
+    "def"
+   ]
+  }
  },
  {
   "id": "monk",
@@ -177,6 +303,20 @@
   },
   "weapon_type": "拳套",
   "image_original": "images/original/monk.jpg",
-  "image_pixel": "images/pixel/monk.png"
+  "image_pixel": "images/pixel/monk.png",
+  "armor_affinity": {
+   "good": [
+    "eva",
+    "hp"
+   ],
+   "normal": [
+    "spd",
+    "atk"
+   ],
+   "poor": [
+    "def",
+    "crit"
+   ]
+  }
  }
 ]
