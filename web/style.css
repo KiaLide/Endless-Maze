@@ -188,7 +188,13 @@ button { font: inherit; color: inherit; }
 .si-price { font-family: var(--num); color: var(--gold); }
 .shop-item:disabled { opacity: .45; cursor: default; }
 .shop .desc { color: var(--dim); margin: 0 0 8px; } .gold { color: var(--gold); }
-.shop-sell { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.shop-sell { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+.shop-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0 0 10px; }
+.shop-tab { font: 700 15px var(--body, inherit); padding: 8px; color: var(--dim); background: var(--ink); border: 1px solid var(--line); border-radius: 4px; cursor: pointer; }
+.shop-tab.on { color: var(--gold); border-color: var(--gold); }
+.shop-item.poor .si-price { color: var(--bad); }
+.si-name .delta { margin: 2px 0 0; font-size: 12px; display: flex; flex-wrap: wrap; gap: 2px 8px; }
+.si-name small.vs { margin-top: 2px; }
 .inv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .slot { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px; background: var(--ink); border: 1px solid var(--line); border-radius: 4px; cursor: pointer; font-size: 12px; }
 .equip { display: grid; gap: 8px; font-size: 14px; }
@@ -203,3 +209,5 @@ button { font: inherit; color: inherit; }
 .seeds { margin: 0; color: var(--dim); font-size: 12px; }
 .toast { position: absolute; left: 50%; bottom: 150px; transform: translateX(-50%); background: rgba(26, 21, 32, .95); border: 1px solid var(--gold); padding: 6px 14px; border-radius: 4px; font-size: 14px; z-index: 20; max-width: calc(100% - 32px); text-align: center; }
 @media (prefers-reduced-motion: reduce) { .title-tap, .float, .skill-banner.pop, .shake { animation: none; } .car-item { transition: none; } }
+.delta { display: flex; flex-wrap: wrap; gap: 2px 8px; margin: 4px 0 0; font-size: 12px; }
+.delta .up { color: var(--good); } .delta .down { color: var(--bad); }

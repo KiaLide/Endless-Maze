@@ -400,20 +400,31 @@ async function doBattle(kind) {
   B = null; refreshHud();
 }
 
+// 裝備比較卡片；base 有值時，在數值下方標出與目前裝備的差距
+// 與目前裝備的數值差（▲ 綠、▼ 紅）
+function deltaHtml(type, it, base) {
+  const a = equipStats(type, it), b = base ? equipStats(type, base) : {};
+  const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])].filter(k => Math.round(((a[k] || 0) - (b[k] || 0)) * 10));
+  return keys.length ? `<p class="delta">${keys.map(k => { const v = (a[k] || 0) - (b[k] || 0); return `<span class="${v > 0 ? 'up' : 'down'}">${STAT_NAMES[k] || k} ${v > 0 ? '▲+' : '▼'}${fmtPct(v)}${k === 'crit' || k === 'eva' ? '%' : ''}</span>`; }).join('')}</p>` : '<p class="delta">數值與目前相同</p>';
+}
+function cmpCard(title, type, it, base) {
+  if (!it) return `<div class="cmp-card empty"><div class="cmp-title">${title}</div><p>（無）</p></div>`;
+  const r = rarityOf(type, it);
+  let extra = '';
+  if (type === 'weapon') { const own = it.cls === G.cls; extra = `<p class="tag ${own ? 'good' : 'warn'}">${CHAR[it.cls].weapon_type}${own ? '・本職' : '・非本職（技能效果 ×0.75）'}</p>`; }
+  if (type === 'acc') { const a = ACCS[it.idx]; extra = `<p class="tag">${a.class_name}・${a.style}${a.class_id === G.cls ? '' : '（非本職：技能詞條無效，其餘 ×0.75）'}</p><p class="affix">${a.affix}</p>`; }
+  if (type === 'armor') extra = `<p class="tag">${ARMOR[it.set][0].set_name}・${ARMOR[it.set][0].type}</p>`;
+  const tierT = type === 'acc' ? '' : `第 ${it.tier} 階・`;
+  const delta = base !== undefined && title !== '目前' ? deltaHtml(type, it, base) : '';
+  return `<div class="cmp-card"><div class="cmp-title">${title}</div><div class="cmp-head">${equipIcon(type, it, 2)}<div><b style="color:${RARITY_COLOR[r]}">${equipName(type, it)}</b><small>${tierT}${r}・數值 ${Math.round(it.roll * 100)}%</small></div></div>
+    <p class="sline">${statLine(equipStats(type, it))}</p>${delta}${extra}</div>`;
+}
+const curEquip = type => type === 'weapon' ? G.weapon : type === 'armor' ? G.armor : G.acc;
+
 async function takeDrop(d) {
   if (d.type === 'item') { await gainItem(d.item); return; }
   const cur = d.type === 'weapon' ? G.weapon : d.type === 'armor' ? G.armor : G.acc;
-  const card = (title, type, it) => {
-    if (!it) return `<div class="cmp-card empty"><div class="cmp-title">${title}</div><p>（無）</p></div>`;
-    const r = rarityOf(type, it);
-    let extra = '';
-    if (type === 'weapon') { const own = it.cls === G.cls; extra = `<p class="tag ${own ? 'good' : 'warn'}">${CHAR[it.cls].weapon_type}${own ? '・本職' : '・非本職（技能效果 ×0.75）'}</p>`; }
-    if (type === 'acc') { const a = ACCS[it.idx]; extra = `<p class="tag">${a.class_name}・${a.style}${a.class_id === G.cls ? '' : '（非本職：技能詞條無效，其餘 ×0.75）'}</p><p class="affix">${a.affix}</p>`; }
-    if (type === 'armor') extra = `<p class="tag">${ARMOR[it.set][0].set_name}・${ARMOR[it.set][0].type}</p>`;
-    const tierT = type === 'acc' ? '' : `第 ${it.tier} 階・`;
-    return `<div class="cmp-card"><div class="cmp-title">${title}</div><div class="cmp-head">${equipIcon(type, it, 2)}<div><b style="color:${RARITY_COLOR[r]}">${equipName(type, it)}</b><small>${tierT}${r}・數值 ${Math.round(it.roll * 100)}%</small></div></div>
-      <p class="sline">${statLine(equipStats(type, it))}</p>${extra}</div>`;
-  };
+  const card = (title, type, it) => cmpCard(title, type, it, it === d.item ? cur : null);
   const sv = sellValue(d.type, d.item);
   const v = await modal(`<div class="cmp"><h3>掉落了${{weapon: '武器', armor: '防具', acc: '飾品'}[d.type]}</h3>
     <div class="cmp-row">${card('目前', d.type, cur)}${card('新的', d.type, d.item)}</div></div>`,
@@ -454,42 +465,68 @@ async function merchant() {
   }
   { const own = chance(0.5); const pool = ACCS.map((a, i) => i).filter(i => own ? ACCS[i].class_id === G.cls : ACCS[i].class_id !== G.cls);
     goods.push({type: 'acc', item: {idx: pick(pool), roll: rollRoll()}, price: Math.round(150 * F * disc)}); }
-  const priceOf = id => { const it = ITEMS[id]; return Math.round((id.startsWith('女神') ? 600 : it.category === '永久' ? 300 : it.category === '回復' ? {小藥水: 25, 中藥水: 60, 大藥水: 120}[id] : {小: 20, 中: 45, 大: 90}[id.slice(-1)]) * F * disc); };
+  const priceOf = id => Math.round(itemBasePrice(id) * F * disc);
   for (let i = 0; i < 2; i++) { const id = rollItemId('normal').replace(/^(生命|力量|守護|迅捷|慧眼|幻影)之種$/, '中藥水').replace('女神之種', '大藥水'); goods.push({type: 'item', item: id, price: priceOf(id)}); }
   { const r = rnd(); const id = r < 0.05 ? '女神之種' : r < 0.35 ? SEED_NAMES[pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva'])] : pick(['小藥水', '中藥水']); goods.push({type: 'item', item: id, price: priceOf(id)}); }
+  let tab = 'buy';
   while (true) {
     refreshHud();
-    const html = `<div class="shop"><h3>暗商</h3><p class="desc">「要買點什麼嗎？」　持有 <b class="gold">${G.gold}</b> 金幣</p>
-      <div class="shop-list">${goods.map((g, i) => {
-        const name = g.type === 'item' ? g.item : equipName(g.type, g.item);
-        const sub = g.type === 'item' ? itemDesc(g.item) : g.type === 'acc' ? `${ACCS[g.item.idx].class_name}・${ACCS[g.item.idx].style}：${ACCS[g.item.idx].affix}` : `第 ${g.item.tier} 階・${statLine(equipStats(g.type, g.item))}`;
-        return `<button class="shop-item" data-i="${i}" ${g.sold || G.gold < g.price ? 'disabled' : ''}>${g.type === 'item' ? spr(itemIcon(g.item), 2) : equipIcon(g.type, g.item, 2)}
-          <span class="si-name">${name}<small>${sub}</small></span><span class="si-price">${g.sold ? '售出' : g.price}</span></button>`;
-      }).join('')}</div>
-      <div class="shop-sell">${G.armor ? `<button class="btn small" data-sell="armor">賣掉防具 +${sellValue('armor', G.armor)}</button>` : ''}${G.acc ? `<button class="btn small" data-sell="acc">賣掉飾品 +${sellValue('acc', G.acc)}</button>` : ''}</div></div>`;
+    const tabs = `<div class="shop-tabs" role="tablist">${[['buy', '購買'], ['sell', '出售']].map(([k, n]) => `<button class="shop-tab${tab === k ? ' on' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${n}</button>`).join('')}</div>`;
+    const buyList = `<div class="shop-list">${goods.map((g, i) => {
+      const name = g.type === 'item' ? g.item : equipName(g.type, g.item);
+      let sub;
+      if (g.type === 'item') sub = `<small>${itemDesc(g.item)}</small>`;
+      else {
+        const a = g.type === 'acc' ? ACCS[g.item.idx] : null;
+        const head = a ? `${a.class_name}・${a.style}${a.class_id === G.cls ? '' : '（非本職）'}` : g.type === 'weapon' ? `第 ${g.item.tier} 階・${CHAR[g.item.cls].weapon_type}${g.item.cls === G.cls ? '・本職' : '・非本職'}` : `第 ${g.item.tier} 階・防具`;
+        sub = `<small>${head}</small>${a ? `<small class="affix">${a.affix}</small>` : ''}<small class="vs">比目前：</small>${deltaHtml(g.type, g.item, curEquip(g.type))}`;
+      }
+      const poor = G.gold < g.price;
+      return `<button class="shop-item${poor ? ' poor' : ''}" data-i="${i}" ${g.sold ? 'disabled' : ''}>${g.type === 'item' ? spr(itemIcon(g.item), 2) : equipIcon(g.type, g.item, 2)}
+        <span class="si-name">${name}${sub}</span><span class="si-price">${g.sold ? '售出' : g.price}</span></button>`;
+    }).join('')}</div>`;
+    const sellList = `<p class="desc">點一下賣掉 1 個。</p>
+      <div class="inv-grid">${G.inv.length ? G.inv.map((it, i) => `<button class="slot" data-sellitem="${i}">${spr(itemIcon(it.id), 2)}<span>${it.id} ×${it.n}</span><b class="gold">+${itemSellValue(it.id)}</b></button>`).join('') : '<p class="desc">道具欄是空的</p>'}</div>
+      <h4 class="shop-h">裝備</h4>
+      <div class="shop-sell">${G.armor ? `<button class="btn small" data-sell="armor">賣掉${equipName('armor', G.armor)} +${sellValue('armor', G.armor)}</button>` : ''}${G.acc ? `<button class="btn small" data-sell="acc">賣掉${equipName('acc', G.acc)} +${sellValue('acc', G.acc)}</button>` : ''}<p class="desc">武器不能賣（不能空手）。</p></div>`;
+    const html = `<div class="shop"><h3>暗商</h3><p class="desc">「要買點什麼嗎？」　持有 <b class="gold">${G.gold}</b> 金幣</p>${tabs}${tab === 'buy' ? buyList : sellList}</div>`;
     const v = await modal(html, [['離開', 'leave', 'primary']], 'wide');
     if (v === 'leave') break;
+    if (typeof v === 'string' && v.startsWith('tab:')) { tab = v.slice(4); continue; }
+    if (typeof v === 'string' && v.startsWith('sellitem:')) {
+      const slot = G.inv[+v.slice(9)]; if (!slot) continue;
+      const gain = itemSellValue(slot.id); G.gold += gain; removeItem(slot.id, 1); toast(`賣掉 ${slot.id}，+${gain} 金幣`); continue;
+    }
     if (typeof v === 'string' && v.startsWith('sell:')) {
-      const t = v.slice(5);
-      G.gold += sellValue(t, G[t]); withMaxHpChange(() => { G[t] = null; }); continue;
+      const t = v.slice(5), gain = sellValue(t, G[t]);
+      G.gold += gain; toast(`賣掉${equipName(t, G[t])}，+${gain} 金幣`); withMaxHpChange(() => { G[t] = null; }); continue;
     }
     const g = goods[v];
-    if (!g || g.sold || G.gold < g.price) continue;
-    if (g.type === 'item') { if (!addItem(g.item)) { toast('道具欄已滿'); continue; } G.gold -= g.price; g.sold = true; toast(`買下 ${g.item}`); }
-    else {
-      G.gold -= g.price; g.sold = true;
-      const cur = g.type === 'weapon' ? G.weapon : g.type === 'armor' ? G.armor : G.acc;
-      if (cur) G.gold += sellValue(g.type, cur);
-      withMaxHpChange(() => { if (g.type === 'weapon') G.weapon = g.item; else if (g.type === 'armor') G.armor = g.item; else G.acc = g.item; });
-      toast(`換上${equipName(g.type, g.item)}`);
+    if (!g || g.sold) continue;
+    if (g.type === 'item') {
+      if (G.gold < g.price) { toast('金幣不夠，可以到「出售」賣掉用不到的道具'); continue; }
+      if (!addItem(g.item)) { toast('道具欄已滿，先賣掉一些道具'); continue; }
+      G.gold -= g.price; g.sold = true; toast(`買下 ${g.item}`); continue;
     }
+    // 裝備：先跟目前的比較，再決定要不要買
+    const cur = curEquip(g.type), back = cur ? sellValue(g.type, cur) : 0, enough = G.gold + back >= g.price;
+    const pick2 = await modal(`<div class="cmp"><h3>${{weapon: '武器', armor: '防具', acc: '飾品'}[g.type]}・${g.price} 金幣</h3>
+      <div class="cmp-row">${cmpCard('目前', g.type, cur)}${cmpCard('商品', g.type, g.item, cur)}</div>
+      <p class="desc">${cur ? `買下後，舊裝備自動換成 ${back} 金幣。` : ''}持有 ${G.gold} 金幣${enough ? '' : '，不夠買（可以到「出售」賣掉用不到的道具）'}</p></div>`,
+      enough ? [[`買下並裝備（${g.price}）`, 'buy', 'primary'], ['返回', 'back']] : [['返回', 'back', 'primary']], 'wide');
+    if (pick2 !== 'buy') continue;
+    G.gold += back - g.price; g.sold = true;
+    withMaxHpChange(() => { if (g.type === 'weapon') G.weapon = g.item; else if (g.type === 'armor') G.armor = g.item; else G.acc = g.item; });
+    toast(`換上${equipName(g.type, g.item)}`);
   }
   scene.mon = null;
 }
 document.addEventListener('click', e => {
   if (!modalResolve) return;
   const s = e.target.closest('.shop-item'); if (s && !s.disabled) { modalResolve(+s.dataset.i); return; }
-  const t = e.target.closest('[data-sell]'); if (t) modalResolve('sell:' + t.dataset.sell);
+  const t = e.target.closest('[data-sell]'); if (t) { modalResolve('sell:' + t.dataset.sell); return; }
+  const tb = e.target.closest('[data-tab]'); if (tb) { modalResolve('tab:' + tb.dataset.tab); return; }
+  const it = e.target.closest('[data-sellitem]'); if (it) modalResolve('sellitem:' + it.dataset.sellitem);
 });
 
 // ---------- 裝備欄、道具欄 ----------
