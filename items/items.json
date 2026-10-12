@@ -235,6 +235,14 @@
    "stat": "任選",
    "value": "該屬性 +1 點",
    "price_F": 600
+  },
+  {
+   "id": "不死鳥之羽",
+   "category": "特殊",
+   "effect": "倒下時自動以最大生命 30% 復活一次",
+   "max_hold": 1,
+   "uses_slot": false,
+   "source": "只從事件 G42、G50、C42、C47 取得"
   }
  ],
  "drop_table": {

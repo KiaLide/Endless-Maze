@@ -15,7 +15,11 @@
   },
   "weapon_type": "長劍",
   "image_original": "images/original/swordsman.jpg",
-  "image_pixel": "images/pixel/swordsman.png"
+  "image_pixel": "images/pixel/swordsman.png",
+  "passive": {
+   "name": "穩紮穩打",
+   "effect": "生命高於 50% 時，攻擊與防禦 +10%"
+  }
  },
  {
   "id": "knight",
@@ -33,7 +37,11 @@
   },
   "weapon_type": "長槍",
   "image_original": "images/original/knight.jpg",
-  "image_pixel": "images/pixel/knight.png"
+  "image_pixel": "images/pixel/knight.png",
+  "passive": {
+   "name": "重甲守護",
+   "effect": "受到的傷害 −15%"
+  }
  },
  {
   "id": "rogue",
@@ -51,7 +59,11 @@
   },
   "weapon_type": "匕首",
   "image_original": "images/original/rogue.jpg",
-  "image_pixel": "images/pixel/rogue.png"
+  "image_pixel": "images/pixel/rogue.png",
+  "passive": {
+   "name": "靈巧身手",
+   "effect": "閃避成功時，行動條 +30"
+  }
  },
  {
   "id": "wizard",
@@ -69,7 +81,11 @@
   },
   "weapon_type": "法杖",
   "image_original": "images/original/wizard.jpg",
-  "image_pixel": "images/pixel/wizard.png"
+  "image_pixel": "images/pixel/wizard.png",
+  "passive": {
+   "name": "魔力轟擊",
+   "effect": "所有攻擊計算時敵人防禦只算 85%；但自己受到的傷害 +10%"
+  }
  },
  {
   "id": "berserker",
@@ -87,7 +103,11 @@
   },
   "weapon_type": "戰斧",
   "image_original": "images/original/berserker.jpg",
-  "image_pixel": "images/pixel/berserker.png"
+  "image_pixel": "images/pixel/berserker.png",
+  "passive": {
+   "name": "蠻勇",
+   "effect": "生命低於 70% 時，每再少 5%，造成的傷害 +3%（最多 +40%）"
+  }
  },
  {
   "id": "fencer",
@@ -105,7 +125,11 @@
   },
   "weapon_type": "細劍",
   "image_original": "images/original/fencer.jpg",
-  "image_pixel": "images/pixel/fencer.png"
+  "image_pixel": "images/pixel/fencer.png",
+  "passive": {
+   "name": "華麗連刺",
+   "effect": "爆擊時 25% 機率追加一擊（攻擊 ×0.5）"
+  }
  },
  {
   "id": "cleric",
@@ -123,7 +147,11 @@
   },
   "weapon_type": "聖杖",
   "image_original": "images/original/cleric.jpg",
-  "image_pixel": "images/pixel/cleric.png"
+  "image_pixel": "images/pixel/cleric.png",
+  "passive": {
+   "name": "神之祝福",
+   "effect": "回復藥水的效果 ×2"
+  }
  },
  {
   "id": "witch",
@@ -141,7 +169,11 @@
   },
   "weapon_type": "魔杖",
   "image_original": "images/original/witch.jpg",
-  "image_pixel": "images/pixel/witch.png"
+  "image_pixel": "images/pixel/witch.png",
+  "passive": {
+   "name": "生命汲取",
+   "effect": "所有攻擊回復造成傷害的 8%"
+  }
  },
  {
   "id": "ranger",
@@ -159,7 +191,11 @@
   },
   "weapon_type": "弓",
   "image_original": "images/original/ranger.jpg",
-  "image_pixel": "images/pixel/ranger.png"
+  "image_pixel": "images/pixel/ranger.png",
+  "passive": {
+   "name": "箭無虛發",
+   "effect": "攻擊無視敵人閃避，必定命中"
+  }
  },
  {
   "id": "monk",
@@ -177,6 +213,10 @@
   },
   "weapon_type": "拳套",
   "image_original": "images/original/monk.jpg",
-  "image_pixel": "images/pixel/monk.png"
+  "image_pixel": "images/pixel/monk.png",
+  "passive": {
+   "name": "連打",
+   "effect": "普通攻擊 25% 機率追加一擊（攻擊 ×0.5）"
+  }
  }
 ]
