@@ -1,61 +1,26 @@
-# Endless Maze 無盡迷宮
+# Endless Maze 素材與設定
 
-像素風、第一人稱、迷宮探索的 Roguelike（肉鴿）手機遊戲。
+遊戲程式碼已移除，這個 repo 目前只保留 **人物設定**、**人物圖**、**武器設定** 與武器圖示。
+（舊版遊戲程式碼可在 git 歷史或 tag `v1.0.5` 找回。）
 
-- 🎮 **手勢操作**：往上滑前進、左右滑轉向該路線、點擊畫面攻擊（迷宮中不能後退）
-- 🧙 **10 種職業**：男女各 5 種，開場以轉盤選擇角色
-- ⚔️ **第一人稱持武器**：每個職業有專屬的持握姿勢，換武器時手上的武器跟著換
-- 🗡️ **200 把武器**：每個職業 20 階，從木製、青銅一路到神器，寶箱與怪物掉落
-- 🌀 **每局隨機生成**：迷宮、怪物、寶箱每次都不一樣，每 5 層有魔王守門
-- 🎲 **天賦三選一**：升級時抽 3 個天賦選 1
+## 人物 `characters/`
 
-## 下載 APK
+- `characters.json`：10 個職業（男女各 5）的設定：性別、職業名、角色名、介紹、基礎能力值（暫定）、武器種類、圖片路徑
+- `images/original/`：原始立繪（Canva 生成的縮圖，149×199）
+- `images/pixel/`：轉成像素風的立繪（高 100px，透明背景）
 
-到 [Releases](../../releases/latest) 下載最新的 `EndlessMaze-*.apk`，用手機安裝即可。
-每次 push 到 `main` 分支，GitHub Actions 會自動編譯並發布新版本。
-
-## 操作
-
-| 手機手勢 | 網頁鍵盤 | 功能 |
+| 性別 | 職業（角色名） | 武器 |
 | --- | --- | --- |
-| 往上滑 | W / ↑ | 前進（前方有怪物則攻擊） |
-| 往左滑 | A / ← | 轉向左邊的路線（是通道就走進去） |
-| 往右滑 | D / → | 轉向右邊的路線 |
-| 點擊畫面 | 空白鍵 / J | 攻擊正前方 |
-| 藥水按鈕 | F | 喝藥水 |
+| 男 | 劍士（雷恩）、騎士（格雷）、盜賊（凱）、法師（馬林）、狂戰士（布魯） | 長劍、長槍、匕首、法杖、戰斧 |
+| 女 | 聖女（露西）、劍姬（艾莉亞）、魔女（莉莉絲）、遊俠（菲娜）、武鬥家（美玲） | 聖杖、細劍、魔杖、弓、拳套 |
 
-網頁版在寬螢幕會自動顯示小鍵盤。用瀏覽器打開 `web/index.html` 即可遊玩。
+## 武器 `weapons/`
 
-## 專案結構
+- `weapons.json`：200 把武器（10 職業 × 20 階）的名稱、階級、材質、稀有度、圖示路徑
+- `icons/<職業>/01.png ~ 20.png`：32×32 像素圖示（`_x8` 為放大 8 倍版），`icons/<職業>_strip.png` 為 20 階橫排
+- `sheets/<職業>.png`：每個職業的 20 階武器圖鑑
+- `weapons.py`：產生以上所有檔案的程式（`python3 weapons/weapons.py`，需要 `numpy scipy pillow`）
 
-```
-web/                 遊戲本體（HTML5 Canvas + JavaScript，無外部依賴）
-  index.html / style.css / game.js
-  data.js            職業與武器資料（自動產生）
-  assets/            LOGO、角色立繪、武器圖示、第一人稱武器圖（自動產生）
-tools/               美術資源產生器（Python）
-  weapons.py         200 把武器的像素圖示
-  fp.py              第一人稱持武器畫面（手臂／武器／拳頭三層）
-  build_assets.py    一鍵產生 web/assets 與 web/data.js
-app/                 Android 外殼（WebView 載入 web/ 資料夾）
-.github/workflows/   自動編譯 APK 並發布 Release
-```
+20 階材質：木 → 青銅 → 鐵 → 鋼 → 精鋼 → 白銀 → 王國 → 黑鐵 → 秘銀 → 烈焰 → 霜寒 → 雷鳴 → 翠玉 → 黃金 → 暗影 → 聖光 → 龍 → 星辰 → 混沌 → 神
 
-## 重新產生美術資源
-
-```bash
-pip install numpy scipy pillow
-python3 tools/build_assets.py
-```
-
-## 自己編譯
-
-需要 Android SDK 與 JDK 17：
-
-```bash
-./gradlew assembleRelease
-# 產出：app/build/outputs/apk/release/app-release.apk
-```
-
-> `app/abyss.keystore` 是公開的簽章金鑰，目的只是讓每次自動編譯的 APK 可以直接覆蓋安裝更新。
-> 若要上架 Google Play，請改用自己保密的金鑰。
+稀有度：普通（1–4）、優良（5–8）、稀有（9–12）、史詩（13–16）、傳說（17–19）、神話（20）

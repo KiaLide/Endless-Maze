@@ -1,0 +1,2002 @@
+[
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 1,
+  "name": "練習木劍",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/swordsman/01.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 2,
+  "name": "青銅劍",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/swordsman/02.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 3,
+  "name": "鐵劍",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/swordsman/03.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 4,
+  "name": "鋼鐵長劍",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/swordsman/04.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 5,
+  "name": "傭兵之劍",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/swordsman/05.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 6,
+  "name": "白銀劍",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/swordsman/06.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 7,
+  "name": "王國騎士劍",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/swordsman/07.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 8,
+  "name": "黑鐵劍",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/swordsman/08.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 9,
+  "name": "秘銀劍",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/swordsman/09.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 10,
+  "name": "烈焰劍「炎牙」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/swordsman/10.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 11,
+  "name": "霜寒劍「冰華」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/swordsman/11.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 12,
+  "name": "雷鳴劍「迅雷」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/swordsman/12.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 13,
+  "name": "翠玉劍「森羅」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/swordsman/13.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 14,
+  "name": "黃金劍「王權」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/swordsman/14.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 15,
+  "name": "暗影劍「夜魘」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/swordsman/15.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 16,
+  "name": "聖光劍「曙光」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/swordsman/16.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 17,
+  "name": "龍牙劍「赤龍」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/swordsman/17.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 18,
+  "name": "星辰劍「天穹」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/swordsman/18.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 19,
+  "name": "混沌劍「深淵」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/swordsman/19.png"
+ },
+ {
+  "class_id": "swordsman",
+  "class_name": "劍士",
+  "type": "長劍",
+  "tier": 20,
+  "name": "神劍「終焉之誓」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/swordsman/20.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 1,
+  "name": "練習木槍",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/knight/01.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 2,
+  "name": "青銅矛",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/knight/02.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 3,
+  "name": "鐵槍",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/knight/03.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 4,
+  "name": "鋼鐵長槍",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/knight/04.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 5,
+  "name": "衛兵長槍",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/knight/05.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 6,
+  "name": "白銀槍",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/knight/06.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 7,
+  "name": "王國騎士槍",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/knight/07.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 8,
+  "name": "黑鐵戰戟",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/knight/08.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 9,
+  "name": "秘銀戰戟",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/knight/09.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 10,
+  "name": "烈焰戟「焚天」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/knight/10.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 11,
+  "name": "霜寒戟「凍原」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/knight/11.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 12,
+  "name": "雷鳴戟「轟雷」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/knight/12.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 13,
+  "name": "翠玉戟「青嵐」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/knight/13.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 14,
+  "name": "黃金戟「榮耀」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/knight/14.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 15,
+  "name": "暗影戟「冥府」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/knight/15.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 16,
+  "name": "聖光戟「審判」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/knight/16.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 17,
+  "name": "龍騎槍「屠龍」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/knight/17.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 18,
+  "name": "星辰槍「流星」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/knight/18.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 19,
+  "name": "混沌槍「虛無」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/knight/19.png"
+ },
+ {
+  "class_id": "knight",
+  "class_name": "騎士",
+  "type": "長槍",
+  "tier": 20,
+  "name": "神槍「天穿」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/knight/20.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 1,
+  "name": "生鏽小刀",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/rogue/01.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 2,
+  "name": "青銅匕首",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/rogue/02.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 3,
+  "name": "鐵匕首",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/rogue/03.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 4,
+  "name": "鋼製短刃",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/rogue/04.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 5,
+  "name": "盜賊短刀",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/rogue/05.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 6,
+  "name": "白銀匕首",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/rogue/06.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 7,
+  "name": "刺客之刃",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/rogue/07.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 8,
+  "name": "黑鐵彎刀",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/rogue/08.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 9,
+  "name": "秘銀短劍",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/rogue/09.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 10,
+  "name": "烈焰匕首「火舌」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/rogue/10.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 11,
+  "name": "霜寒匕首「冰牙」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/rogue/11.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 12,
+  "name": "雷鳴匕首「電光」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/rogue/12.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 13,
+  "name": "翠玉匕首「毒藤」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/rogue/13.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 14,
+  "name": "黃金匕首「貪婪」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/rogue/14.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 15,
+  "name": "暗影匕首「無聲」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/rogue/15.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 16,
+  "name": "聖光匕首「破邪」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/rogue/16.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 17,
+  "name": "龍爪匕首「逆鱗」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/rogue/17.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 18,
+  "name": "星辰匕首「流螢」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/rogue/18.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 19,
+  "name": "混沌匕首「噬魂」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/rogue/19.png"
+ },
+ {
+  "class_id": "rogue",
+  "class_name": "盜賊",
+  "type": "匕首",
+  "tier": 20,
+  "name": "神器「虛空之牙」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/rogue/20.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 1,
+  "name": "樹枝法杖",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/wizard/01.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 2,
+  "name": "青銅法杖",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/wizard/02.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 3,
+  "name": "鐵頭法杖",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/wizard/03.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 4,
+  "name": "學徒法杖",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/wizard/04.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 5,
+  "name": "水晶法杖",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/wizard/05.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 6,
+  "name": "白銀法杖",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/wizard/06.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 7,
+  "name": "宮廷魔導杖",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/wizard/07.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 8,
+  "name": "黑曜法杖",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/wizard/08.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 9,
+  "name": "秘銀法杖",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/wizard/09.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 10,
+  "name": "烈焰法杖「熔核」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/wizard/10.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 11,
+  "name": "霜寒法杖「永凍」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/wizard/11.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 12,
+  "name": "雷鳴法杖「天雷」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/wizard/12.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 13,
+  "name": "翠玉法杖「生命之樹」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/wizard/13.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 14,
+  "name": "黃金法杖「賢者」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/wizard/14.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 15,
+  "name": "暗影法杖「禁咒」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/wizard/15.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 16,
+  "name": "聖光法杖「光輝」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/wizard/16.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 17,
+  "name": "龍眼法杖「龍瞳」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/wizard/17.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 18,
+  "name": "星辰法杖「星界」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/wizard/18.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 19,
+  "name": "混沌法杖「萬象歸零」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/wizard/19.png"
+ },
+ {
+  "class_id": "wizard",
+  "class_name": "法師",
+  "type": "法杖",
+  "tier": 20,
+  "name": "神杖「創世」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/wizard/20.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 1,
+  "name": "伐木斧",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/berserker/01.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 2,
+  "name": "青銅斧",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/berserker/02.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 3,
+  "name": "鐵斧",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/berserker/03.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 4,
+  "name": "鋼鐵戰斧",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/berserker/04.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 5,
+  "name": "蠻族巨斧",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/berserker/05.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 6,
+  "name": "白銀戰斧",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/berserker/06.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 7,
+  "name": "王國重斧",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/berserker/07.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 8,
+  "name": "黑鐵雙刃斧",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/berserker/08.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 9,
+  "name": "秘銀戰斧",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/berserker/09.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 10,
+  "name": "烈焰巨斧「爆炎」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/berserker/10.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 11,
+  "name": "霜寒巨斧「冰河」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/berserker/11.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 12,
+  "name": "雷鳴巨斧「雷神」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/berserker/12.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 13,
+  "name": "翠玉巨斧「荒野」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/berserker/13.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 14,
+  "name": "黃金巨斧「霸王」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/berserker/14.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 15,
+  "name": "暗影巨斧「斷頭台」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/berserker/15.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 16,
+  "name": "聖光巨斧「天罰」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/berserker/16.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 17,
+  "name": "龍顎巨斧「龍噬」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/berserker/17.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 18,
+  "name": "星辰巨斧「隕星」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/berserker/18.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 19,
+  "name": "混沌巨斧「狂亂」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/berserker/19.png"
+ },
+ {
+  "class_id": "berserker",
+  "class_name": "狂戰士",
+  "type": "戰斧",
+  "tier": 20,
+  "name": "神斧「開天」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/berserker/20.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 1,
+  "name": "練習細劍",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/fencer/01.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 2,
+  "name": "青銅細劍",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/fencer/02.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 3,
+  "name": "鐵製細劍",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/fencer/03.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 4,
+  "name": "鋼製刺劍",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/fencer/04.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 5,
+  "name": "決鬥細劍",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/fencer/05.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 6,
+  "name": "白銀細劍",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/fencer/06.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 7,
+  "name": "宮廷細劍",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/fencer/07.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 8,
+  "name": "黑鐵刺劍",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/fencer/08.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 9,
+  "name": "秘銀細劍",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/fencer/09.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 10,
+  "name": "烈焰細劍「緋紅」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/fencer/10.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 11,
+  "name": "霜寒細劍「雪舞」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/fencer/11.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 12,
+  "name": "雷鳴細劍「紫電」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/fencer/12.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 13,
+  "name": "翠玉細劍「薔薇」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/fencer/13.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 14,
+  "name": "黃金細劍「女王」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/fencer/14.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 15,
+  "name": "暗影細劍「月下」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/fencer/15.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 16,
+  "name": "聖光細劍「純白」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/fencer/16.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 17,
+  "name": "龍鱗細劍「龍姬」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/fencer/17.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 18,
+  "name": "星辰細劍「銀河」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/fencer/18.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 19,
+  "name": "混沌細劍「血薔薇」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/fencer/19.png"
+ },
+ {
+  "class_id": "fencer",
+  "class_name": "劍姬",
+  "type": "細劍",
+  "tier": 20,
+  "name": "神劍「永恆之舞」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/fencer/20.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 1,
+  "name": "修女木杖",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/cleric/01.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 2,
+  "name": "青銅錫杖",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/cleric/02.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 3,
+  "name": "鐵製錘矛",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/cleric/03.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 4,
+  "name": "鋼製錘矛",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/cleric/04.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 5,
+  "name": "祈禱權杖",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/cleric/05.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 6,
+  "name": "白銀聖杖",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/cleric/06.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 7,
+  "name": "主教權杖",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/cleric/07.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 8,
+  "name": "黑鐵懺悔杖",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/cleric/08.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 9,
+  "name": "秘銀聖杖",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/cleric/09.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 10,
+  "name": "烈焰聖杖「淨火」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/cleric/10.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 11,
+  "name": "霜寒聖杖「慈雪」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/cleric/11.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 12,
+  "name": "雷鳴聖杖「神鳴」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/cleric/12.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 13,
+  "name": "翠玉聖杖「豐饒」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/cleric/13.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 14,
+  "name": "黃金聖杖「教皇」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/cleric/14.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 15,
+  "name": "暗影聖杖「墮天」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/cleric/15.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 16,
+  "name": "聖光聖杖「天使之環」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/cleric/16.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 17,
+  "name": "龍骨聖杖「龍之祈禱」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/cleric/17.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 18,
+  "name": "星辰聖杖「星之巫女」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/cleric/18.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 19,
+  "name": "混沌聖杖「背德」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/cleric/19.png"
+ },
+ {
+  "class_id": "cleric",
+  "class_name": "聖女",
+  "type": "聖杖",
+  "tier": 20,
+  "name": "神杖「女神之淚」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/cleric/20.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 1,
+  "name": "樹枝魔杖",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/witch/01.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 2,
+  "name": "青銅魔杖",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/witch/02.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 3,
+  "name": "鐵製魔杖",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/witch/03.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 4,
+  "name": "見習魔杖",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/witch/04.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 5,
+  "name": "糖果魔杖",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/witch/05.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 6,
+  "name": "白銀魔杖",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/witch/06.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 7,
+  "name": "月光魔杖",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/witch/07.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 8,
+  "name": "黑貓魔杖",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/witch/08.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 9,
+  "name": "秘銀魔杖",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/witch/09.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 10,
+  "name": "烈焰魔杖「火精靈」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/witch/10.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 11,
+  "name": "霜寒魔杖「雪精靈」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/witch/11.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 12,
+  "name": "雷鳴魔杖「雷精靈」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/witch/12.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 13,
+  "name": "翠玉魔杖「妖精之森」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/witch/13.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 14,
+  "name": "黃金魔杖「蜜糖」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/witch/14.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 15,
+  "name": "暗影魔杖「夜之魔女」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/witch/15.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 16,
+  "name": "聖光魔杖「心願之星」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/witch/16.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 17,
+  "name": "龍心魔杖「龍之心」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/witch/17.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 18,
+  "name": "星辰魔杖「流星雨」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/witch/18.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 19,
+  "name": "混沌魔杖「惡夢」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/witch/19.png"
+ },
+ {
+  "class_id": "witch",
+  "class_name": "魔女",
+  "type": "魔杖",
+  "tier": 20,
+  "name": "神杖「魔女之王冠」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/witch/20.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 1,
+  "name": "樹枝短弓",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/ranger/01.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 2,
+  "name": "青銅反曲弓",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/ranger/02.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 3,
+  "name": "鐵臂弓",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/ranger/03.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 4,
+  "name": "鋼製長弓",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/ranger/04.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 5,
+  "name": "獵人長弓",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/ranger/05.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 6,
+  "name": "白銀弓",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/ranger/06.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 7,
+  "name": "王國長弓",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/ranger/07.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 8,
+  "name": "黑鐵重弓",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/ranger/08.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 9,
+  "name": "秘銀弓",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/ranger/09.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 10,
+  "name": "烈焰弓「火鳥」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/ranger/10.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 11,
+  "name": "霜寒弓「冰晶」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/ranger/11.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 12,
+  "name": "雷鳴弓「雷鷹」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/ranger/12.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 13,
+  "name": "翠玉弓「精靈之森」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/ranger/13.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 14,
+  "name": "黃金弓「日輪」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/ranger/14.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 15,
+  "name": "暗影弓「夜梟」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/ranger/15.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 16,
+  "name": "聖光弓「天使之翼」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/ranger/16.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 17,
+  "name": "龍筋弓「龍翼」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/ranger/17.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 18,
+  "name": "星辰弓「月與星」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/ranger/18.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 19,
+  "name": "混沌弓「災厄」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/ranger/19.png"
+ },
+ {
+  "class_id": "ranger",
+  "class_name": "遊俠",
+  "type": "弓",
+  "tier": 20,
+  "name": "神弓「世界樹」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/ranger/20.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 1,
+  "name": "布纏手",
+  "material": "木",
+  "rarity": "普通",
+  "icon": "icons/monk/01.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 2,
+  "name": "青銅指虎",
+  "material": "青銅",
+  "rarity": "普通",
+  "icon": "icons/monk/02.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 3,
+  "name": "鐵拳套",
+  "material": "鐵",
+  "rarity": "普通",
+  "icon": "icons/monk/03.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 4,
+  "name": "鋼鐵拳套",
+  "material": "鋼",
+  "rarity": "普通",
+  "icon": "icons/monk/04.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 5,
+  "name": "鬥士拳套",
+  "material": "精鋼",
+  "rarity": "優良",
+  "icon": "icons/monk/05.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 6,
+  "name": "白銀拳套",
+  "material": "白銀",
+  "rarity": "優良",
+  "icon": "icons/monk/06.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 7,
+  "name": "武僧護手",
+  "material": "王國",
+  "rarity": "優良",
+  "icon": "icons/monk/07.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 8,
+  "name": "黑鐵爪",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "icon": "icons/monk/08.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 9,
+  "name": "秘銀拳套",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "icon": "icons/monk/09.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 10,
+  "name": "烈焰拳套「炎拳」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "icon": "icons/monk/10.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 11,
+  "name": "霜寒拳套「冰拳」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "icon": "icons/monk/11.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 12,
+  "name": "雷鳴拳套「雷拳」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "icon": "icons/monk/12.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 13,
+  "name": "翠玉拳套「龍虎」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "icon": "icons/monk/13.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 14,
+  "name": "黃金拳套「百裂」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "icon": "icons/monk/14.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 15,
+  "name": "暗影拳套「修羅」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "icon": "icons/monk/15.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 16,
+  "name": "聖光拳套「金剛」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "icon": "icons/monk/16.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 17,
+  "name": "龍爪拳套「昇龍」",
+  "material": "龍",
+  "rarity": "傳說",
+  "icon": "icons/monk/17.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 18,
+  "name": "星辰拳套「天罡」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "icon": "icons/monk/18.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 19,
+  "name": "混沌拳套「阿修羅」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "icon": "icons/monk/19.png"
+ },
+ {
+  "class_id": "monk",
+  "class_name": "武鬥家",
+  "type": "拳套",
+  "tier": 20,
+  "name": "神器「天地無雙」",
+  "material": "神",
+  "rarity": "神話",
+  "icon": "icons/monk/20.png"
+ }
+]
