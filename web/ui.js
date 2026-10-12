@@ -255,6 +255,8 @@ function initTitle() {
   $('#car-next').onclick = () => { carIdx = (carIdx + 1) % 5; renderCarousel(1); };
   $('#car-go').onclick = () => startRun(classesOf(chosenSex)[carIdx].id);
   swipe($('#car-stage'), d => { if (d === 'l') $('#car-next').click(); if (d === 'r') $('#car-prev').click(); });
+  $('#title-load').hidden = !hasAnySave();
+  $('#title-load').onclick = e => { e.stopPropagation(); doLoad(true); };
   try { const best = JSON.parse(localStorage.getItem('em-best') || 'null'); if (best) $('#title-best').textContent = `最佳紀錄：${best.name}（${best.cls}）地下 ${best.floor} 層`; } catch (e) {}
 }
 function classesOf(sex) { return DATA.characters.filter(c => c.sex === sex); }
@@ -606,6 +608,83 @@ async function gameOver(mon) {
   show('scr-class'); renderCarousel();
 }
 
+// ============ 設定、存檔、讀取 ============
+const SAVE_SLOTS = 3;
+const saveKey = i => 'em-save-' + i;
+function readSlot(i) { try { return JSON.parse(localStorage.getItem(saveKey(i)) || 'null'); } catch (e) { return null; } }
+function hasAnySave() { for (let i = 1; i <= SAVE_SLOTS; i++) if (readSlot(i)) return true; return false; }
+function fmtTime(t) { const d = new Date(t), p = n => String(n).padStart(2, '0'); return `${d.getMonth() + 1}/${d.getDate()} ${p(d.getHours())}:${p(d.getMinutes())}`; }
+function slotText(i) {
+  const s = readSlot(i);
+  return s ? `${i}．${s.name}・${s.cls}・地下 ${s.floor} 層（${fmtTime(s.time)}）` : `${i}．（空）`;
+}
+// 選擇存檔欄位；回傳 1～3 或 null
+async function pickSlot(title) {
+  const btns = [];
+  for (let i = 1; i <= SAVE_SLOTS; i++) btns.push([slotText(i), i, 'opt slot-btn']);
+  btns.push(['返回', 0]);
+  const v = await modal(`<div class="banner"><h3>${title}</h3><p class="hint">存檔只保存在這台裝置上。</p></div>`, btns, 'center choice');
+  return v || null;
+}
+function saveGame(i) {
+  try {
+    localStorage.setItem(saveKey(i), JSON.stringify({v: 1, time: Date.now(), name: G.name, cls: CHAR[G.cls].class_name, floor: G.floor, G}));
+    return true;
+  } catch (e) { return false; }
+}
+function loadGame(i) {
+  const s = readSlot(i); if (!s || !s.G) return false;
+  newGame(s.G.name, s.G.cls);
+  Object.assign(G, s.G);        // 以新局的預設值補齊舊存檔缺少的欄位
+  B = null; busy = false; scene.mon = null; scene.ev = null; scene.monDead = 0;
+  playerName = G.name;
+  show('scr-game'); setMode('explore'); refreshHud();
+  $('#log').textContent = `讀取存檔：地下 ${G.floor} 層`;
+  return true;
+}
+async function doSave() {
+  const i = await pickSlot('存檔'); if (!i) return;
+  if (readSlot(i)) {
+    const ok = await modal(`<div class="banner"><h3>覆蓋存檔？</h3><p>${esc(slotText(i))}</p></div>`, [['覆蓋', 1, 'primary'], ['取消', 0]], 'center');
+    if (!ok) return;
+  }
+  toast(saveGame(i) ? `已存到欄位 ${i}` : '存檔失敗：這個環境不允許保存資料');
+}
+async function doLoad(fromTitle) {
+  const i = await pickSlot('讀取'); if (!i) return false;
+  if (!readSlot(i)) { toast('這個欄位是空的'); return false; }
+  if (!fromTitle) {
+    const ok = await modal('<div class="banner"><h3>讀取存檔？</h3><p>目前沒有存檔的進度會遺失。</p></div>', [['讀取', 1, 'primary'], ['取消', 0]], 'center');
+    if (!ok) return false;
+  }
+  if (!loadGame(i)) { toast('存檔損毀，無法讀取'); return false; }
+  toast(`已讀取欄位 ${i}`);
+  return true;
+}
+function backToTitle() {
+  G = null; B = null; busy = false; scene.mon = null; scene.ev = null;
+  $('#title-load').hidden = !hasAnySave();
+  show('scr-title');
+}
+async function openSettings() {
+  if (!G || !$('#modal').hidden) return;
+  if (busy) { toast('戰鬥或事件進行中，不能存檔或讀取'); return; }
+  busy = true;
+  try {
+    while (true) {
+      const v = await modal('<div class="banner"><h3>設定</h3></div>', [['存檔', 'save', 'opt'], ['讀取', 'load', 'opt'], ['回到標題', 'title', 'opt'], ['關閉', 0, 'primary']], 'center choice');
+      if (v === 'save') { await doSave(); continue; }
+      if (v === 'load') { if (await doLoad(false)) return; continue; }
+      if (v === 'title') {
+        const ok = await modal('<div class="banner"><h3>回到標題？</h3><p>目前沒有存檔的進度會遺失。</p></div>', [['回到標題', 1, 'primary'], ['取消', 0]], 'center');
+        if (ok) { backToTitle(); return; }
+        continue;
+      }
+      return;
+    }
+  } finally { busy = false; }
+}
+
 // ============ 戰鬥介面（給 battle.js 呼叫） ============
 let actResolve = null;
 const UI = {
@@ -701,6 +780,7 @@ function initInput() {
   $$('.sk-btn').forEach((b, i) => b.onclick = () => act({type: 'skill', idx: i}));
   $('#bt-item').onclick = async () => { if (!actResolve) return; const id = await openInventory(true); if (id) act({type: 'item', id}); };
   $('#btn-equip').onclick = () => openEquip();
+  $('#btn-set').onclick = () => openSettings();
   $('#btn-inv').onclick = () => { if ($('#scr-game').dataset.mode === 'battle') $('#bt-item').click(); else openInventory(false); };
   document.addEventListener('keydown', e => {
     if ($('#scr-game').hidden || e.target.tagName === 'INPUT') return;

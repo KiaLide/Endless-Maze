@@ -213,3 +213,5 @@ button { font: inherit; color: inherit; }
 .delta .up { color: var(--good); } .delta .down { color: var(--bad); }
 .shop-refresh { width: 100%; margin-top: 8px; }
 .shop-refresh:disabled { opacity: .45; }
+.slot-btn { text-align: left; font-size: 14px; white-space: normal; }
+#title-load { margin-top: 4px; }
