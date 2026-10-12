@@ -57,7 +57,14 @@ function texFrom(key) {
   const c = document.createElement('canvas'); c.width = 32; c.height = 32;
   const g = c.getContext('2d'); g.imageSmoothingEnabled = false;
   g.drawImage(ATLAS, x, y, w, h, 0, 0, 32, 32);
-  return g.getImageData(0, 0, 32, 32).data;
+  try { return g.getImageData(0, 0, 32, 32).data; }
+  catch (e) {
+    // 無法讀取像素時（例如 file:// 被視為跨來源），改用純色材質，避免整個畫面變黑
+    const fb = {0: [92, 88, 84], 1: [52, 66, 48], 2: [30, 32, 36]}[key.split(':')[2]] || [80, 80, 80];
+    const t = new Uint8ClampedArray(32 * 32 * 4);
+    for (let i = 0; i < t.length; i += 4) { const n = ((i >> 2) % 32 === 0 || (i >> 7) % 16 === 0) ? 0.7 : 1; t[i] = fb[0] * n; t[i + 1] = fb[1] * n; t[i + 2] = fb[2] * n; t[i + 3] = 255; }
+    return t;
+  }
 }
 function regionTex(r) {
   if (TEX[r]) return TEX[r];

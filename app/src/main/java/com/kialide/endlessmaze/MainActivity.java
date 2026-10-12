@@ -15,6 +15,7 @@ public class MainActivity extends Activity {
     private WebView web;
 
     @SuppressLint("SetJavaScriptEnabled")
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +26,10 @@ public class MainActivity extends Activity {
         s.setDomStorageEnabled(true);           // localStorage：保存最佳紀錄
         s.setMediaPlaybackRequiresUserGesture(false);
         s.setSupportZoom(false);
+        // 從 file:// 載入時，讓畫布能讀取本地圖集像素（否則場景材質會被視為跨來源而全黑）
+        s.setAllowFileAccess(true);
+        s.setAllowFileAccessFromFileURLs(true);
+        s.setAllowUniversalAccessFromFileURLs(true);
         web.setWebViewClient(new WebViewClient());
         web.setOverScrollMode(View.OVER_SCROLL_NEVER);
         setContentView(web);
