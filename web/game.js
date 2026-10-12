@@ -4,7 +4,7 @@
  * 第一人稱迷宮探索 Roguelike（手機手勢操作）
  * ========================================================= */
 const DATA = window.GAME_DATA;
-const W = 192, H = 240, HALF = H / 2, TEX = 16;
+const W = 192, H = 240, HALF = H / 2, TEX = 32, TM = TEX - 1;
 const PROJ = (W / 2) / 0.66;                          // 投影距離：牆高比例固定，畫面加高只會多看到地板與天花板
 const FP_DY = H - 144;                               // 第一人稱圖層以 192×144 設計，往下對齊
 const DIRS = [[1, 0], [0, 1], [-1, 0], [0, -1]];      // 東 南 西 北（y 向下）
@@ -19,7 +19,25 @@ const IMG = {};
 function loadImg(key, src) {
   return new Promise(res => { const im = new Image(); im.onload = im.onerror = () => res(); im.src = src; IMG[key] = im; });
 }
+const MON_ART = {};   // 怪物立繪（有圖的種類）：{ img, levels: [canvas...], white: canvas }
+const MON_ART_LIST = ['slime', 'bat'];
+const MON_SIZE = { slime: 0.62, bat: 0.6, goblin: 0.85, skeleton: 0.95, eye: 0.7, golem: 1.05, demon: 1.25 };
+function prepMonsterArt(id) {
+  const im = IMG['mon_' + id];
+  if (!im || !im.naturalWidth) return;
+  const levels = [];
+  for (let i = 0; i <= 7; i++) {
+    const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight;
+    const g = c.getContext('2d'); g.drawImage(im, 0, 0);
+    g.globalCompositeOperation = 'source-atop'; g.fillStyle = `rgba(5,3,8,${1 - Math.max(0.08, i / 7)})`; g.fillRect(0, 0, c.width, c.height);
+    levels.push(c);
+  }
+  const wc = document.createElement('canvas'); wc.width = im.naturalWidth; wc.height = im.naturalHeight;
+  const wg = wc.getContext('2d'); wg.drawImage(im, 0, 0); wg.globalCompositeOperation = 'source-atop'; wg.fillStyle = '#fff'; wg.fillRect(0, 0, wc.width, wc.height);
+  MON_ART[id] = { w: im.naturalWidth, h: im.naturalHeight, levels, white: wc };
+}
 const loading = Promise.all([
+  ...MON_ART_LIST.map(id => loadImg('mon_' + id, `assets/monsters/${id}.png`).then(() => prepMonsterArt(id))),
   ...DATA.classes.map(c => loadImg('fp_' + c.id, `assets/fp/${c.id}.png`)),
   ...DATA.classes.map(c => loadImg('hero_' + c.id, `assets/heroes/${c.id}.png`)),
 ]);
@@ -39,28 +57,57 @@ const THEMES = [
   { name: '白骨墓穴', wall: ['#8a8470', '#9a937c', '#76705e'], mortar: '#2e2a22', floor: ['#4a463c', '#3c382f'], ceil: ['#1c1a16', '#24211b'] },
 ];
 let wallTex, floorTex, ceilTex;
+/* 32×32 材質：石塊有斜面光影（左上亮、右下暗）、灰縫、雜點、裂痕 */
 function makeTextures(theme) {
-  const wall = theme.wall.map(hex), mortar = hex(theme.mortar);
-  wallTex = new Uint32Array(TEX * TEX);
-  for (let y = 0; y < TEX; y++) {
-    const row = y >> 2, off = (row & 1) * 4;
-    for (let x = 0; x < TEX; x++) {
-      let c;
-      if (y % 4 === 3 || (x + off) % 8 === 7) c = mortar;
-      else { c = vary(wall[(row * 7 + Math.floor((x + off) / 8) * 13) % 3], rnd(-10, 10)); if (y % 4 === 0) c = vary(c, 14); }
-      wallTex[y * TEX + x] = c;
+  const T = TEX, wall = theme.wall.map(hex), mortar = hex(theme.mortar);
+  const moss = theme.name === '苔蘚地道', bone = theme.name === '白骨墓穴';
+  wallTex = new Uint32Array(T * T);
+  for (let row = 0; row < 4; row++) {
+    const off = (row & 1) * 8;
+    for (let col = -1; col < 3; col++) {
+      const x0 = col * 16 + off, y0 = row * 8, base = vary(wall[rnd(0, 2)], rnd(-8, 8));
+      const crack = Math.random() < 0.3, cx = rnd(3, 12), cy = rnd(1, 5);
+      for (let y = 0; y < 8; y++) for (let x = 0; x < 16; x++) {
+        const X = (x0 + x + T) % T, Y = y0 + y;
+        let c;
+        if (y === 7 || x === 15) c = mortar;
+        else {
+          c = vary(base, rnd(-6, 6));
+          if (y === 0 || x === 0) c = vary(c, 20);                  // 上、左斜面亮
+          else if (y === 6 || x === 14) c = vary(c, -20);          // 下、右斜面暗
+          if (y === 1 && x > 0 && x < 14) c = vary(c, 8);
+          if (Math.random() < 0.04) c = vary(c, -16);              // 雜點
+          if (crack && (x - cx === y - cy || x - cx === y - cy + 1) && y > 0 && y < 6) c = vary(base, -34);
+          if (moss && y < 2 + ((x * 7) % 3) && Math.random() < 0.6) c = vary(rgb(70, 120, 60), rnd(-15, 15));
+          if (bone && Math.random() < 0.015) c = rgb(220, 214, 196);
+        }
+        wallTex[Y * T + X] = c;
+      }
     }
   }
   const fl = theme.floor.map(hex);
-  floorTex = new Uint32Array(TEX * TEX);
-  for (let y = 0; y < TEX; y++) for (let x = 0; x < TEX; x++) {
-    let c = vary(fl[((x >> 3) + (y >> 3)) & 1], rnd(-8, 8));
-    if (x % 8 === 0 || y % 8 === 0) c = vary(c, -18);
-    floorTex[y * TEX + x] = c;
+  floorTex = new Uint32Array(T * T);
+  for (let ty = 0; ty < 2; ty++) for (let tx = 0; tx < 2; tx++) {
+    const base = vary(fl[(tx + ty) & 1], rnd(-6, 6));
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      let c;
+      if (x === 15 || y === 15) c = vary(base, -30);
+      else {
+        c = vary(base, rnd(-5, 5));
+        if (x === 0 || y === 0) c = vary(c, 12); else if (x === 14 || y === 14) c = vary(c, -14);
+        if (Math.random() < 0.05) c = vary(c, -12);
+      }
+      floorTex[(ty * 16 + y) * T + tx * 16 + x] = c;
+    }
   }
   const ce = theme.ceil.map(hex);
-  ceilTex = new Uint32Array(TEX * TEX);
-  for (let i = 0; i < TEX * TEX; i++) ceilTex[i] = vary(ce[Math.random() < 0.3 ? 1 : 0], rnd(-5, 5));
+  ceilTex = new Uint32Array(T * T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    let c = vary(ce[(y >> 4) & 1], rnd(-4, 4));
+    if (y % 16 === 15 || x % 32 === 31) c = vary(c, -12);
+    if (y % 16 === 0) c = vary(c, 6);
+    ceilTex[y * T + x] = c;
+  }
 }
 
 /* ---------- 怪物與物品像素圖 (16×16) ---------- */
@@ -549,7 +596,7 @@ function renderWorld(ctx, w, playerCell) {
     let fx = px + rd * rdx0, fy = py + rd * rdy0;
     const f = lightF(rd, L), fc = f * 0.8, yo = y * W, yc = (H - y - 1) * W;
     for (let x = 0; x < W; x++) {
-      const ti = (((fy - Math.floor(fy)) * TEX) & 15) * TEX + (((fx - Math.floor(fx)) * TEX) & 15);
+      const ti = (((fy - Math.floor(fy)) * TEX) & TM) * TEX + (((fx - Math.floor(fx)) * TEX) & TM);
       fx += sx; fy += sy;
       buf[yo + x] = shade(floorTex[ti], f); buf[yc + x] = shade(ceilTex[ti], fc);
     }
@@ -570,18 +617,20 @@ function renderWorld(ctx, w, playerCell) {
     const perp = Math.max(0.05, side === 0 ? sdx - ddx : sdy - ddy); zbuf[x] = perp;
     const lh = PROJ / perp, ds = Math.max(0, Math.floor(HALF - lh / 2)), de = Math.min(H, Math.ceil(HALF + lh / 2));
     let wx = side === 0 ? py + perp * rdy : px + perp * rdx; wx -= Math.floor(wx);
-    let tx = Math.floor(wx * TEX) & 15;
-    if ((side === 0 && rdx > 0) || (side === 1 && rdy < 0)) tx = 15 - tx;
+    let tx = Math.floor(wx * TEX) & TM;
+    if ((side === 0 && rdx > 0) || (side === 1 && rdy < 0)) tx = TM - tx;
     const f = lightF(perp, L) * (side ? 0.78 : 1), step = TEX / lh;
     let tp = (ds - HALF + lh / 2) * step;
-    for (let y = ds; y < de; y++) { buf[y * W + x] = shade(wallTex[((tp | 0) & 15) * TEX + tx], f); tp += step; }
+    for (let y = ds; y < de; y++) { buf[y * W + x] = shade(wallTex[((tp | 0) & TM) * TEX + tx], f); tp += step; }
   }
   // 精靈
   const sprites = [{ x: w.stairs.x + 0.5, y: w.stairs.y + 0.5, s: SPR.stairs, glow: true }];
   for (const it of w.items) sprites.push({ x: it.x + 0.5, y: it.y + 0.5, s: SPR[it.kind === 'weapon' ? 'chest' : it.kind], bob: it.kind !== 'gold' });
+  const artSprites = [];
   for (const m of w.monsters) {
     const t = clamp((now - m.t0) / 150, 0, 1);
-    sprites.push({ x: m.fx + (m.x - m.fx) * t + 0.5, y: m.fy + (m.y - m.fy) * t + 0.5, s: SPR[m.type], m, scale: m.boss ? 1.25 : 1, fly: m.fly });
+    const sp = { x: m.fx + (m.x - m.fx) * t + 0.5, y: m.fy + (m.y - m.fy) * t + 0.5, s: SPR[m.type], m, scale: m.boss ? 1.25 : 1, fly: m.fly };
+    (MON_ART[m.type] ? artSprites : sprites).push(sp);
   }
   const invDet = 1 / (plx * dy - dx * ply);
   for (const s of sprites) s.d = (s.x - px) ** 2 + (s.y - py) ** 2;
@@ -607,6 +656,35 @@ function renderWorld(ctx, w, playerCell) {
     if (s.m) { s.m.sx = sx; s.m.sy = top; s.m.size = size; s.m.vis = tY < zbuf[clamp(Math.floor(sx), 0, W - 1)]; }
   }
   ctx.putImageData(img, 0, 0);
+  // 立繪怪物：由遠到近、逐欄繪製（被牆擋住的欄位跳過）
+  for (const s of artSprites) s.d = (s.x - px) ** 2 + (s.y - py) ** 2;
+  artSprites.sort((a, b) => b.d - a.d);
+  ctx.imageSmoothingEnabled = false;
+  for (const s of artSprites) {
+    const art = MON_ART[s.m.type], rx = s.x - px, ry = s.y - py;
+    const tX = invDet * (dy * rx - dx * ry), tY = invDet * (-ply * rx + plx * ry);
+    if (tY <= 0.15) { s.m.vis = false; continue; }
+    const sx = (W / 2) * (1 + tX / tY), unit = PROJ / tY;
+    const hgt = unit * (MON_SIZE[s.m.type] || 0.8), wid = hgt * art.w / art.h;
+    let bottom = HALF + unit / 2 - unit * 0.02;
+    if (s.fly) bottom -= unit * (0.22 + Math.sin(now * 0.008 + s.x * 3) * 0.05);
+    else bottom -= Math.abs(Math.sin(now * 0.005 + s.x)) * unit * 0.015;   // 呼吸起伏
+    const top = bottom - hgt, left = sx - wid / 2;
+    const lvl = Math.round(lightF(Math.sqrt(s.d), 7.7) * 7);
+    const src = s.m.flash > 0.5 ? art.white : art.levels[lvl];
+    const x0 = Math.max(0, Math.floor(left)), x1 = Math.min(W, Math.ceil(left + wid));
+    let run = -1;
+    const flush = (xa, xb) => {
+      const u0 = (xa - left) / wid * art.w, u1 = (xb - left) / wid * art.w;
+      ctx.drawImage(src, u0, 0, Math.max(0.01, u1 - u0), art.h, xa, top, xb - xa, hgt);
+    };
+    for (let x = x0; x <= x1; x++) {
+      const visible = x < x1 && tY < zbuf[x];
+      if (visible && run < 0) run = x;
+      if (!visible && run >= 0) { flush(run, x); run = -1; }
+    }
+    s.m.sx = sx; s.m.sy = top; s.m.size = hgt; s.m.vis = tY < zbuf[clamp(Math.floor(sx), 0, W - 1)];
+  }
 }
 
 /* 第一人稱武器：手臂 → 武器 → 拳頭，三層疊加；換武器只換中間那層 */

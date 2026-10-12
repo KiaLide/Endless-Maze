@@ -108,8 +108,13 @@ def build_icons(dst_dir):
 
 
 def main():
-    for d in ('heroes', 'icons', 'fp'):
+    for d in ('heroes', 'icons', 'fp', 'monsters'):
         os.makedirs(os.path.join(ASSETS, d), exist_ok=True)
+    # 怪物立繪（有原圖的才轉換，其餘遊戲內用備用像素圖）
+    msrc = os.path.join(HERE, 'src', 'monsters')
+    for f in sorted(os.listdir(msrc)):
+        cut_hero(os.path.join(msrc, f), os.path.join(ASSETS, 'monsters', os.path.splitext(f)[0] + '.png'))
+    print('monsters ok')
     for cid in CLASS_INFO:
         cut_hero(os.path.join(HERE, 'src', 'heroes', f'{cid}.jpg'), os.path.join(ASSETS, 'heroes', f'{cid}.png'))
     print('heroes ok')
