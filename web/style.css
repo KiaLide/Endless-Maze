@@ -211,3 +211,5 @@ button { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) { .title-tap, .float, .skill-banner.pop, .shake { animation: none; } .car-item { transition: none; } }
 .delta { display: flex; flex-wrap: wrap; gap: 2px 8px; margin: 4px 0 0; font-size: 12px; }
 .delta .up { color: var(--good); } .delta .down { color: var(--bad); }
+.shop-refresh { width: 100%; margin-top: 8px; }
+.shop-refresh:disabled { opacity: .45; }

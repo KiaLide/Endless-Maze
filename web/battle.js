@@ -328,11 +328,16 @@ async function playerTurn() {
   P.turns++;
   if (!(await turnStart(P))) { turnEnd(P); return; }
   if (B.over) return;
-  const act = await UI.waitAction(B);
+  // 使用道具不消耗回合：用完繼續選擇行動
+  let act = await UI.waitAction(B);
+  while (act.type === 'item' && !B.over) {
+    await useItemInBattle(act.id);
+    act = await UI.waitAction(B, true);
+  }
+  if (B.over) return;
   P.noDmgTurns++;
   if (act.type === 'attack') await normalAttack();
   else if (act.type === 'skill') await useSkill(act.idx);
-  else if (act.type === 'item') await useItemInBattle(act.id);
   // 召喚物追擊
   if (!B.over && B.summonP && B.summonP.turns > 0) {
     B.summonP.turns--;

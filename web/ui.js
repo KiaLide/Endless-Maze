@@ -457,17 +457,24 @@ document.addEventListener('click', e => {
 async function merchant() {
   scene.mon = 'misc:merchant';
   const F = floorF(G.floor), disc = hasAcc('金幣袋') ? 1 - 0.2 * accScale() : 1;
-  const goods = [];
-  for (let i = 0; i < 2; i++) {
-    const t = clamp(Math.round(G.floor / 2) + ri(0, 2), 1, 20);
-    const it = chance(0.5) ? {type: 'weapon', item: {cls: chance(0.5) ? G.cls : pick(CLASSES), tier: t, roll: rollRoll()}} : {type: 'armor', item: {set: pick(ARMOR_SETS), tier: t, roll: rollRoll()}};
-    goods.push({...it, price: Math.round(t * 20 * disc)});
-  }
-  { const own = chance(0.5); const pool = ACCS.map((a, i) => i).filter(i => own ? ACCS[i].class_id === G.cls : ACCS[i].class_id !== G.cls);
-    goods.push({type: 'acc', item: {idx: pick(pool), roll: rollRoll()}, price: Math.round(150 * F * disc)}); }
   const priceOf = id => Math.round(itemBasePrice(id) * F * disc);
-  for (let i = 0; i < 2; i++) { const id = rollItemId('normal').replace(/^(生命|力量|守護|迅捷|慧眼|幻影)之種$/, '中藥水').replace('女神之種', '大藥水'); goods.push({type: 'item', item: id, price: priceOf(id)}); }
-  { const r = rnd(); const id = r < 0.05 ? '女神之種' : r < 0.35 ? SEED_NAMES[pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva'])] : pick(['小藥水', '中藥水']); goods.push({type: 'item', item: id, price: priceOf(id)}); }
+  const rollGoods = () => {
+    const goods = [];
+    for (let i = 0; i < 2; i++) {
+      const t = clamp(Math.round(G.floor / 2) + ri(0, 2), 1, 20);
+      const it = chance(0.5) ? {type: 'weapon', item: {cls: chance(0.5) ? G.cls : pick(CLASSES), tier: t, roll: rollRoll()}} : {type: 'armor', item: {set: pick(ARMOR_SETS), tier: t, roll: rollRoll()}};
+      goods.push({...it, price: Math.round(t * 20 * disc)});
+    }
+    { const own = chance(0.5); const pool = ACCS.map((a, i) => i).filter(i => own ? ACCS[i].class_id === G.cls : ACCS[i].class_id !== G.cls);
+      goods.push({type: 'acc', item: {idx: pick(pool), roll: rollRoll()}, price: Math.round(150 * F * disc)}); }
+    for (let i = 0; i < 2; i++) { const id = rollItemId('normal').replace(/^(生命|力量|守護|迅捷|慧眼|幻影)之種$/, '中藥水').replace('女神之種', '大藥水'); goods.push({type: 'item', item: id, price: priceOf(id)}); }
+    { const r = rnd(); const id = r < 0.05 ? '女神之種' : r < 0.35 ? SEED_NAMES[pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva'])] : pick(['小藥水', '中藥水']); goods.push({type: 'item', item: id, price: priceOf(id)}); }
+    return goods;
+  };
+  let goods = rollGoods();
+  // 刷新商品：第 1 次 20F，之後每次價格翻倍
+  let refreshes = 0;
+  const refreshCost = () => Math.round(20 * F * Math.pow(2, refreshes));
   let tab = 'buy';
   while (true) {
     refreshHud();
@@ -484,7 +491,8 @@ async function merchant() {
       const poor = G.gold < g.price;
       return `<button class="shop-item${poor ? ' poor' : ''}" data-i="${i}" ${g.sold ? 'disabled' : ''}>${g.type === 'item' ? spr(itemIcon(g.item), 2) : equipIcon(g.type, g.item, 2)}
         <span class="si-name">${name}${sub}</span><span class="si-price">${g.sold ? '售出' : g.price}</span></button>`;
-    }).join('')}</div>`;
+    }).join('')}</div>
+      <button class="btn shop-refresh" data-refresh="1" ${G.gold < refreshCost() ? 'disabled' : ''}>刷新商品　<b class="gold">${refreshCost()}</b> 金幣</button>`;
     const sellList = `<p class="desc">點一下賣掉 1 個。</p>
       <div class="inv-grid">${G.inv.length ? G.inv.map((it, i) => `<button class="slot" data-sellitem="${i}">${spr(itemIcon(it.id), 2)}<span>${it.id} ×${it.n}</span><b class="gold">+${itemSellValue(it.id)}</b></button>`).join('') : '<p class="desc">道具欄是空的</p>'}</div>
       <h4 class="shop-h">裝備</h4>
@@ -493,6 +501,10 @@ async function merchant() {
     const v = await modal(html, [['離開', 'leave', 'primary']], 'wide');
     if (v === 'leave') break;
     if (typeof v === 'string' && v.startsWith('tab:')) { tab = v.slice(4); continue; }
+    if (v === 'refresh') {
+      const c = refreshCost(); if (G.gold < c) continue;
+      G.gold -= c; refreshes++; goods = rollGoods(); toast(`商品刷新了（-${c} 金幣）`); continue;
+    }
     if (typeof v === 'string' && v.startsWith('sellitem:')) {
       const slot = G.inv[+v.slice(9)]; if (!slot) continue;
       const gain = itemSellValue(slot.id); G.gold += gain; removeItem(slot.id, 1); toast(`賣掉 ${slot.id}，+${gain} 金幣`); continue;
@@ -526,6 +538,7 @@ document.addEventListener('click', e => {
   const s = e.target.closest('.shop-item'); if (s && !s.disabled) { modalResolve(+s.dataset.i); return; }
   const t = e.target.closest('[data-sell]'); if (t) { modalResolve('sell:' + t.dataset.sell); return; }
   const tb = e.target.closest('[data-tab]'); if (tb) { modalResolve('tab:' + tb.dataset.tab); return; }
+  const rf = e.target.closest('[data-refresh]'); if (rf && !rf.disabled) { modalResolve('refresh'); return; }
   const it = e.target.closest('[data-sellitem]'); if (it) modalResolve('sellitem:' + it.dataset.sellitem);
 });
 
@@ -640,10 +653,10 @@ const UI = {
     });
     $('#bt-item').disabled = !G.inv.length;
   },
-  waitAction(B) {
+  waitAction(B, again) {
     this.battleRefresh(B);
     $('#ctrl-battle').classList.add('ready');
-    UI.log('輪到你了');
+    if (!again) UI.log('輪到你了');
     return new Promise(res => { actResolve = a => { actResolve = null; $('#ctrl-battle').classList.remove('ready'); res(a); }; });
   },
   float(u, text, cls) {
