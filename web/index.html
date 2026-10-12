@@ -9,52 +9,92 @@
 </head>
 <body>
 <div id="app">
-  <header id="hud">
-    <div class="row">
-      <span id="hud-floor" class="tag">B1</span>
-      <div class="bar"><div id="hp-fill"></div><span id="hp-text">30/30</span></div>
-      <span id="hud-lvl" class="tag">Lv1</span>
+
+  <!-- 1. 標題畫面 -->
+  <section id="scr-title" class="screen active">
+    <canvas id="title-bg" width="192" height="240"></canvas>
+    <div class="title-shade"></div>
+    <img id="logo" src="assets/logo.png" alt="Endless Maze">
+    <div id="title-heroes"></div>
+    <div class="tap-start">TAP TO START</div>
+    <div class="title-best" id="title-best"></div>
+  </section>
+
+  <!-- 2. 輸入名稱 -->
+  <section id="scr-name" class="screen">
+    <div class="panel">
+      <h2>冒險者的名字是？</h2>
+      <input id="name-input" type="text" maxlength="10" placeholder="輸入名稱" autocomplete="off" enterkeyhint="done">
+      <p class="hint">最多 10 個字</p>
+      <button class="btn primary" id="name-ok">確定</button>
     </div>
-    <div class="row small">
+  </section>
+
+  <!-- 3. 選擇角色 -->
+  <section id="scr-select" class="screen">
+    <div class="sex-tabs">
+      <button class="sex-tab active" data-sex="M">♂ 男性</button>
+      <button class="sex-tab" data-sex="F">♀ 女性</button>
+    </div>
+    <div id="carousel">
+      <button class="car-arrow left" id="car-prev">◀</button>
+      <div class="car-stage"><div class="car-ring" id="car-ring"></div></div>
+      <button class="car-arrow right" id="car-next">▶</button>
+    </div>
+    <div class="class-info">
+      <div class="ci-head"><span id="ci-name"></span><span id="ci-hero"></span></div>
+      <p id="ci-desc"></p>
+      <div class="ci-stats" id="ci-stats"></div>
+      <div class="ci-weapon"><span class="wicon" id="ci-wicon"></span><span id="ci-wname"></span></div>
+    </div>
+    <button class="btn primary go" id="select-ok">出發！</button>
+  </section>
+
+  <!-- 4. 遊戲 -->
+  <section id="scr-game" class="screen">
+    <header id="hud">
+      <div class="hud-row">
+        <span id="hud-floor" class="tag">B1</span>
+        <span id="hud-name"></span>
+        <span id="hud-lvl" class="tag">Lv1</span>
+      </div>
+      <div class="bar hp"><div id="hp-fill"></div><span id="hp-text"></span></div>
       <div class="bar xp"><div id="xp-fill"></div></div>
+      <div class="hud-row stats">
+        <span>攻 <b id="st-atk"></b></span><span>防 <b id="st-def"></b></span>
+        <span>爆 <b id="st-crit"></b></span><span>金 <b id="st-gold"></b></span><span>殺 <b id="st-kills"></b></span>
+      </div>
+    </header>
+    <div id="play-area">
+      <div id="view-wrap">
+        <canvas id="view" width="192" height="240"></canvas>
+        <div id="flash"></div>
+        <div id="swipe-hint">
+          <div><b>↑</b> 往上滑：前進</div>
+          <div><b>← →</b> 左右滑：轉向該路線</div>
+          <div><b>●</b> 點擊畫面：攻擊</div>
+        </div>
+      </div>
+      <div id="keypad">
+        <div class="kp-title">鍵盤 / 小鍵盤</div>
+        <div class="kp-grid">
+          <span></span><button data-cmd="fw">↑<small>W</small></button><span></span>
+          <button data-cmd="left">←<small>A</small></button><button data-cmd="atk">⚔<small>空白</small></button><button data-cmd="right">→<small>D</small></button>
+        </div>
+        <button class="kp-pot" data-cmd="pot">藥水<small>F</small></button>
+      </div>
     </div>
-    <div class="row small stats">
-      <span>⚔ <b id="st-atk">5</b></span>
-      <span>🛡 <b id="st-def">1</b></span>
-      <span>✦ <b id="st-crit">5%</b></span>
-      <span>◉ <b id="st-gold">0</b></span>
-      <span>☠ <b id="st-kills">0</b></span>
-    </div>
-  </header>
+    <div id="log"></div>
+    <footer id="bottom">
+      <button id="weapon-slot"><span class="wicon" id="hud-wicon"></span><span id="hud-wname"></span></button>
+      <button id="pot-btn">藥水<b id="pot-n">×0</b></button>
+      <canvas id="minimap" width="99" height="99"></canvas>
+    </footer>
+  </section>
 
-  <div id="view-wrap">
-    <canvas id="view" width="160" height="120"></canvas>
-    <div id="flash"></div>
-  </div>
-
-  <div id="log"></div>
-
-  <div id="controls">
-    <canvas id="minimap" width="93" height="93"></canvas>
-    <div id="pad">
-      <button data-cmd="tl">↺</button>
-      <button data-cmd="fw" data-repeat>▲</button>
-      <button data-cmd="tr">↻</button>
-      <button data-cmd="sl" data-repeat>◀</button>
-      <button data-cmd="bk" data-repeat>▼</button>
-      <button data-cmd="sr" data-repeat>▶</button>
-    </div>
-    <div id="acts">
-      <button data-cmd="atk" class="atk">攻擊</button>
-      <button data-cmd="pot" class="pot">藥水<small id="pot-n">×2</small></button>
-      <button data-cmd="wait" class="wait">等待</button>
-    </div>
-  </div>
-
-  <div id="overlay" class="show">
-    <div class="panel" id="panel"></div>
-  </div>
+  <div id="modal"><div class="panel" id="modal-panel"></div></div>
 </div>
+<script src="data.js"></script>
 <script src="game.js"></script>
 </body>
 </html>
