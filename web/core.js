@@ -36,6 +36,7 @@ function newGame(name, cls) {
     poison: null,         // {pct, left|'long'}
     phoenix: false,
     next: {},             // 下一場戰鬥的特殊效果
+    cds: [0, 0, 0],       // 技能冷卻：跨戰鬥共通，新戰鬥不重置
     blockHits: 0,
     dropFloor: 0,         // 掉落保底剩餘步數
     merchantStep: -1,

@@ -94,7 +94,7 @@ async function startBattle(kind) {
   const ms = monsterStats(m, G.floor, kind);
   const bs = baseStats();
   const P = {isP: true, name: G.name, hp: G.hp, maxHp: bs.hp, atk: bs.atk, def: bs.def, spd: bs.spd, crit: bs.crit,
-    eva: bs.eva, hit: bs.hit, gauge: 0, st: [], cds: [0, 0, 0], turns: 0, noDmgTurns: 0, roseStacks: 0, dragonStack: 0,
+    eva: bs.eva, hit: bs.hit, gauge: 0, st: [], cds: G.cds, turns: 0, noDmgTurns: 0, roseStacks: 0, dragonStack: 0,
     firstAttackDone: false, veteranUsed: false, nextBoost: 1};
   const E = {isP: false, name: m.name, data: m, fx: MON_FX[m.name] || {}, rank: m.rank, hp: ms.hp, maxHp: ms.hp,
     atk: ms.atk, def: ms.def, spd: ms.spd, crit: ms.crit, eva: ms.eva, hit: 100, gauge: 0, st: [], turns: 0,
@@ -112,7 +112,7 @@ async function startBattle(kind) {
   if (G.next.first === 'enemy2') E.extraFirst = true;
   if (hasAcc('疾風腰帶') || hasAcc('獵人斗篷扣')) P.gauge = Math.max(P.gauge, 100);
   if (G.next.skill === 'cdstart') {
-    const n = unlockedSkills(G.floor); for (let i = 0; i < n; i++) P.cds[i] = SKILLS[G.cls][i].cd;
+    const n = unlockedSkills(G.floor); for (let i = 0; i < n; i++) P.cds[i] = Math.max(P.cds[i], SKILLS[G.cls][i].cd);
   }
   if (hasAcc('魔力護盾')) stAdd(P, 'shield', Math.round(P.atk * 3 * accScale()), 999);
   await UI.battleBegin(B);
