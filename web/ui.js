@@ -56,8 +56,7 @@ function texFrom(key) {
   const [x, y, w, h] = DATA.atlas[key];
   const c = document.createElement('canvas'); c.width = 32; c.height = 32;
   const g = c.getContext('2d'); g.imageSmoothingEnabled = false;
-  g.drawImage(ATLAS, x, y, w, h, 0, 0, 32, 32);
-  try { return g.getImageData(0, 0, 32, 32).data; }
+  try { g.drawImage(ATLAS, x, y, w, h, 0, 0, 32, 32); return g.getImageData(0, 0, 32, 32).data; }
   catch (e) {
     // 無法讀取像素時（例如 file:// 被視為跨來源），改用純色材質，避免整個畫面變黑
     const fb = {0: [92, 88, 84], 1: [52, 66, 48], 2: [30, 32, 36]}[key.split(':')[2]] || [80, 80, 80];
@@ -172,7 +171,10 @@ function renderView() {
   }
   if (cam.fade > 0) { vctx.fillStyle = `rgba(6,5,10,${cam.fade})`; vctx.fillRect(0, 0, W, H); }
 }
-function loop() { renderView(); decay(); requestAnimationFrame(loop); }
+function loop() {
+  try { renderView(); } catch (e) { if (!loop.warned) { loop.warned = true; console.error(e); } }
+  decay(); requestAnimationFrame(loop);
+}
 function decay() {
   scene.monShake = Math.max(0, scene.monShake - 0.08); scene.monFlash = Math.max(0, scene.monFlash - 0.12);
   scene.wpnKick = Math.max(0, scene.wpnKick - 0.12); scene.playerHit = Math.max(0, scene.playerHit - 0.06);
@@ -668,14 +670,19 @@ function initInput() {
 
 // ============ 啟動 ============
 function boot() {
-  ATLAS = new Image();
-  ATLAS.onload = () => {
-    AW = ATLAS.naturalWidth; AH = ATLAS.naturalHeight;
-    document.documentElement.style.setProperty('--atlas', 'url(assets/atlas.png)');
+  let started = false;
+  const start = () => {
+    if (started) return; started = true;
+    if (ATLAS.naturalWidth) { AW = ATLAS.naturalWidth; AH = ATLAS.naturalHeight; }
+    document.documentElement.style.setProperty('--atlas', `url("${ATLAS.src}")`);
     view = $('#view'); view.width = VIEW_W; view.height = VIEW_H;
     vctx = view.getContext('2d'); vctx.imageSmoothingEnabled = false; vimg = vctx.createImageData(VIEW_W, VIEW_H);
     initTitle(); initInput(); show('scr-title'); loop();
   };
-  ATLAS.src = 'assets/atlas.png';
+  ATLAS = new Image();
+  ATLAS.onload = start;
+  // 內嵌圖集若失敗就改讀圖片檔；兩者都失敗仍啟動遊戲（以純色顯示），不讓畫面卡在全黑
+  ATLAS.onerror = () => { if (ATLAS.src.startsWith('data:')) ATLAS.src = 'assets/atlas.png'; else start(); };
+  ATLAS.src = typeof ATLAS_SRC === 'string' ? ATLAS_SRC : 'assets/atlas.png';
 }
 boot();

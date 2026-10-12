@@ -113,6 +113,11 @@ def main():
         f.write('// 由 tools/build_web.py 產生，請勿手動修改\nconst DATA = ')
         json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
         f.write(';\n')
+    # 圖集另外內嵌成 data URI：不需額外載入圖片檔，任何來源（file://、其他網域）都不會讓畫布被視為跨來源
+    import base64
+    with open(os.path.join(WEB, 'assets/atlas.png'), 'rb') as f: b64 = base64.b64encode(f.read()).decode()
+    with open(os.path.join(WEB, 'atlas.js'), 'w', encoding='utf-8') as f:
+        f.write('// 由 tools/build_web.py 產生，請勿手動修改\nconst ATLAS_SRC = "data:image/png;base64,' + b64 + '";\n')
     print('atlas', W, H, len(tiles), 'tiles')
 
 if __name__ == '__main__':
