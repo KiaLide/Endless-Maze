@@ -1,0 +1,1961 @@
+{
+ "base_floor1": {
+  "hp": 50,
+  "atk": 6,
+  "def_": 4,
+  "spd": 9,
+  "crit": 5,
+  "eva": 3
+ },
+ "roles": {
+  "標準": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   0
+  ],
+  "坦克": [
+   1.5,
+   0.8,
+   1.8,
+   0.8,
+   0
+  ],
+  "速攻": [
+   0.7,
+   1.0,
+   0.7,
+   1.5,
+   10
+  ],
+  "重擊": [
+   1.1,
+   1.4,
+   1.0,
+   0.7,
+   0
+  ],
+  "術者": [
+   0.8,
+   1.2,
+   0.6,
+   1.0,
+   0
+  ],
+  "群聚": [
+   0.6,
+   0.7,
+   0.5,
+   1.2,
+   0
+  ]
+ },
+ "rank_mult": {
+  "基本": [
+   1.0,
+   1.0
+  ],
+  "精英": [
+   1.8,
+   1.3
+  ],
+  "頭目": [
+   3.0,
+   1.5
+  ]
+ },
+ "growth": "生命、攻擊、防禦：第 1～50 層每層 ×1.045，第 51 層起每層 ×1.05；速度每層 ×1.01",
+ "monsters": [
+  {
+   "region": "幽暗森林",
+   "rank": "基本",
+   "no": 1,
+   "name": "森林史萊姆",
+   "role": "標準",
+   "behavior": "無（新手怪）",
+   "floors": [
+    1,
+    5
+   ],
+   "stats_at_first_floor": {
+    "hp": 50,
+    "atk": 6,
+    "def_": 4,
+    "spd": 9,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "基本",
+   "no": 2,
+   "name": "野狼",
+   "role": "速攻",
+   "behavior": "雙咬：每次攻擊打 2 下（各 ×0.6）",
+   "floors": [
+    1,
+    5
+   ],
+   "stats_at_first_floor": {
+    "hp": 35,
+    "atk": 6,
+    "def_": 3,
+    "spd": 14,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "基本",
+   "no": 3,
+   "name": "毒菇人",
+   "role": "術者",
+   "behavior": "攻擊 30% 機率讓玩家中毒 3 回合",
+   "floors": [
+    1,
+    10
+   ],
+   "stats_at_first_floor": {
+    "hp": 40,
+    "atk": 7,
+    "def_": 2,
+    "spd": 9,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "基本",
+   "no": 4,
+   "name": "哥布林斥候",
+   "role": "速攻",
+   "behavior": "攻擊時 20% 機率偷走少量金幣，打倒牠就拿回來",
+   "floors": [
+    1,
+    10
+   ],
+   "stats_at_first_floor": {
+    "hp": 35,
+    "atk": 6,
+    "def_": 3,
+    "spd": 14,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "基本",
+   "no": 5,
+   "name": "荊棘樹精",
+   "role": "坦克",
+   "behavior": "受到攻擊時反彈 15% 傷害",
+   "floors": [
+    1,
+    10
+   ],
+   "stats_at_first_floor": {
+    "hp": 75,
+    "atk": 5,
+    "def_": 7,
+    "spd": 7,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "基本",
+   "no": 6,
+   "name": "巨角野豬",
+   "role": "重擊",
+   "behavior": "第一次行動傷害 ×1.5",
+   "floors": [
+    6,
+    10
+   ],
+   "stats_at_first_floor": {
+    "hp": 69,
+    "atk": 10,
+    "def_": 5,
+    "spd": 7,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "基本",
+   "no": 7,
+   "name": "哥布林薩滿",
+   "role": "術者",
+   "behavior": "每 3 回合回復自己 20% 生命",
+   "floors": [
+    6,
+    10
+   ],
+   "stats_at_first_floor": {
+    "hp": 50,
+    "atk": 9,
+    "def_": 3,
+    "spd": 9,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "精英",
+   "no": 1,
+   "name": "狼王・灰鬃",
+   "role": "速攻",
+   "behavior": "雙咬；生命低於 50% 時速度 +50%",
+   "floors": [
+    1,
+    10
+   ],
+   "stats_at_first_floor": {
+    "hp": 63,
+    "atk": 8,
+    "def_": 3,
+    "spd": 14,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "精英",
+   "no": 2,
+   "name": "哥布林戰將",
+   "role": "重擊",
+   "behavior": "每 3 回合重劈（攻擊 ×2）",
+   "floors": [
+    1,
+    10
+   ],
+   "stats_at_first_floor": {
+    "hp": 99,
+    "atk": 11,
+    "def_": 4,
+    "spd": 6,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "精英",
+   "no": 3,
+   "name": "古樹守衛",
+   "role": "坦克",
+   "behavior": "每回合回復 5% 生命",
+   "floors": [
+    1,
+    10
+   ],
+   "stats_at_first_floor": {
+    "hp": 135,
+    "atk": 6,
+    "def_": 7,
+    "spd": 7,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "頭目",
+   "name": "毒蛛女王",
+   "role": "標準",
+   "behavior": "攻擊附中毒；每 3 回合吐網讓玩家減速；生命低於 50% 時召喚小蜘蛛協助攻擊",
+   "floors": [
+    5,
+    5
+   ],
+   "stats_at_first_floor": {
+    "hp": 179,
+    "atk": 11,
+    "def_": 5,
+    "spd": 9,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "幽暗森林",
+   "rank": "頭目",
+   "name": "腐根巨人",
+   "role": "標準",
+   "behavior": "生命特別高；每 4 回合根縛（玩家行動條 −50）；生命低於 30% 時攻擊 +50%",
+   "floors": [
+    10,
+    10
+   ],
+   "stats_at_first_floor": {
+    "hp": 223,
+    "atk": 13,
+    "def_": 6,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "基本",
+   "no": 1,
+   "name": "水泡史萊姆",
+   "role": "標準",
+   "behavior": "分裂：第一次被打倒時以 30% 生命復活",
+   "floors": [
+    11,
+    15
+   ],
+   "stats_at_first_floor": {
+    "hp": 78,
+    "atk": 9,
+    "def_": 6,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "基本",
+   "no": 2,
+   "name": "鋸齒魚人",
+   "role": "速攻",
+   "behavior": "雙擊",
+   "floors": [
+    11,
+    15
+   ],
+   "stats_at_first_floor": {
+    "hp": 54,
+    "atk": 9,
+    "def_": 4,
+    "spd": 15,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "基本",
+   "no": 3,
+   "name": "毒刺水母",
+   "role": "術者",
+   "behavior": "攻擊附中毒；閃避 +15%",
+   "floors": [
+    11,
+    20
+   ],
+   "stats_at_first_floor": {
+    "hp": 62,
+    "atk": 11,
+    "def_": 4,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "基本",
+   "no": 4,
+   "name": "甲殼蟹",
+   "role": "坦克",
+   "behavior": "背殼：受到爆擊時不加倍",
+   "floors": [
+    11,
+    20
+   ],
+   "stats_at_first_floor": {
+    "hp": 116,
+    "atk": 7,
+    "def_": 11,
+    "spd": 8,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "基本",
+   "no": 5,
+   "name": "沼澤蛙",
+   "role": "速攻",
+   "behavior": "舌捲：攻擊 20% 機率讓玩家減速",
+   "floors": [
+    11,
+    20
+   ],
+   "stats_at_first_floor": {
+    "hp": 54,
+    "atk": 9,
+    "def_": 4,
+    "spd": 15,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "基本",
+   "no": 6,
+   "name": "鱷魚獵手",
+   "role": "重擊",
+   "behavior": "生命低於 30% 時攻擊 ×1.5",
+   "floors": [
+    16,
+    20
+   ],
+   "stats_at_first_floor": {
+    "hp": 106,
+    "atk": 16,
+    "def_": 8,
+    "spd": 7,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "基本",
+   "no": 7,
+   "name": "魚人祭司",
+   "role": "術者",
+   "behavior": "每 3 回合給自己護盾（攻擊 ×3）",
+   "floors": [
+    16,
+    20
+   ],
+   "stats_at_first_floor": {
+    "hp": 77,
+    "atk": 14,
+    "def_": 5,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "精英",
+   "no": 1,
+   "name": "深潭電鰻",
+   "role": "速攻",
+   "behavior": "電擊：攻擊 20% 機率讓玩家行動條 −30",
+   "floors": [
+    11,
+    20
+   ],
+   "stats_at_first_floor": {
+    "hp": 98,
+    "atk": 12,
+    "def_": 4,
+    "spd": 15,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "精英",
+   "no": 2,
+   "name": "魚人隊長",
+   "role": "重擊",
+   "behavior": "每 3 回合三連刺",
+   "floors": [
+    11,
+    20
+   ],
+   "stats_at_first_floor": {
+    "hp": 154,
+    "atk": 17,
+    "def_": 6,
+    "spd": 7,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "精英",
+   "no": 3,
+   "name": "巨鉗蟹王",
+   "role": "坦克",
+   "behavior": "被攻擊時 20% 機率反擊",
+   "floors": [
+    11,
+    20
+   ],
+   "stats_at_first_floor": {
+    "hp": 210,
+    "atk": 10,
+    "def_": 11,
+    "spd": 8,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "頭目",
+   "name": "沉沒的巫女",
+   "role": "標準",
+   "behavior": "每 3 回合歌聲（玩家攻擊 −25%，3 回合）；會召喚水母協助攻擊",
+   "floors": [
+    15,
+    15
+   ],
+   "stats_at_first_floor": {
+    "hp": 278,
+    "atk": 17,
+    "def_": 7,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "沉沒水道",
+   "rank": "頭目",
+   "name": "深海巨鯨",
+   "role": "標準",
+   "behavior": "每 4 回合漩渦（攻擊 ×3）；生命越低速度越快",
+   "floors": [
+    20,
+    20
+   ],
+   "stats_at_first_floor": {
+    "hp": 346,
+    "atk": 21,
+    "def_": 9,
+    "spd": 11,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "基本",
+   "no": 1,
+   "name": "熔岩史萊姆",
+   "role": "標準",
+   "behavior": "攻擊附灼燒",
+   "floors": [
+    21,
+    25
+   ],
+   "stats_at_first_floor": {
+    "hp": 121,
+    "atk": 14,
+    "def_": 10,
+    "spd": 11,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "基本",
+   "no": 2,
+   "name": "火蜥蜴",
+   "role": "速攻",
+   "behavior": "每 2 回合噴火（攻擊 ×1.3，附灼燒）",
+   "floors": [
+    21,
+    25
+   ],
+   "stats_at_first_floor": {
+    "hp": 84,
+    "atk": 14,
+    "def_": 7,
+    "spd": 16,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "基本",
+   "no": 3,
+   "name": "礦坑地精",
+   "role": "重擊",
+   "behavior": "生命低於 30% 時自爆（攻擊 ×3），然後死亡",
+   "floors": [
+    21,
+    30
+   ],
+   "stats_at_first_floor": {
+    "hp": 133,
+    "atk": 20,
+    "def_": 10,
+    "spd": 8,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "基本",
+   "no": 4,
+   "name": "岩石魔像",
+   "role": "坦克",
+   "behavior": "受到的傷害 −20%",
+   "floors": [
+    21,
+    30
+   ],
+   "stats_at_first_floor": {
+    "hp": 181,
+    "atk": 12,
+    "def_": 17,
+    "spd": 9,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "基本",
+   "no": 5,
+   "name": "火焰蝙蝠",
+   "role": "速攻",
+   "behavior": "閃避 +20%",
+   "floors": [
+    21,
+    30
+   ],
+   "stats_at_first_floor": {
+    "hp": 84,
+    "atk": 14,
+    "def_": 7,
+    "spd": 16,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "基本",
+   "no": 6,
+   "name": "黑曜騎士",
+   "role": "重擊",
+   "behavior": "破甲：攻擊讓玩家防禦 −20%，3 回合",
+   "floors": [
+    26,
+    30
+   ],
+   "stats_at_first_floor": {
+    "hp": 165,
+    "atk": 25,
+    "def_": 12,
+    "spd": 8,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "基本",
+   "no": 7,
+   "name": "地獄犬",
+   "role": "速攻",
+   "behavior": "雙咬，附灼燒",
+   "floors": [
+    26,
+    30
+   ],
+   "stats_at_first_floor": {
+    "hp": 105,
+    "atk": 18,
+    "def_": 8,
+    "spd": 17,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "精英",
+   "no": 1,
+   "name": "熔岩魔像",
+   "role": "坦克",
+   "behavior": "被攻擊時 30% 機率讓攻擊者灼燒",
+   "floors": [
+    21,
+    30
+   ],
+   "stats_at_first_floor": {
+    "hp": 326,
+    "atk": 15,
+    "def_": 17,
+    "spd": 9,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "精英",
+   "no": 2,
+   "name": "礦坑監工",
+   "role": "重擊",
+   "behavior": "每次攻擊讓自己攻擊 +10%（可累積）",
+   "floors": [
+    21,
+    30
+   ],
+   "stats_at_first_floor": {
+    "hp": 239,
+    "atk": 26,
+    "def_": 10,
+    "spd": 8,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "精英",
+   "no": 3,
+   "name": "炎之精靈",
+   "role": "術者",
+   "behavior": "每 3 回合火焰風暴（攻擊 ×2，必定灼燒）",
+   "floors": [
+    21,
+    30
+   ],
+   "stats_at_first_floor": {
+    "hp": 174,
+    "atk": 23,
+    "def_": 6,
+    "spd": 11,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "頭目",
+   "name": "鍛造巨人",
+   "role": "標準",
+   "behavior": "每 4 回合巨錘（攻擊 ×3）；生命低於 50% 時防禦 ×2",
+   "floors": [
+    25,
+    25
+   ],
+   "stats_at_first_floor": {
+    "hp": 431,
+    "atk": 26,
+    "def_": 12,
+    "spd": 11,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "熔岩礦坑",
+   "rank": "頭目",
+   "name": "炎龍",
+   "role": "標準",
+   "behavior": "每 3 回合吐息（攻擊 ×2.5，附灼燒）；閃避 +20%；生命低於 30% 時攻擊 +50%",
+   "floors": [
+    30,
+    30
+   ],
+   "stats_at_first_floor": {
+    "hp": 538,
+    "atk": 32,
+    "def_": 14,
+    "spd": 12,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "基本",
+   "no": 1,
+   "name": "骷髏士兵",
+   "role": "標準",
+   "behavior": "不屈：第一次被打倒時以 1 生命站起",
+   "floors": [
+    31,
+    35
+   ],
+   "stats_at_first_floor": {
+    "hp": 187,
+    "atk": 22,
+    "def_": 15,
+    "spd": 12,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "基本",
+   "no": 2,
+   "name": "冰霜幽靈",
+   "role": "術者",
+   "behavior": "閃避 +25%；攻擊 20% 機率讓玩家減速",
+   "floors": [
+    31,
+    35
+   ],
+   "stats_at_first_floor": {
+    "hp": 150,
+    "atk": 27,
+    "def_": 9,
+    "spd": 12,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "基本",
+   "no": 3,
+   "name": "殭屍",
+   "role": "坦克",
+   "behavior": "攻擊附中毒",
+   "floors": [
+    31,
+    40
+   ],
+   "stats_at_first_floor": {
+    "hp": 281,
+    "atk": 18,
+    "def_": 27,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "基本",
+   "no": 4,
+   "name": "冰狼",
+   "role": "速攻",
+   "behavior": "雙咬；攻擊 20% 機率讓玩家減速",
+   "floors": [
+    31,
+    40
+   ],
+   "stats_at_first_floor": {
+    "hp": 131,
+    "atk": 22,
+    "def_": 10,
+    "spd": 18,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "基本",
+   "no": 5,
+   "name": "屍鴉群",
+   "role": "群聚",
+   "behavior": "每次行動攻擊 3 下（各 ×0.4）",
+   "floors": [
+    31,
+    40
+   ],
+   "stats_at_first_floor": {
+    "hp": 112,
+    "atk": 16,
+    "def_": 7,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "基本",
+   "no": 6,
+   "name": "骸骨弓手",
+   "role": "術者",
+   "behavior": "攻擊無視玩家一半的閃避",
+   "floors": [
+    36,
+    40
+   ],
+   "stats_at_first_floor": {
+    "hp": 187,
+    "atk": 34,
+    "def_": 11,
+    "spd": 13,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "基本",
+   "no": 7,
+   "name": "吸血鬼侍從",
+   "role": "速攻",
+   "behavior": "回復造成傷害的 50%",
+   "floors": [
+    36,
+    40
+   ],
+   "stats_at_first_floor": {
+    "hp": 163,
+    "atk": 28,
+    "def_": 13,
+    "spd": 19,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "精英",
+   "no": 1,
+   "name": "死靈法師",
+   "role": "術者",
+   "behavior": "每 3 回合召喚骷髏協助攻擊",
+   "floors": [
+    31,
+    40
+   ],
+   "stats_at_first_floor": {
+    "hp": 270,
+    "atk": 35,
+    "def_": 9,
+    "spd": 12,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "精英",
+   "no": 2,
+   "name": "冰霜騎士",
+   "role": "坦克",
+   "behavior": "攻擊 20% 機率凍結玩家 1 回合",
+   "floors": [
+    31,
+    40
+   ],
+   "stats_at_first_floor": {
+    "hp": 506,
+    "atk": 23,
+    "def_": 27,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "精英",
+   "no": 3,
+   "name": "無頭騎士",
+   "role": "重擊",
+   "behavior": "生命低於 50% 時每次行動攻擊 2 次",
+   "floors": [
+    31,
+    40
+   ],
+   "stats_at_first_floor": {
+    "hp": 371,
+    "atk": 41,
+    "def_": 15,
+    "spd": 8,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "頭目",
+   "name": "冰之女王",
+   "role": "標準",
+   "behavior": "每 3 回合暴風雪（攻擊 ×1.5＋減速）；冰甲：受到傷害 −30%，被打 3 下後破碎",
+   "floors": [
+    35,
+    35
+   ],
+   "stats_at_first_floor": {
+    "hp": 670,
+    "atk": 40,
+    "def_": 18,
+    "spd": 13,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "冰封墓城",
+   "rank": "頭目",
+   "name": "巫妖王",
+   "role": "標準",
+   "behavior": "召喚骷髏；詛咒（玩家攻擊、防禦 −25%）；第一次被打倒時以 50% 生命復活",
+   "floors": [
+    40,
+    40
+   ],
+   "stats_at_first_floor": {
+    "hp": 835,
+    "atk": 50,
+    "def_": 22,
+    "spd": 13,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "基本",
+   "no": 1,
+   "name": "小惡魔",
+   "role": "速攻",
+   "behavior": "嘲弄：攻擊 20% 機率讓玩家一個技能 CD +1",
+   "floors": [
+    41,
+    45
+   ],
+   "stats_at_first_floor": {
+    "hp": 204,
+    "atk": 35,
+    "def_": 16,
+    "spd": 20,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "基本",
+   "no": 2,
+   "name": "混沌史萊姆",
+   "role": "標準",
+   "behavior": "每回合隨機獲得攻擊、防禦或速度 +20%",
+   "floors": [
+    41,
+    45
+   ],
+   "stats_at_first_floor": {
+    "hp": 291,
+    "atk": 35,
+    "def_": 23,
+    "spd": 13,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "基本",
+   "no": 3,
+   "name": "夢魘",
+   "role": "術者",
+   "behavior": "攻擊 25% 機率讓玩家行動條 −50",
+   "floors": [
+    41,
+    50
+   ],
+   "stats_at_first_floor": {
+    "hp": 233,
+    "atk": 42,
+    "def_": 14,
+    "spd": 13,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "基本",
+   "no": 4,
+   "name": "深淵觸手",
+   "role": "坦克",
+   "behavior": "每回合回復 5% 生命",
+   "floors": [
+    41,
+    50
+   ],
+   "stats_at_first_floor": {
+    "hp": 436,
+    "atk": 28,
+    "def_": 42,
+    "spd": 11,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "基本",
+   "no": 5,
+   "name": "魅魔",
+   "role": "術者",
+   "behavior": "回復造成傷害的 30%；攻擊讓玩家攻擊 −15%",
+   "floors": [
+    41,
+    50
+   ],
+   "stats_at_first_floor": {
+    "hp": 233,
+    "atk": 42,
+    "def_": 14,
+    "spd": 13,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "基本",
+   "no": 6,
+   "name": "惡魔騎士",
+   "role": "重擊",
+   "behavior": "破甲：攻擊讓玩家防禦 −20%，3 回合",
+   "floors": [
+    46,
+    50
+   ],
+   "stats_at_first_floor": {
+    "hp": 399,
+    "atk": 61,
+    "def_": 29,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "基本",
+   "no": 7,
+   "name": "混沌之眼",
+   "role": "術者",
+   "behavior": "每 3 回合讓玩家隨機一個 buff 消失",
+   "floors": [
+    46,
+    50
+   ],
+   "stats_at_first_floor": {
+    "hp": 290,
+    "atk": 52,
+    "def_": 17,
+    "spd": 14,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "精英",
+   "no": 1,
+   "name": "地獄領主",
+   "role": "重擊",
+   "behavior": "攻擊附灼燒；生命低於 50% 時攻擊 +50%",
+   "floors": [
+    41,
+    50
+   ],
+   "stats_at_first_floor": {
+    "hp": 576,
+    "atk": 64,
+    "def_": 23,
+    "spd": 9,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "精英",
+   "no": 2,
+   "name": "虛空行者",
+   "role": "速攻",
+   "behavior": "閃避 +30%；閃避成功後反擊",
+   "floors": [
+    41,
+    50
+   ],
+   "stats_at_first_floor": {
+    "hp": 366,
+    "atk": 45,
+    "def_": 16,
+    "spd": 20,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "精英",
+   "no": 3,
+   "name": "墮落天使",
+   "role": "術者",
+   "behavior": "每 3 回合解除自己所有負面狀態並回復 15% 生命",
+   "floors": [
+    41,
+    50
+   ],
+   "stats_at_first_floor": {
+    "hp": 419,
+    "atk": 54,
+    "def_": 14,
+    "spd": 13,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "頭目",
+   "name": "深淵魔將",
+   "role": "標準",
+   "behavior": "每次行動二連斬；生命低於 50% 時召喚 2 隻小惡魔",
+   "floors": [
+    45,
+    45
+   ],
+   "stats_at_first_floor": {
+    "hp": 1040,
+    "atk": 62,
+    "def_": 28,
+    "spd": 14,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "深淵魔域",
+   "rank": "頭目",
+   "name": "深淵之主",
+   "role": "標準",
+   "behavior": "三階段：生命 66% 以下時攻擊、速度 +30%；33% 以下時每 3 回合施放「終焉」（攻擊 ×4）",
+   "floors": [
+    50,
+    50
+   ],
+   "stats_at_first_floor": {
+    "hp": 1297,
+    "atk": 78,
+    "def_": 35,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 1,
+   "name": "古堡蝙蝠群",
+   "role": "群聚",
+   "behavior": "每次行動攻擊 3 下",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 272,
+    "atk": 38,
+    "def_": 18,
+    "spd": 18,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 2,
+   "name": "活化盔甲",
+   "role": "坦克",
+   "behavior": "受到的傷害 −20%",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 681,
+    "atk": 44,
+    "def_": 65,
+    "spd": 12,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 3,
+   "name": "石像鬼",
+   "role": "坦克",
+   "behavior": "戰鬥開始的 2 回合呈石化狀態，受到的傷害 −50%",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 681,
+    "atk": 44,
+    "def_": 65,
+    "spd": 12,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 4,
+   "name": "幽靈女僕",
+   "role": "術者",
+   "behavior": "閃避 +25%",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 363,
+    "atk": 65,
+    "def_": 22,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 5,
+   "name": "詛咒畫像",
+   "role": "術者",
+   "behavior": "凝視：攻擊讓玩家速度 −20%，3 回合",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 363,
+    "atk": 65,
+    "def_": 22,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 6,
+   "name": "舞動人偶",
+   "role": "速攻",
+   "behavior": "雙擊",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 318,
+    "atk": 54,
+    "def_": 25,
+    "spd": 22,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 7,
+   "name": "吸血蝙蝠",
+   "role": "速攻",
+   "behavior": "回復造成傷害的 30%",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 318,
+    "atk": 54,
+    "def_": 25,
+    "spd": 22,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 8,
+   "name": "骷髏衛兵",
+   "role": "標準",
+   "behavior": "第一次被打倒時以 1 生命站起",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 454,
+    "atk": 54,
+    "def_": 36,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 9,
+   "name": "地牢獄卒",
+   "role": "重擊",
+   "behavior": "鐐銬：攻擊 20% 機率讓玩家行動條 −30",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 499,
+    "atk": 76,
+    "def_": 36,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 10,
+   "name": "鬼火",
+   "role": "術者",
+   "behavior": "攻擊附灼燒",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 363,
+    "atk": 65,
+    "def_": 22,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 11,
+   "name": "瘟疫鼠群",
+   "role": "群聚",
+   "behavior": "攻擊附中毒",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 272,
+    "atk": 38,
+    "def_": 18,
+    "spd": 18,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 12,
+   "name": "斷頭台處刑者",
+   "role": "重擊",
+   "behavior": "玩家生命低於 30% 時傷害 ×2",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 499,
+    "atk": 76,
+    "def_": 36,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 13,
+   "name": "鏡中魔影",
+   "role": "速攻",
+   "behavior": "閃避 +20%；閃避成功後反擊",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 318,
+    "atk": 54,
+    "def_": 25,
+    "spd": 22,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 14,
+   "name": "煉金失敗品",
+   "role": "標準",
+   "behavior": "被打倒時爆炸（攻擊 ×1.5）",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 454,
+    "atk": 54,
+    "def_": 36,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 15,
+   "name": "古堡獵犬",
+   "role": "速攻",
+   "behavior": "雙咬",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 318,
+    "atk": 54,
+    "def_": 25,
+    "spd": 22,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 16,
+   "name": "血族侍從",
+   "role": "速攻",
+   "behavior": "回復造成傷害的 50%",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 318,
+    "atk": 54,
+    "def_": 25,
+    "spd": 22,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 17,
+   "name": "怨靈騎士",
+   "role": "重擊",
+   "behavior": "破甲：攻擊讓玩家防禦 −20%，3 回合",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 499,
+    "atk": 76,
+    "def_": 36,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 18,
+   "name": "黑魔導書",
+   "role": "術者",
+   "behavior": "每 3 回合讓玩家一個技能 CD +2",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 363,
+    "atk": 65,
+    "def_": 22,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 19,
+   "name": "寶箱怪",
+   "role": "坦克",
+   "behavior": "打倒後額外掉落 1 件物品",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 681,
+    "atk": 44,
+    "def_": 65,
+    "spd": 12,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "基本",
+   "no": 20,
+   "name": "宮廷小丑",
+   "role": "速攻",
+   "behavior": "每次行動隨機一種：攻擊 ×2、回復自己 20%、讓玩家減速",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 318,
+    "atk": 54,
+    "def_": 25,
+    "spd": 22,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 1,
+   "name": "吸血伯爵",
+   "role": "速攻",
+   "behavior": "回復造成傷害的 50%；生命低於 50% 時化為蝙蝠，閃避 +40%，持續 2 回合",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 572,
+    "atk": 71,
+    "def_": 25,
+    "spd": 22,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 2,
+   "name": "黑騎士",
+   "role": "重擊",
+   "behavior": "每 3 回合三連斬",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 899,
+    "atk": 99,
+    "def_": 36,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 3,
+   "name": "古堡管家",
+   "role": "術者",
+   "behavior": "每 3 回合召喚幽靈女僕協助攻擊",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 653,
+    "atk": 85,
+    "def_": 22,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 4,
+   "name": "血腥伯爵夫人",
+   "role": "速攻",
+   "behavior": "每次攻擊讓自己攻擊 +10%（可累積）",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 572,
+    "atk": 71,
+    "def_": 25,
+    "spd": 22,
+    "crit": 5,
+    "eva": 13
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 5,
+   "name": "石像鬼領主",
+   "role": "坦克",
+   "behavior": "每回合回復 5% 生命",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 1225,
+    "atk": 57,
+    "def_": 65,
+    "spd": 12,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 6,
+   "name": "處刑人",
+   "role": "重擊",
+   "behavior": "玩家生命低於 40% 時傷害 ×2",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 899,
+    "atk": 99,
+    "def_": 36,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 7,
+   "name": "瘋狂煉金術士",
+   "role": "術者",
+   "behavior": "每次攻擊隨機讓玩家中毒或灼燒",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 653,
+    "atk": 85,
+    "def_": 22,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 8,
+   "name": "幽靈新娘",
+   "role": "術者",
+   "behavior": "閃避 +30%；攻擊讓玩家攻擊 −20%",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 653,
+    "atk": 85,
+    "def_": 22,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 9,
+   "name": "魔像衛士",
+   "role": "坦克",
+   "behavior": "受到的傷害 −30%，但速度很慢",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 1225,
+    "atk": 57,
+    "def_": 65,
+    "spd": 12,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "精英",
+   "no": 10,
+   "name": "夢魘騎士",
+   "role": "重擊",
+   "behavior": "攻擊 25% 機率讓玩家行動條 −50",
+   "floors": [
+    51,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 899,
+    "atk": 99,
+    "def_": 36,
+    "spd": 10,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "頭目",
+   "no": 1,
+   "name": "吸血鬼真祖",
+   "role": "標準",
+   "behavior": "回復造成傷害的 50%；每 3 回合血霧（攻擊 ×2，並回復同量）；第一次被打倒時以 30% 生命復活",
+   "floors": [
+    55,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 1655,
+    "atk": 99,
+    "def_": 44,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "頭目",
+   "no": 2,
+   "name": "亡靈國王",
+   "role": "標準",
+   "behavior": "召喚衛兵協助攻擊；詛咒（玩家攻擊、防禦 −25%）；生命低於 30% 時攻擊 +50%",
+   "floors": [
+    55,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 1655,
+    "atk": 99,
+    "def_": 44,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "頭目",
+   "no": 3,
+   "name": "鍊金之王",
+   "role": "標準",
+   "behavior": "每次行動隨機讓玩家灼燒、中毒或減速；生命低於 50% 時喝藥回復 30%（一次）",
+   "floors": [
+    55,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 1655,
+    "atk": 99,
+    "def_": 44,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "頭目",
+   "no": 4,
+   "name": "鐘樓巨像",
+   "role": "標準",
+   "behavior": "受到的傷害 −40%；每 4 回合鐘響（攻擊 ×3，並讓玩家行動條 −50）",
+   "floors": [
+    55,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 1655,
+    "atk": 99,
+    "def_": 44,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  },
+  {
+   "region": "古堡",
+   "rank": "頭目",
+   "no": 5,
+   "name": "鏡之魔王",
+   "role": "標準",
+   "behavior": "能力值取「頭目標準值」和「玩家目前能力 ×1.2」中較高的",
+   "floors": [
+    55,
+    null
+   ],
+   "stats_at_first_floor": {
+    "hp": 1655,
+    "atk": 99,
+    "def_": 44,
+    "spd": 15,
+    "crit": 5,
+    "eva": 3
+   }
+  }
+ ]
+}
