@@ -1,0 +1,271 @@
+{
+ "note": "價格與金幣都乘樓層係數 F = 1 + 0.1 ×（樓層 − 1）；道具欄 6 格，每格最多 5 個",
+ "items": [
+  {
+   "id": "小藥水",
+   "category": "回復",
+   "effect": {
+    "heal_pct": 30
+   },
+   "price_F": 25
+  },
+  {
+   "id": "中藥水",
+   "category": "回復",
+   "effect": {
+    "heal_pct": 60
+   },
+   "price_F": 60
+  },
+  {
+   "id": "大藥水",
+   "category": "回復",
+   "effect": {
+    "heal_pct": 100
+   },
+   "price_F": 120
+  },
+  {
+   "id": "活力藥劑・小",
+   "category": "暫時",
+   "stat": "hp",
+   "value": 10,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 20
+  },
+  {
+   "id": "活力藥劑・中",
+   "category": "暫時",
+   "stat": "hp",
+   "value": 20,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 45
+  },
+  {
+   "id": "活力藥劑・大",
+   "category": "暫時",
+   "stat": "hp",
+   "value": 35,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 90
+  },
+  {
+   "id": "力量藥劑・小",
+   "category": "暫時",
+   "stat": "atk",
+   "value": 10,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 20
+  },
+  {
+   "id": "力量藥劑・中",
+   "category": "暫時",
+   "stat": "atk",
+   "value": 20,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 45
+  },
+  {
+   "id": "力量藥劑・大",
+   "category": "暫時",
+   "stat": "atk",
+   "value": 35,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 90
+  },
+  {
+   "id": "鐵壁藥劑・小",
+   "category": "暫時",
+   "stat": "def",
+   "value": 10,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 20
+  },
+  {
+   "id": "鐵壁藥劑・中",
+   "category": "暫時",
+   "stat": "def",
+   "value": 20,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 45
+  },
+  {
+   "id": "鐵壁藥劑・大",
+   "category": "暫時",
+   "stat": "def",
+   "value": 35,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 90
+  },
+  {
+   "id": "疾風藥劑・小",
+   "category": "暫時",
+   "stat": "spd",
+   "value": 10,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 20
+  },
+  {
+   "id": "疾風藥劑・中",
+   "category": "暫時",
+   "stat": "spd",
+   "value": 20,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 45
+  },
+  {
+   "id": "疾風藥劑・大",
+   "category": "暫時",
+   "stat": "spd",
+   "value": 35,
+   "unit": "%",
+   "duration": "一場戰鬥",
+   "price_F": 90
+  },
+  {
+   "id": "鷹眼藥劑・小",
+   "category": "暫時",
+   "stat": "crit",
+   "value": 5,
+   "unit": "點",
+   "duration": "一場戰鬥",
+   "price_F": 20
+  },
+  {
+   "id": "鷹眼藥劑・中",
+   "category": "暫時",
+   "stat": "crit",
+   "value": 10,
+   "unit": "點",
+   "duration": "一場戰鬥",
+   "price_F": 45
+  },
+  {
+   "id": "鷹眼藥劑・大",
+   "category": "暫時",
+   "stat": "crit",
+   "value": 15,
+   "unit": "點",
+   "duration": "一場戰鬥",
+   "price_F": 90
+  },
+  {
+   "id": "幻影藥劑・小",
+   "category": "暫時",
+   "stat": "eva",
+   "value": 5,
+   "unit": "點",
+   "duration": "一場戰鬥",
+   "price_F": 20
+  },
+  {
+   "id": "幻影藥劑・中",
+   "category": "暫時",
+   "stat": "eva",
+   "value": 10,
+   "unit": "點",
+   "duration": "一場戰鬥",
+   "price_F": 45
+  },
+  {
+   "id": "幻影藥劑・大",
+   "category": "暫時",
+   "stat": "eva",
+   "value": 15,
+   "unit": "點",
+   "duration": "一場戰鬥",
+   "price_F": 90
+  },
+  {
+   "id": "生命之種",
+   "category": "永久",
+   "stat": "hp",
+   "value": 10,
+   "price_F": 300
+  },
+  {
+   "id": "力量之種",
+   "category": "永久",
+   "stat": "atk",
+   "value": 2,
+   "price_F": 300
+  },
+  {
+   "id": "守護之種",
+   "category": "永久",
+   "stat": "def",
+   "value": 2,
+   "price_F": 300
+  },
+  {
+   "id": "迅捷之種",
+   "category": "永久",
+   "stat": "spd",
+   "value": 1,
+   "price_F": 300
+  },
+  {
+   "id": "慧眼之種",
+   "category": "永久",
+   "stat": "crit",
+   "value": 1,
+   "price_F": 300
+  },
+  {
+   "id": "幻影之種",
+   "category": "永久",
+   "stat": "eva",
+   "value": 1,
+   "price_F": 300
+  },
+  {
+   "id": "女神之種",
+   "category": "永久",
+   "stat": "任選",
+   "value": "該屬性 +1 點",
+   "price_F": 600
+  }
+ ],
+ "drop_table": {
+  "一般戰": {
+   "小藥水": 30,
+   "中藥水": 15,
+   "大藥水": 5,
+   "暫時・小": 25,
+   "暫時・中": 15,
+   "暫時・大": 5,
+   "永久之種": 4.5,
+   "女神之種": 0.5
+  },
+  "精英戰": {
+   "小藥水": 20,
+   "中藥水": 15,
+   "大藥水": 10,
+   "暫時・小": 15,
+   "暫時・中": 20,
+   "暫時・大": 10,
+   "永久之種": 9,
+   "女神之種": 1
+  }
+ },
+ "gold": {
+  "一般戰鬥": "5F ±20%",
+  "精英戰": "15F",
+  "頭目戰": "30F",
+  "事件少量/中量/大量": "10F/25F/60F",
+  "裝備換金幣": "階級 × 3",
+  "暗商裝備": "階級 × 20",
+  "暗商飾品": "150F"
+ }
+}
