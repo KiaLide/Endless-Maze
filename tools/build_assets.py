@@ -12,6 +12,8 @@ ASSETS = os.path.join(WEB, 'assets')
 sys.path.insert(0, HERE)
 import weapons as W
 import fp as FP
+import event_icons as EV
+from pixelize import pixelize, recolor
 
 CJK = '/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc'
 SERIF_B = '/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf'
@@ -30,6 +32,21 @@ CLASS_INFO = {
     'monk':      dict(sex='F', name='武鬥家', hero='美玲', desc='以拳腳為武器，攻擊有機率連打。', hp=36, atk=6, def_=2, crit=10),
 }
 
+
+# 怪物變體：同一張原圖換色成不同屬性（id: (原圖, 換色參數, 像素高度)）
+MON_VARIANTS = {
+    'slime_green': ('slime', None, 64),
+    'slime_red':   ('slime', dict(hue=0.01, sat=1.15), 64),
+    'slime_blue':  ('slime', dict(hue=0.56), 64),
+    'slime_dark':  ('slime', dict(hue=0.78, val=0.8), 64),
+    'slime_gold':  ('slime', dict(hue=0.12, sat=1.2, val=1.12), 64),
+    'slime_king':  ('slime', dict(hue=0.9, sat=1.2), 88),
+    'bat_purple':  ('bat', dict(hue_shift=0.0, sat=1.35, val=1.15), 60),
+    'bat_red':     ('bat', dict(hue=0.99, sat=1.6, val=1.15), 60),
+    'bat_yellow':  ('bat', dict(hue=0.13, sat=1.7, val=1.35), 60),
+    'bat_dark':    ('bat', dict(hue=0.64, sat=0.55, val=0.62), 60),
+    'bat_lord':    ('bat', dict(hue=0.95, sat=1.4, val=0.9), 84),
+}
 
 # ---------- 角色立繪：去背 ----------
 def cut_hero(src, dst):
@@ -111,12 +128,21 @@ def main():
     for d in ('heroes', 'icons', 'fp', 'monsters'):
         os.makedirs(os.path.join(ASSETS, d), exist_ok=True)
     # 怪物立繪（有原圖的才轉換，其餘遊戲內用備用像素圖）
+    tmp = os.path.join(HERE, '.cut'); os.makedirs(tmp, exist_ok=True)
     msrc = os.path.join(HERE, 'src', 'monsters')
     for f in sorted(os.listdir(msrc)):
-        cut_hero(os.path.join(msrc, f), os.path.join(ASSETS, 'monsters', os.path.splitext(f)[0] + '.png'))
-    print('monsters ok')
+        cut_hero(os.path.join(msrc, f), os.path.join(tmp, os.path.splitext(f)[0] + '.png'))
+    for f in os.listdir(os.path.join(ASSETS, 'monsters')): os.remove(os.path.join(ASSETS, 'monsters', f))
+    for vid, (base, kw, h) in MON_VARIANTS.items():
+        src = Image.open(os.path.join(tmp, base + '.png'))
+        if kw: src = recolor(src, **kw)
+        pixelize(src, h, colors=28).save(os.path.join(ASSETS, 'monsters', vid + '.png'), optimize=True)
+    print('monsters ok', len(MON_VARIANTS))
+    EV.build(os.path.join(ASSETS, 'events.png')); print('event icons ok')
     for cid in CLASS_INFO:
-        cut_hero(os.path.join(HERE, 'src', 'heroes', f'{cid}.jpg'), os.path.join(ASSETS, 'heroes', f'{cid}.png'))
+        dst = os.path.join(ASSETS, 'heroes', f'{cid}.png')
+        cut_hero(os.path.join(HERE, 'src', 'heroes', f'{cid}.jpg'), dst)
+        pixelize(Image.open(dst), 100, colors=40).save(dst, optimize=True)
     print('heroes ok')
     print('logo', build_logo(os.path.join(ASSETS, 'logo.png')))
     build_icons(os.path.join(ASSETS, 'icons')); print('icons ok')
@@ -128,7 +154,7 @@ def main():
         classes.append(dict(id=cls_id, sex=info['sex'], name=info['name'], hero=info['hero'], desc=info['desc'],
                             hp=info['hp'], atk=info['atk'], def_=info['def_'], crit=info['crit'], weaponType=wname,
                             weapons=names, fp=fpmeta[cls_id]))
-    data = dict(classes=classes,
+    data = dict(classes=classes, monsterArt=list(MON_VARIANTS), eventIcons=EV.EVENT_ICONS,
                 rarity=[dict(name=W.rarity(t)[0], color=W.rarity(t)[1]) for t in range(20)],
                 materials=[m['name'] for m in W.MATS],
                 fpSize=FP.FS)

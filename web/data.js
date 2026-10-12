@@ -402,6 +402,43 @@ window.GAME_DATA = {
    }
   }
  ],
+ "monsterArt": [
+  "slime_green",
+  "slime_red",
+  "slime_blue",
+  "slime_dark",
+  "slime_gold",
+  "slime_king",
+  "bat_purple",
+  "bat_red",
+  "bat_yellow",
+  "bat_dark",
+  "bat_lord"
+ ],
+ "eventIcons": [
+  "potion",
+  "bigpotion",
+  "chest",
+  "coins",
+  "heart",
+  "up",
+  "skull",
+  "spikes",
+  "scroll",
+  "fountain",
+  "orb",
+  "bomb",
+  "feather",
+  "poison",
+  "cloud",
+  "shield",
+  "hourglass",
+  "knife",
+  "smoke",
+  "fire",
+  "ice",
+  "star"
+ ],
  "rarity": [
   {
    "name": "普通",

@@ -55,24 +55,33 @@
     <header id="hud">
       <div class="hud-row">
         <span id="hud-floor" class="tag">B1</span>
-        <span id="hud-name"></span>
+        <div id="hud-steps"></div>
         <span id="hud-lvl" class="tag">Lv1</span>
       </div>
+      <div class="hud-row"><span id="hud-name"></span></div>
       <div class="bar hp"><div id="hp-fill"></div><span id="hp-text"></span></div>
       <div class="bar xp"><div id="xp-fill"></div></div>
       <div class="hud-row stats">
         <span>攻 <b id="st-atk"></b></span><span>防 <b id="st-def"></b></span>
         <span>爆 <b id="st-crit"></b></span><span>金 <b id="st-gold"></b></span><span>殺 <b id="st-kills"></b></span>
       </div>
+      <div id="buffs"></div>
     </header>
     <div id="play-area">
       <div id="view-wrap">
         <canvas id="view" width="192" height="240"></canvas>
         <div id="flash"></div>
+        <div id="enemy-bar" hidden><div class="en-name" id="en-name"></div><div class="en-hp"><i id="en-hp"></i></div></div>
+        <div id="choice" hidden>
+          <div class="ch ch-l">◀<small>左</small></div>
+          <div class="ch ch-f">▲<small>前</small></div>
+          <div class="ch ch-r">▶<small>右</small></div>
+        </div>
+        <div id="banner" hidden></div>
         <div id="swipe-hint">
-          <div><b>↑</b> 往上滑：前進</div>
-          <div><b>← →</b> 左右滑：轉向該路線</div>
-          <div><b>●</b> 點擊畫面：攻擊</div>
+          <div><b>←↑→</b> 滑動選擇路線</div>
+          <div><b>●</b> 戰鬥時點擊畫面攻擊</div>
+          <div><b>10</b> 次選擇後前往下一層</div>
         </div>
       </div>
       <div id="keypad">
@@ -81,14 +90,16 @@
           <span></span><button data-cmd="fw">↑<small>W</small></button><span></span>
           <button data-cmd="left">←<small>A</small></button><button data-cmd="atk">⚔<small>空白</small></button><button data-cmd="right">→<small>D</small></button>
         </div>
-        <button class="kp-pot" data-cmd="pot">藥水<small>F</small></button>
+        <div class="kp-items">
+          <button data-cmd="potion">藥水<small>1</small></button><button data-cmd="bomb">炸彈<small>2</small></button>
+          <button data-cmd="knife">飛刀<small>3</small></button><button data-cmd="smoke">煙霧<small>4</small></button>
+        </div>
       </div>
     </div>
     <div id="log"></div>
     <footer id="bottom">
       <button id="weapon-slot"><span class="wicon" id="hud-wicon"></span><span id="hud-wname"></span></button>
-      <button id="pot-btn">藥水<b id="pot-n">×0</b></button>
-      <canvas id="minimap" width="99" height="99"></canvas>
+      <div id="items"></div>
     </footer>
   </section>
 
