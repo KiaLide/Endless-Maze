@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Endless Maze</title>
+<meta name="theme-color" content="#0e0b12">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Silkscreen&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- 形象圖：點擊開始 -->
+  <section id="scr-title" class="screen" tabindex="0" aria-label="點擊開始">
+    <div class="title-wrap">
+      <p class="title-en">ENDLESS MAZE</p>
+      <h1>無盡迷宮</h1>
+      <div id="title-heroes" class="title-heroes"></div>
+      <p class="title-tap">點擊畫面開始</p>
+      <p id="title-best" class="title-best"></p>
+      <p class="title-ver">網頁測試版 v2.0・怪物與場景為暫定素材</p>
+    </div>
+  </section>
+
+  <!-- 輸入名稱 -->
+  <section id="scr-name" class="screen" hidden>
+    <form id="name-form" class="name-wrap">
+      <h2>冒險者的名字</h2>
+      <label for="name-input" class="sr">玩家名稱</label>
+      <input id="name-input" maxlength="10" autocomplete="off" placeholder="最多 10 個字">
+      <p id="name-err" class="err" hidden>請輸入名字</p>
+      <button class="btn primary" type="submit">下一步</button>
+    </form>
+  </section>
+
+  <!-- 選擇性別與職業 -->
+  <section id="scr-class" class="screen" hidden>
+    <div class="class-wrap">
+      <div class="sex-tabs" role="group" aria-label="性別">
+        <button class="sex-tab" data-sex="男" aria-pressed="true">男</button>
+        <button class="sex-tab" data-sex="女" aria-pressed="false">女</button>
+      </div>
+      <div class="car">
+        <button id="car-prev" class="car-arrow" aria-label="上一個職業">‹</button>
+        <div id="car-stage" class="car-stage"></div>
+        <button id="car-next" class="car-arrow" aria-label="下一個職業">›</button>
+      </div>
+      <div id="car-info" class="car-info"></div>
+      <button id="car-go" class="btn primary big">選擇這個職業</button>
+    </div>
+  </section>
+
+  <!-- 遊戲 -->
+  <section id="scr-game" class="screen" hidden data-mode="explore">
+    <header class="hud">
+      <div class="hud-row">
+        <div class="hud-floor"><b id="hud-floor">地下 1 層</b><span id="hud-region">幽暗森林</span></div>
+        <div id="hud-steps" class="steps" aria-label="本層進度"></div>
+        <div class="hud-gold"><i class="coin"></i><b id="hud-gold">0</b></div>
+      </div>
+      <div class="hud-row">
+        <div class="hp"><div id="hp-fill" class="hp-fill"></div><span id="hp-text">0 / 0</span></div>
+        <button id="btn-equip" class="btn small">裝備</button>
+        <button id="btn-inv" class="btn small">道具</button>
+      </div>
+      <div id="hud-status" class="hud-status"></div>
+    </header>
+
+    <div id="view-wrap" class="view-wrap">
+      <canvas id="view" aria-label="迷宮畫面"></canvas>
+      <div id="battle-top" class="battle-top" hidden>
+        <div class="bt-head"><span id="bt-name"></span><span id="bt-hptext" class="num"></span></div>
+        <div class="bt-bar"><div id="bt-hp"></div></div>
+        <div id="bt-status" class="bt-status"></div>
+        <p id="bt-behavior" class="bt-behavior"></p>
+      </div>
+      <div id="floats" class="floats"></div>
+      <div id="skill-banner" class="skill-banner" hidden></div>
+    </div>
+
+    <p id="log" class="log" aria-live="polite"></p>
+
+    <div id="ctrl-explore" class="ctrl">
+      <p class="ctrl-hint">往上、左、右滑動畫面選路，或按下方按鈕</p>
+      <div class="dirs">
+        <button id="btn-l" class="dir" aria-label="左轉">◀<span>左</span></button>
+        <button id="btn-f" class="dir" aria-label="前進">▲<span>前</span></button>
+        <button id="btn-r" class="dir" aria-label="右轉">▶<span>右</span></button>
+      </div>
+    </div>
+
+    <div id="ctrl-battle" class="ctrl" hidden>
+      <div class="order"><span>行動順序</span><div id="bt-order"></div></div>
+      <div class="acts">
+        <button id="bt-attack" class="act attack">攻擊<small>點擊畫面也能攻擊</small></button>
+        <div class="skills-row">
+          <button class="sk-btn"></button><button class="sk-btn"></button><button class="sk-btn"></button>
+        </div>
+        <button id="bt-item" class="act item">道具</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="modal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <div id="modal-body"></div>
+      <div id="modal-btns" class="modal-btns"></div>
+    </div>
+  </div>
+  <div id="toast" class="toast" hidden></div>
+</div>
+
+<script src="data.js"></script>
+<script src="rules.js"></script>
+<script src="events.js"></script>
+<script src="core.js"></script>
+<script src="battle.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

@@ -67,3 +67,8 @@
 - `monsters.json`：95 種怪物（5 個地區各 7 基本／3 精英／2 頭目，第 51 層起的古堡 20 基本／10 精英／5 頭目），含類型、特殊行為、出現樓層、首次出現時的能力值
 - `monsters.py`：產生 `monsters.json` 的程式（`python3 monsters/monsters.py`）
 - 成長：生命、攻擊、防禦第 1～50 層每層 ×1.045，第 51 層起每層 ×1.05；速度每層 ×1.01
+
+## 網頁版（web/）
+- 直接用瀏覽器開 `web/index.html`（或 `cd web && python3 -m http.server`）即可遊玩；APK 以 WebView 載入同一份 `web/`。
+- `tools/build_web.py <DCSS rltiles 目錄>`：打包圖集 `web/assets/atlas.png` 與資料 `web/data.js`。
+- 怪物、道具、場景圖目前使用 DCSS（Dungeon Crawl Stone Soup）CC0 開源圖塊作為暫定素材。

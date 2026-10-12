@@ -7,11 +7,11 @@ import json, os
 OUT = os.path.dirname(os.path.abspath(__file__))
 
 # 第 1 層標準怪物
-BASE = dict(hp=50, atk=6, def_=4, spd=9, crit=5, eva=3)
+BASE = dict(hp=50, atk=4, def_=4, spd=9, crit=5, eva=3)
 
 def floor_mult(f):
-    """生命、攻擊、防禦的樓層倍率：第 1～50 層每層 ×1.045，第 51 層起每層 ×1.05"""
-    return 1.045 ** (min(f, 50) - 1) * 1.05 ** max(0, f - 50)
+    """生命、攻擊、防禦的樓層倍率：第 1～40 層每層 ×1.06，第 41～50 層每層 ×1.03，第 51 層起每層 ×1.05"""
+    return 1.06 ** (min(f, 40) - 1) * 1.03 ** max(0, min(f, 50) - 40) * 1.05 ** max(0, f - 50)
 
 def speed_mult(f):
     return 1.01 ** (f - 1)
@@ -184,6 +184,6 @@ if __name__ == '__main__':
                         stats_at_first_floor=stats('標準', '頭目', 55)))
     with open(os.path.join(OUT, 'monsters.json'), 'w', encoding='utf-8') as fp:
         json.dump(dict(base_floor1=BASE, roles=ROLES, rank_mult=RANK,
-                       growth='生命、攻擊、防禦：第 1～50 層每層 ×1.045，第 51 層起每層 ×1.05；速度每層 ×1.01',
+                       growth='生命、攻擊、防禦：第 1～40 層每層 ×1.06，第 41～50 層每層 ×1.03，第 51 層起每層 ×1.05；速度每層 ×1.01',
                        monsters=out), fp, ensure_ascii=False, indent=1)
     print(len(out), 'monsters')
