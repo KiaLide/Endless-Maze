@@ -6,10 +6,12 @@
   "hero": "雷恩",
   "desc": "攻守平衡的劍術家，穩紮穩打地深入迷宮。",
   "base_stats": {
-   "hp": 34,
-   "atk": 6,
-   "def_": 2,
-   "crit": 8
+   "hp": 110,
+   "atk": 12,
+   "def": 6,
+   "spd": 10,
+   "crit": 5,
+   "eva": 5
   },
   "weapon_type": "長劍",
   "image_original": "images/original/swordsman.jpg",
@@ -22,10 +24,12 @@
   "hero": "格雷",
   "desc": "重甲長槍，以厚實的防禦守護同伴。",
   "base_stats": {
-   "hp": 40,
-   "atk": 5,
-   "def_": 4,
-   "crit": 4
+   "hp": 140,
+   "atk": 9,
+   "def": 10,
+   "spd": 6,
+   "crit": 3,
+   "eva": 2
   },
   "weapon_type": "長槍",
   "image_original": "images/original/knight.jpg",
@@ -38,10 +42,12 @@
   "hero": "凱",
   "desc": "身手敏捷，擅長爆擊與閃避。",
   "base_stats": {
-   "hp": 28,
-   "atk": 5,
-   "def_": 1,
-   "crit": 18
+   "hp": 85,
+   "atk": 10,
+   "def": 4,
+   "spd": 15,
+   "crit": 15,
+   "eva": 12
   },
   "weapon_type": "匕首",
   "image_original": "images/original/rogue.jpg",
@@ -54,10 +60,12 @@
   "hero": "馬林",
   "desc": "以魔力轟擊敵人，攻擊力極高但身體虛弱。",
   "base_stats": {
-   "hp": 24,
-   "atk": 8,
-   "def_": 1,
-   "crit": 6
+   "hp": 75,
+   "atk": 15,
+   "def": 3,
+   "spd": 9,
+   "crit": 5,
+   "eva": 4
   },
   "weapon_type": "法杖",
   "image_original": "images/original/wizard.jpg",
@@ -70,10 +78,12 @@
   "hero": "布魯",
   "desc": "揮舞巨斧的猛將，血量越高越能硬撐。",
   "base_stats": {
-   "hp": 42,
-   "atk": 7,
-   "def_": 1,
-   "crit": 6
+   "hp": 130,
+   "atk": 14,
+   "def": 4,
+   "spd": 8,
+   "crit": 8,
+   "eva": 2
   },
   "weapon_type": "戰斧",
   "image_original": "images/original/berserker.jpg",
@@ -86,10 +96,12 @@
   "hero": "艾莉亞",
   "desc": "優雅的細劍使，連擊與爆擊兼具。",
   "base_stats": {
-   "hp": 30,
-   "atk": 6,
-   "def_": 2,
-   "crit": 14
+   "hp": 90,
+   "atk": 11,
+   "def": 5,
+   "spd": 14,
+   "crit": 10,
+   "eva": 10
   },
   "weapon_type": "細劍",
   "image_original": "images/original/fencer.jpg",
@@ -102,10 +114,12 @@
   "hero": "露西",
   "desc": "受神祝福的祭司，藥水效果加倍。",
   "base_stats": {
-   "hp": 30,
-   "atk": 5,
-   "def_": 2,
-   "crit": 5
+   "hp": 95,
+   "atk": 8,
+   "def": 6,
+   "spd": 9,
+   "crit": 3,
+   "eva": 5
   },
   "weapon_type": "聖杖",
   "image_original": "images/original/cleric.jpg",
@@ -118,10 +132,12 @@
   "hero": "莉莉絲",
   "desc": "操縱詭譎魔法的魔女，攻擊吸取生命。",
   "base_stats": {
-   "hp": 26,
-   "atk": 7,
-   "def_": 1,
-   "crit": 8
+   "hp": 80,
+   "atk": 13,
+   "def": 3,
+   "spd": 10,
+   "crit": 6,
+   "eva": 6
   },
   "weapon_type": "魔杖",
   "image_original": "images/original/witch.jpg",
@@ -134,10 +150,12 @@
   "hero": "菲娜",
   "desc": "精靈弓手，箭無虛發，閃避率高。",
   "base_stats": {
-   "hp": 28,
-   "atk": 6,
-   "def_": 1,
-   "crit": 12
+   "hp": 90,
+   "atk": 11,
+   "def": 4,
+   "spd": 12,
+   "crit": 12,
+   "eva": 8
   },
   "weapon_type": "弓",
   "image_original": "images/original/ranger.jpg",
@@ -150,10 +168,12 @@
   "hero": "美玲",
   "desc": "以拳腳為武器，攻擊有機率連打。",
   "base_stats": {
-   "hp": 36,
-   "atk": 6,
-   "def_": 2,
-   "crit": 10
+   "hp": 105,
+   "atk": 10,
+   "def": 6,
+   "spd": 13,
+   "crit": 8,
+   "eva": 10
   },
   "weapon_type": "拳套",
   "image_original": "images/original/monk.jpg",

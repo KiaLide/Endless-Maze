@@ -1,0 +1,1778 @@
+[
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 1,
+  "name": "粗布戰袍",
+  "material": "木",
+  "rarity": "普通",
+  "stats": {
+   "hp": 20,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 2,
+  "name": "青銅扣戰袍",
+  "material": "青銅",
+  "rarity": "普通",
+  "stats": {
+   "hp": 23,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 3,
+  "name": "鐵扣戰袍",
+  "material": "鐵",
+  "rarity": "普通",
+  "stats": {
+   "hp": 27,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 4,
+  "name": "鋼紋戰袍",
+  "material": "鋼",
+  "rarity": "普通",
+  "stats": {
+   "hp": 32,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 5,
+  "name": "傭兵戰袍",
+  "material": "精鋼",
+  "rarity": "優良",
+  "stats": {
+   "hp": 37,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 6,
+  "name": "白銀戰袍",
+  "material": "白銀",
+  "rarity": "優良",
+  "stats": {
+   "hp": 44,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 7,
+  "name": "王國戰袍",
+  "material": "王國",
+  "rarity": "優良",
+  "stats": {
+   "hp": 51,
+   "def": 4
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 8,
+  "name": "黑鐵戰袍",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "stats": {
+   "hp": 60,
+   "def": 5
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 9,
+  "name": "秘銀戰袍",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "stats": {
+   "hp": 70,
+   "def": 5
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 10,
+  "name": "烈焰戰袍「不滅」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "stats": {
+   "hp": 82,
+   "def": 6
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 11,
+  "name": "霜寒戰袍「長眠」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "stats": {
+   "hp": 96,
+   "def": 7
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 12,
+  "name": "雷鳴戰袍「脈動」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "stats": {
+   "hp": 112,
+   "def": 8
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 13,
+  "name": "翠玉戰袍「生命之樹」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "stats": {
+   "hp": 132,
+   "def": 10
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 14,
+  "name": "黃金戰袍「豐饒」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "stats": {
+   "hp": 154,
+   "def": 12
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 15,
+  "name": "暗影戰袍「不死」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "stats": {
+   "hp": 180,
+   "def": 14
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 16,
+  "name": "聖光戰袍「祝福」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "stats": {
+   "hp": 211,
+   "def": 16
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 17,
+  "name": "龍血戰袍「再生」",
+  "material": "龍",
+  "rarity": "傳說",
+  "stats": {
+   "hp": 247,
+   "def": 18
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 18,
+  "name": "星辰戰袍「永生」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "stats": {
+   "hp": 289,
+   "def": 22
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 19,
+  "name": "混沌戰袍「輪迴」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "stats": {
+   "hp": 338,
+   "def": 25
+  }
+ },
+ {
+  "set_id": "hp",
+  "set_name": "生命系",
+  "type": "戰袍",
+  "focus": "生命",
+  "tier": 20,
+  "name": "神衣「生命之源」",
+  "material": "神",
+  "rarity": "神話",
+  "stats": {
+   "hp": 395,
+   "def": 30
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 1,
+  "name": "獸皮戰甲",
+  "material": "木",
+  "rarity": "普通",
+  "stats": {
+   "atk": 2,
+   "hp": 6,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 2,
+  "name": "青銅戰甲",
+  "material": "青銅",
+  "rarity": "普通",
+  "stats": {
+   "atk": 3,
+   "hp": 7,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 3,
+  "name": "鐵刺戰甲",
+  "material": "鐵",
+  "rarity": "普通",
+  "stats": {
+   "atk": 3,
+   "hp": 8,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 4,
+  "name": "鋼刃戰甲",
+  "material": "鋼",
+  "rarity": "普通",
+  "stats": {
+   "atk": 4,
+   "hp": 10,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 5,
+  "name": "蠻族戰甲",
+  "material": "精鋼",
+  "rarity": "優良",
+  "stats": {
+   "atk": 5,
+   "hp": 11,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 6,
+  "name": "白銀戰甲",
+  "material": "白銀",
+  "rarity": "優良",
+  "stats": {
+   "atk": 5,
+   "hp": 13,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 7,
+  "name": "王國戰甲",
+  "material": "王國",
+  "rarity": "優良",
+  "stats": {
+   "atk": 6,
+   "hp": 15,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 8,
+  "name": "黑鐵棘甲",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "stats": {
+   "atk": 8,
+   "hp": 18,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 9,
+  "name": "秘銀戰甲",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "stats": {
+   "atk": 9,
+   "hp": 21,
+   "def": 4
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 10,
+  "name": "烈焰戰甲「怒焰」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "stats": {
+   "atk": 10,
+   "hp": 25,
+   "def": 4
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 11,
+  "name": "霜寒戰甲「冰刃」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "stats": {
+   "atk": 12,
+   "hp": 29,
+   "def": 5
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 12,
+  "name": "雷鳴戰甲「雷霆」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "stats": {
+   "atk": 14,
+   "hp": 34,
+   "def": 6
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 13,
+  "name": "翠玉戰甲「野性」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "stats": {
+   "atk": 16,
+   "hp": 39,
+   "def": 7
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 14,
+  "name": "黃金戰甲「霸者」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "stats": {
+   "atk": 19,
+   "hp": 46,
+   "def": 8
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 15,
+  "name": "暗影戰甲「修羅」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "stats": {
+   "atk": 23,
+   "hp": 54,
+   "def": 9
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 16,
+  "name": "聖光戰甲「聖戰」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "stats": {
+   "atk": 26,
+   "hp": 63,
+   "def": 11
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 17,
+  "name": "龍角戰甲「龍怒」",
+  "material": "龍",
+  "rarity": "傳說",
+  "stats": {
+   "atk": 31,
+   "hp": 74,
+   "def": 12
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 18,
+  "name": "星辰戰甲「破星」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "stats": {
+   "atk": 36,
+   "hp": 87,
+   "def": 14
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 19,
+  "name": "混沌戰甲「狂神」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "stats": {
+   "atk": 42,
+   "hp": 101,
+   "def": 17
+  }
+ },
+ {
+  "set_id": "atk",
+  "set_name": "攻擊系",
+  "type": "戰甲",
+  "focus": "攻擊",
+  "tier": 20,
+  "name": "神甲「戰神」",
+  "material": "神",
+  "rarity": "神話",
+  "stats": {
+   "atk": 49,
+   "hp": 118,
+   "def": 20
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 1,
+  "name": "木板護甲",
+  "material": "木",
+  "rarity": "普通",
+  "stats": {
+   "def": 4,
+   "hp": 8
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 2,
+  "name": "青銅鎧",
+  "material": "青銅",
+  "rarity": "普通",
+  "stats": {
+   "def": 5,
+   "hp": 9
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 3,
+  "name": "鐵鎧",
+  "material": "鐵",
+  "rarity": "普通",
+  "stats": {
+   "def": 5,
+   "hp": 11
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 4,
+  "name": "鋼鐵全身鎧",
+  "material": "鋼",
+  "rarity": "普通",
+  "stats": {
+   "def": 6,
+   "hp": 13
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 5,
+  "name": "衛兵重鎧",
+  "material": "精鋼",
+  "rarity": "優良",
+  "stats": {
+   "def": 7,
+   "hp": 15,
+   "spd": -1
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 6,
+  "name": "白銀重鎧",
+  "material": "白銀",
+  "rarity": "優良",
+  "stats": {
+   "def": 9,
+   "hp": 18,
+   "spd": -1
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 7,
+  "name": "王國近衛鎧",
+  "material": "王國",
+  "rarity": "優良",
+  "stats": {
+   "def": 10,
+   "hp": 21,
+   "spd": -1
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 8,
+  "name": "黑鐵重鎧",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "stats": {
+   "def": 12,
+   "hp": 24,
+   "spd": -1
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 9,
+  "name": "秘銀重鎧",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "stats": {
+   "def": 14,
+   "hp": 28,
+   "spd": -1
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 10,
+  "name": "烈焰鎧「熔岩」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "stats": {
+   "def": 16,
+   "hp": 33,
+   "spd": -2
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 11,
+  "name": "霜寒鎧「冰壁」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "stats": {
+   "def": 19,
+   "hp": 38,
+   "spd": -2
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 12,
+  "name": "雷鳴鎧「雷盾」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "stats": {
+   "def": 22,
+   "hp": 45,
+   "spd": -2
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 13,
+  "name": "翠玉鎧「巨木」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "stats": {
+   "def": 26,
+   "hp": 53,
+   "spd": -2
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 14,
+  "name": "黃金鎧「城塞」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "stats": {
+   "def": 31,
+   "hp": 62,
+   "spd": -2
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 15,
+  "name": "暗影鎧「冥壁」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "stats": {
+   "def": 36,
+   "hp": 72,
+   "spd": -3
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 16,
+  "name": "聖光鎧「聖域」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "stats": {
+   "def": 42,
+   "hp": 84,
+   "spd": -3
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 17,
+  "name": "龍鱗鎧「龍甲」",
+  "material": "龍",
+  "rarity": "傳說",
+  "stats": {
+   "def": 49,
+   "hp": 99,
+   "spd": -3
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 18,
+  "name": "星辰鎧「天蓋」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "stats": {
+   "def": 58,
+   "hp": 115,
+   "spd": -3
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 19,
+  "name": "混沌鎧「虛空壁」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "stats": {
+   "def": 68,
+   "hp": 135,
+   "spd": -3
+  }
+ },
+ {
+  "set_id": "def",
+  "set_name": "防禦系",
+  "type": "重鎧",
+  "focus": "防禦",
+  "tier": 20,
+  "name": "神鎧「不落之城」",
+  "material": "神",
+  "rarity": "神話",
+  "stats": {
+   "def": 79,
+   "hp": 158,
+   "spd": -4
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 1,
+  "name": "粗布輕衣",
+  "material": "木",
+  "rarity": "普通",
+  "stats": {
+   "spd": 1,
+   "hp": 6,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 2,
+  "name": "青銅輕甲",
+  "material": "青銅",
+  "rarity": "普通",
+  "stats": {
+   "spd": 2,
+   "hp": 7,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 3,
+  "name": "鐵片輕甲",
+  "material": "鐵",
+  "rarity": "普通",
+  "stats": {
+   "spd": 3,
+   "hp": 8,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 4,
+  "name": "鋼絲輕甲",
+  "material": "鋼",
+  "rarity": "普通",
+  "stats": {
+   "spd": 3,
+   "hp": 10,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 5,
+  "name": "斥候輕甲",
+  "material": "精鋼",
+  "rarity": "優良",
+  "stats": {
+   "spd": 4,
+   "hp": 11,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 6,
+  "name": "白銀輕甲",
+  "material": "白銀",
+  "rarity": "優良",
+  "stats": {
+   "spd": 5,
+   "hp": 13,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 7,
+  "name": "王國斥候服",
+  "material": "王國",
+  "rarity": "優良",
+  "stats": {
+   "spd": 6,
+   "hp": 15,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 8,
+  "name": "黑鐵鎖子甲",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "stats": {
+   "spd": 6,
+   "hp": 18,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 9,
+  "name": "秘銀鎖子甲",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "stats": {
+   "spd": 7,
+   "hp": 21,
+   "def": 4
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 10,
+  "name": "烈焰輕甲「疾火」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "stats": {
+   "spd": 8,
+   "hp": 25,
+   "def": 4
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 11,
+  "name": "霜寒輕甲「冰風」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "stats": {
+   "spd": 9,
+   "hp": 29,
+   "def": 5
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 12,
+  "name": "雷鳴輕甲「迅雷」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "stats": {
+   "spd": 9,
+   "hp": 34,
+   "def": 6
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 13,
+  "name": "翠玉輕甲「疾風」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "stats": {
+   "spd": 10,
+   "hp": 39,
+   "def": 7
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 14,
+  "name": "黃金輕甲「天馬」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "stats": {
+   "spd": 11,
+   "hp": 46,
+   "def": 8
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 15,
+  "name": "暗影輕甲「瞬影」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "stats": {
+   "spd": 12,
+   "hp": 54,
+   "def": 9
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 16,
+  "name": "聖光輕甲「光速」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "stats": {
+   "spd": 12,
+   "hp": 63,
+   "def": 11
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 17,
+  "name": "龍翼輕甲「飛龍」",
+  "material": "龍",
+  "rarity": "傳說",
+  "stats": {
+   "spd": 13,
+   "hp": 74,
+   "def": 12
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 18,
+  "name": "星辰輕甲「流星」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "stats": {
+   "spd": 14,
+   "hp": 87,
+   "def": 14
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 19,
+  "name": "混沌輕甲「時隙」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "stats": {
+   "spd": 15,
+   "hp": 101,
+   "def": 17
+  }
+ },
+ {
+  "set_id": "spd",
+  "set_name": "速度系",
+  "type": "輕甲",
+  "focus": "速度",
+  "tier": 20,
+  "name": "神裝「天翔」",
+  "material": "神",
+  "rarity": "神話",
+  "stats": {
+   "spd": 15,
+   "hp": 118,
+   "def": 20
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 1,
+  "name": "舊皮獵裝",
+  "material": "木",
+  "rarity": "普通",
+  "stats": {
+   "crit": 1.0,
+   "hp": 6,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 2,
+  "name": "青銅扣獵裝",
+  "material": "青銅",
+  "rarity": "普通",
+  "stats": {
+   "crit": 1.5,
+   "hp": 7,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 3,
+  "name": "鐵扣獵裝",
+  "material": "鐵",
+  "rarity": "普通",
+  "stats": {
+   "crit": 2.0,
+   "hp": 8,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 4,
+  "name": "鋼片獵裝",
+  "material": "鋼",
+  "rarity": "普通",
+  "stats": {
+   "crit": 3.0,
+   "hp": 10,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 5,
+  "name": "獵人獵裝",
+  "material": "精鋼",
+  "rarity": "優良",
+  "stats": {
+   "crit": 4.0,
+   "hp": 11,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 6,
+  "name": "白銀獵裝",
+  "material": "白銀",
+  "rarity": "優良",
+  "stats": {
+   "crit": 4.5,
+   "hp": 13,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 7,
+  "name": "王國獵裝",
+  "material": "王國",
+  "rarity": "優良",
+  "stats": {
+   "crit": 5.0,
+   "hp": 15,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 8,
+  "name": "黑鐵獵裝",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "stats": {
+   "crit": 6.0,
+   "hp": 18,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 9,
+  "name": "秘銀獵裝",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "stats": {
+   "crit": 7.0,
+   "hp": 21,
+   "def": 4
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 10,
+  "name": "烈焰獵裝「火眼」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "stats": {
+   "crit": 7.5,
+   "hp": 25,
+   "def": 4
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 11,
+  "name": "霜寒獵裝「冰鋒」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "stats": {
+   "crit": 8.0,
+   "hp": 29,
+   "def": 5
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 12,
+  "name": "雷鳴獵裝「一閃」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "stats": {
+   "crit": 9.0,
+   "hp": 34,
+   "def": 6
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 13,
+  "name": "翠玉獵裝「鷹眼」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "stats": {
+   "crit": 10.0,
+   "hp": 39,
+   "def": 7
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 14,
+  "name": "黃金獵裝「必中」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "stats": {
+   "crit": 10.5,
+   "hp": 46,
+   "def": 8
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 15,
+  "name": "暗影獵裝「致命」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "stats": {
+   "crit": 11.0,
+   "hp": 54,
+   "def": 9
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 16,
+  "name": "聖光獵裝「天眼」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "stats": {
+   "crit": 12.0,
+   "hp": 63,
+   "def": 11
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 17,
+  "name": "龍瞳獵裝「龍瞳」",
+  "material": "龍",
+  "rarity": "傳說",
+  "stats": {
+   "crit": 13.0,
+   "hp": 74,
+   "def": 12
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 18,
+  "name": "星辰獵裝「天狼」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "stats": {
+   "crit": 13.5,
+   "hp": 87,
+   "def": 14
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 19,
+  "name": "混沌獵裝「斷罪」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "stats": {
+   "crit": 14.0,
+   "hp": 101,
+   "def": 17
+  }
+ },
+ {
+  "set_id": "crit",
+  "set_name": "爆擊系",
+  "type": "獵裝",
+  "focus": "爆擊率",
+  "tier": 20,
+  "name": "神獵衣「弒神」",
+  "material": "神",
+  "rarity": "神話",
+  "stats": {
+   "crit": 15.0,
+   "hp": 118,
+   "def": 20
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 1,
+  "name": "破舊斗篷",
+  "material": "木",
+  "rarity": "普通",
+  "stats": {
+   "eva": 0.5,
+   "hp": 6,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 2,
+  "name": "青銅扣斗篷",
+  "material": "青銅",
+  "rarity": "普通",
+  "stats": {
+   "eva": 1.0,
+   "hp": 7,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 3,
+  "name": "鐵扣斗篷",
+  "material": "鐵",
+  "rarity": "普通",
+  "stats": {
+   "eva": 2.0,
+   "hp": 8,
+   "def": 1
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 4,
+  "name": "鋼絲斗篷",
+  "material": "鋼",
+  "rarity": "普通",
+  "stats": {
+   "eva": 2.5,
+   "hp": 10,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 5,
+  "name": "盜賊斗篷",
+  "material": "精鋼",
+  "rarity": "優良",
+  "stats": {
+   "eva": 3.0,
+   "hp": 11,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 6,
+  "name": "白銀斗篷",
+  "material": "白銀",
+  "rarity": "優良",
+  "stats": {
+   "eva": 3.5,
+   "hp": 13,
+   "def": 2
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 7,
+  "name": "王國密探斗篷",
+  "material": "王國",
+  "rarity": "優良",
+  "stats": {
+   "eva": 4.0,
+   "hp": 15,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 8,
+  "name": "黑鐵斗篷",
+  "material": "黑鐵",
+  "rarity": "優良",
+  "stats": {
+   "eva": 5.0,
+   "hp": 18,
+   "def": 3
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 9,
+  "name": "秘銀斗篷",
+  "material": "秘銀",
+  "rarity": "稀有",
+  "stats": {
+   "eva": 5.5,
+   "hp": 21,
+   "def": 4
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 10,
+  "name": "烈焰斗篷「陽炎」",
+  "material": "烈焰",
+  "rarity": "稀有",
+  "stats": {
+   "eva": 6.0,
+   "hp": 25,
+   "def": 4
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 11,
+  "name": "霜寒斗篷「雪幻」",
+  "material": "霜寒",
+  "rarity": "稀有",
+  "stats": {
+   "eva": 6.5,
+   "hp": 29,
+   "def": 5
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 12,
+  "name": "雷鳴斗篷「殘影」",
+  "material": "雷鳴",
+  "rarity": "稀有",
+  "stats": {
+   "eva": 7.0,
+   "hp": 34,
+   "def": 6
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 13,
+  "name": "翠玉斗篷「林隱」",
+  "material": "翠玉",
+  "rarity": "史詩",
+  "stats": {
+   "eva": 8.0,
+   "hp": 39,
+   "def": 7
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 14,
+  "name": "黃金斗篷「幻光」",
+  "material": "黃金",
+  "rarity": "史詩",
+  "stats": {
+   "eva": 8.5,
+   "hp": 46,
+   "def": 8
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 15,
+  "name": "暗影斗篷「無形」",
+  "material": "暗影",
+  "rarity": "史詩",
+  "stats": {
+   "eva": 9.0,
+   "hp": 54,
+   "def": 9
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 16,
+  "name": "聖光斗篷「光隱」",
+  "material": "聖光",
+  "rarity": "史詩",
+  "stats": {
+   "eva": 9.5,
+   "hp": 63,
+   "def": 11
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 17,
+  "name": "龍翼斗篷「龍影」",
+  "material": "龍",
+  "rarity": "傳說",
+  "stats": {
+   "eva": 10.0,
+   "hp": 74,
+   "def": 12
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 18,
+  "name": "星辰斗篷「月隱」",
+  "material": "星辰",
+  "rarity": "傳說",
+  "stats": {
+   "eva": 11.0,
+   "hp": 87,
+   "def": 14
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 19,
+  "name": "混沌斗篷「虛像」",
+  "material": "混沌",
+  "rarity": "傳說",
+  "stats": {
+   "eva": 11.5,
+   "hp": 101,
+   "def": 17
+  }
+ },
+ {
+  "set_id": "eva",
+  "set_name": "閃避系",
+  "type": "斗篷",
+  "focus": "閃避",
+  "tier": 20,
+  "name": "神之斗篷「不可視」",
+  "material": "神",
+  "rarity": "神話",
+  "stats": {
+   "eva": 12.0,
+   "hp": 118,
+   "def": 20
+  }
+ }
+]

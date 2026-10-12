@@ -603,6 +603,36 @@ CLASSES = [
 ]
 
 
+# ================= 數值 =================
+# 攻擊 = 5 × 1.18^(階-1) × 職業倍率；副屬性依武器種類
+GROW = 1.17   # 生命、防禦類副屬性的每階成長
+WEAPON_STAT = {
+    #  職業        攻擊倍率  副屬性
+    'swordsman': (1.00, 'def'),    # 長劍：防禦
+    'knight':    (1.00, 'hp'),     # 長槍：生命
+    'rogue':     (1.00, 'crit'),   # 匕首：爆擊率
+    'wizard':    (1.15, None),     # 法杖：攻擊特別高
+    'berserker': (1.20, None),     # 戰斧：攻擊最高
+    'fencer':    (1.00, 'spd'),    # 細劍：速度
+    'cleric':    (0.90, 'hp'),     # 聖杖：生命
+    'witch':     (1.10, 'eva'),    # 魔杖：閃避
+    'ranger':    (1.00, 'crit'),   # 弓：爆擊率
+    'monk':      (1.00, 'eva'),    # 拳套：閃避
+}
+
+def sub_stat(kind, t):
+    """t = 1..20；回傳副屬性數值（爆擊率、閃避為 %）"""
+    g = GROW ** (t - 1)
+    return {'hp': round(5 * g), 'def': round(1 * g), 'spd': int(0.5 * t + 0.5),
+            'crit': round(0.5 * t, 1), 'eva': round(0.5 * t, 1)}[kind]
+
+def weapon_stats(cls_id, t):
+    mult, sub = WEAPON_STAT[cls_id]
+    st = {'atk': round(5 * 1.18 ** (t - 1) * mult)}
+    if sub: st[sub] = sub_stat(sub, t)
+    return st
+
+
 # ================= 輸出 =================
 FONT = '/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc'
 
@@ -636,13 +666,14 @@ def sheet_for(cls_id, cname, wname, fn, names):
 
 
 if __name__ == '__main__':
-    import json
+    import json, sys
+    json_only = '--json-only' in sys.argv   # 只更新 weapons.json，不重畫圖示
     catalog = []
     for cls_id, cname, wname, fn, names in CLASSES:
-        sheet_for(cls_id, cname, wname, fn, names)
+        if not json_only: sheet_for(cls_id, cname, wname, fn, names)
         for t, nm in enumerate(names):
             catalog.append(dict(class_id=cls_id, class_name=cname, type=wname, tier=t + 1, name=nm,
-                                material=MATS[t]['name'], rarity=rarity(t)[0], icon=f'icons/{cls_id}/{t + 1:02d}.png'))
+                                material=MATS[t]['name'], rarity=rarity(t)[0], stats=weapon_stats(cls_id, t + 1), icon=f'icons/{cls_id}/{t + 1:02d}.png'))
         print('ok', cls_id)
     with open(os.path.join(OUT, 'weapons.json'), 'w', encoding='utf-8') as f:
         json.dump(catalog, f, ensure_ascii=False, indent=1)
