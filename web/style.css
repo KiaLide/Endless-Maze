@@ -222,3 +222,10 @@ button { font: inherit; color: inherit; }
 .bt-intent { margin: 4px 0 2px; font-size: 13px; font-weight: 700; color: var(--text, #e8e4d8); background: rgba(10, 8, 16, .75); border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; display: inline-block; }
 .bt-intent.warn { color: #ffd34a; border-color: #b08020; animation: blink 1s steps(2) infinite; }
 @media (prefers-reduced-motion: reduce) { .bt-intent.warn { animation: none; } }
+#tip { position: absolute; z-index: 50; background: #0e0b16; color: var(--text, #e8e4d8); border: 1px solid var(--gold); border-radius: 4px; padding: 6px 9px; font-size: 12px; line-height: 1.5; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,.6); }
+.chip { cursor: help; -webkit-touch-callout: none; user-select: none; }
+.chip.body { color: #c9b8ff; border-color: #5a4a8a; background: #1c1630; }
+.chip.warn { color: #ffd34a; border-color: #b08020; background: #2a2010; }
+.chip:not(.good):not(.bad):not(.body):not(.warn):not(.combo) { color: var(--dim); border-color: var(--line); }
+.chip.combo { color: #ffb070; border-color: #a0602a; background: #2a1a10; font-weight: 700; }
+.battle-top .chip, .hud-status .chip { pointer-events: auto; }

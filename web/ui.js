@@ -19,6 +19,31 @@ function equipIcon(type, item, scale = 2) {
 }
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c])); }
 
+// 狀態標籤：data-tip 是懸停（電腦）或長按（手機）時顯示的實際效果
+function chip(text, cls, tip) { return `<b class="chip ${cls}" data-tip="${esc(tip || text)}" tabindex="0">${text}</b>`; }
+const pct = v => `${v > 0 ? '+' : ''}${Math.round(v * 100)}%`;
+function initTips() {
+  const tip = document.createElement('div'); tip.id = 'tip'; tip.hidden = true; $('#app').appendChild(tip);
+  const showTip = el => {
+    tip.textContent = el.dataset.tip; tip.hidden = false;
+    const r = el.getBoundingClientRect(), a = $('#app').getBoundingClientRect();
+    const w = Math.min(260, a.width - 24); tip.style.maxWidth = w + 'px';
+    let x = r.left - a.left, y = r.bottom - a.top + 6;
+    x = Math.max(8, Math.min(x, a.width - tip.offsetWidth - 8));
+    if (y + tip.offsetHeight > a.height - 8) y = r.top - a.top - tip.offsetHeight - 6;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  };
+  const hide = () => { tip.hidden = true; };
+  document.addEventListener('mouseover', e => { const el = e.target.closest('[data-tip]'); if (el && matchMedia('(hover: hover)').matches) showTip(el); });
+  document.addEventListener('mouseout', e => { if (e.target.closest('[data-tip]')) hide(); });
+  document.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el) showTip(el); });
+  document.addEventListener('focusout', hide);
+  let pressT = 0;
+  document.addEventListener('touchstart', e => { const el = e.target.closest('[data-tip]'); if (!el) return; clearTimeout(pressT); pressT = setTimeout(() => showTip(el), 350); }, {passive: true});
+  const end = () => { clearTimeout(pressT); hide(); };
+  document.addEventListener('touchend', end); document.addEventListener('touchmove', end, {passive: true}); document.addEventListener('touchcancel', end);
+  document.addEventListener('contextmenu', e => { if (e.target.closest('[data-tip]')) e.preventDefault(); });
+}
 function show(id) { $$('.screen').forEach(s => s.hidden = s.id !== id); }
 let toastT = 0;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 1800); }
@@ -227,12 +252,16 @@ function refreshHud() {
   $('#hp-text').textContent = `${hp} / ${mhp}`;
   $('#hud-gold').textContent = G.gold;
   const st = [];
-  if (G.phoenix) st.push('<b class="chip good">不死鳥之羽</b>');
-  if (G.poison) st.push(`<b class="chip bad">中毒</b>`);
-  if (G.blockHits) st.push(`<b class="chip good">結界 ×${G.blockHits}</b>`);
+  if (G.phoenix) st.push(chip('不死鳥之羽', 'good', '倒下時自動以最大生命 30% 復活一次'));
+  if (G.poison) st.push(chip('中毒', 'bad', `每走一步扣最大生命 ${Math.round(G.poison.pct * 100)}%（${G.poison.left === 'long' ? '持續到打完精英或頭目' : `剩 ${G.poison.left} 步`}）`));
+  if (G.blockHits) st.push(chip(`結界 ×${G.blockHits}`, 'good', `守護結界：擋下接下來 ${G.blockHits} 次攻擊`));
   const agg = {};
   G.buffs.forEach(b => { agg[b.stat] = (agg[b.stat] || 0) + b.val; });
-  for (const k in agg) if (agg[k]) st.push(`<b class="chip ${agg[k] > 0 ? 'good' : 'bad'}">${STAT_NAMES[k]}${agg[k] > 0 ? '↑' : '↓'}</b>`);
+  const durText = b => ({steps: `剩 ${b.left} 步`, floor: '本層內', long: '到打完精英或頭目', next: '到下一場戰鬥結束'}[b.dur]);
+  for (const k in agg) if (agg[k]) {
+    const list = G.buffs.filter(b => b.stat === k).map(b => `${b.val > 0 ? '+' : ''}${b.val}%（${durText(b)}）`).join('、');
+    st.push(chip(`${STAT_NAMES[k]}${agg[k] > 0 ? '↑' : '↓'}`, agg[k] > 0 ? 'good' : 'bad', `${STAT_NAMES[k]} ${agg[k] > 0 ? '+' : ''}${agg[k]}%：${list}`));
+  }
   $('#hud-status').innerHTML = st.join('');
   cam.region = r;
 }
@@ -713,10 +742,19 @@ const UI = {
     $('#bt-hp').style.width = (100 * E.hp / E.maxHp) + '%';
     $('#bt-hptext').textContent = `${E.hp} / ${E.maxHp}`;
     const tags = [];
-    const add = (u, k, t, c) => { if (stHas(u, k)) tags.push(`<b class="chip ${c}">${t}</b>`); };
-    add(E, 'poison', '中毒', 'bad'); add(E, 'burn', '灼燒', 'bad'); add(E, 'freeze', '凍結', 'bad'); add(E, 'slow', '減速', 'bad');
-    add(E, 'cursed', '詛咒', 'bad'); add(E, 'shield', '護盾', 'good');
-    if (E.enraged) tags.push('<b class="chip good">狂暴</b>');
+    const bd = BODY[E.body], tm = typeMul();
+    tags.push(chip(E.body, 'body', `${E.body}：${bd.desc}。斬擊 ×${bd.slash.toFixed(1)}、魔法 ×${bd.magic.toFixed(1)}、持續 ×${bd.dot.toFixed(1)}。你目前是${DMG_NAMES[hitType()]}傷害 ×${tm.toFixed(2)}${B.enchant ? '（附魔）' : ''}`));
+    if (stHas(E, 'broken')) tags.push(chip('破防中', 'bad', '跳過下一次行動，受到的傷害 ×1.5'));
+    else tags.push(chip(`破防 ${E.breakV}/${E.breakMax}`, tm > 1 ? 'warn' : '', `用牠弱點的傷害類型攻擊，每次行動削減 1 點；歸零時破防：跳過下一次行動、受到傷害 ×1.5，之後恢復。${tm > 1 ? '你現在打的是弱點！' : '你現在打的不是弱點。'}`));
+    const dot = (u, k, n) => { const s = stGet(u, k); if (s) tags.push(chip(n, 'bad', `每回合開始受到 ${Math.max(1, Math.round(s.v * BODY[E.body].dot))} 傷害，剩 ${s.turns} 回合`)); };
+    dot(E, 'poison', E.venom ? `中毒 ×${E.venom}` : '中毒'); dot(E, 'burn', '灼燒');
+    if (stHas(E, 'freeze')) tags.push(chip('凍結', 'bad', '跳過下一次行動'));
+    if (stHas(E, 'slow')) tags.push(chip('減速', 'bad', '速度 −50%，到牠下一次行動結束'));
+    if (stHas(E, 'cursed')) tags.push(chip('詛咒', 'bad', `攻擊、防禦下降（剩 ${stGet(E, 'cursed').turns} 回合）`));
+    if (stHas(E, 'shield')) tags.push(chip('護盾', 'good', `可吸收 ${Math.round(stGet(E, 'shield').v)} 傷害`));
+    if (stSum(E, 'atkMod') < 0) tags.push(chip('攻擊↓', 'bad', `攻擊 ${pct(stSum(E, 'atkMod'))}`));
+    if (stSum(E, 'defMod') < 0) tags.push(chip('防禦↓', 'bad', `防禦 ${pct(stSum(E, 'defMod'))}`));
+    if (E.enraged) tags.push(chip('狂暴', 'good', `攻擊 +${Math.round(E.enraged * 100)}%`));
     $('#bt-status').innerHTML = tags.join('');
     const ii = intentInfo();
     const ie = $('#bt-intent'); ie.hidden = !ii;
@@ -727,12 +765,33 @@ const UI = {
     $('#hp-fill').style.width = (100 * P.hp / P.maxHp) + '%';
     $('#hp-text').textContent = `${Math.round(P.hp)} / ${P.maxHp}`;
     const pt = [];
-    const padd = (k, t, c) => { if (stHas(P, k)) pt.push(`<b class="chip ${c}">${t}</b>`); };
-    padd('poison', '中毒', 'bad'); padd('burn', '灼燒', 'bad'); padd('slow', '減速', 'bad'); padd('freeze', '凍結', 'bad');
-    padd('guard', '防禦中', 'good'); padd('shield', '護盾', 'good'); padd('parry', '格擋', 'good'); padd('smoke', '煙幕', 'good'); padd('mikiri', '見切', 'good'); padd('rage', '狂怒', 'good');
-    if (stSum(P, 'atkMod') > 0) pt.push('<b class="chip good">攻擊↑</b>'); if (stSum(P, 'atkMod') < 0) pt.push('<b class="chip bad">攻擊↓</b>');
-    if (stSum(P, 'defMod') > 0) pt.push('<b class="chip good">防禦↑</b>'); if (stSum(P, 'defMod') < 0) pt.push('<b class="chip bad">防禦↓</b>');
-    if (G.phoenix) pt.push('<b class="chip good">不死鳥之羽</b>');
+    const has = k => stHas(P, k), gs = k => stGet(P, k);
+    if (P.combo) pt.push(chip(`連擊 ${P.combo}`, 'combo', `連續命中的攻擊次數。每次 +6% 傷害（目前 +${Math.min(P.combo, 10) * 6}%，最多 +60%）。被攻擊命中就會中斷；中毒、灼燒不算。`));
+    for (const [k, n] of [['poison', '中毒'], ['burn', '灼燒']]) if (has(k)) pt.push(chip(n, 'bad', `每回合開始受到 ${Math.max(1, Math.round(gs(k).v))} 傷害，剩 ${gs(k).turns} 回合`));
+    if (has('slow')) pt.push(chip('減速', 'bad', '速度 −50%，到你下一次行動結束'));
+    if (has('freeze')) pt.push(chip('凍結', 'bad', '跳過下一次行動'));
+    if (has('guard')) pt.push(chip(hasAcc('城塞之心') ? '架盾' : '防禦中', 'good', `到你下一次行動前，受到的傷害 ${hasAcc('城塞之心') ? '−75%' : '−50%'}`));
+    if (has('shield')) pt.push(chip('護盾', 'good', `可吸收 ${Math.round(gs('shield').v)} 傷害`));
+    if (has('parry')) pt.push(chip('格擋', 'good', '擋下敵人下一次攻擊，並反擊敵人攻擊 ×2.0'));
+    if (has('smoke')) pt.push(chip('煙幕', 'good', '敵人下一次攻擊必定落空；你下一擊必定爆擊'));
+    if (has('mikiri')) pt.push(chip('見切', 'good', `閃避 +30%，閃避成功時反擊（剩 ${gs('mikiri').turns} 回合）`));
+    if (has('rage')) pt.push(chip('狂怒', 'good', `攻擊 +50%、防禦 −30%（剩 ${gs('rage').turns} 回合）`));
+    if (has('mikiriStance')) pt.push(chip('見切架式', 'good', '下一次攻擊必定閃開並反擊 ×1.2'));
+    if (has('aim')) pt.push(chip('瞄準', 'good', '下一次瞄準射擊傷害 ×2 且必定爆擊'));
+    if (has('mirror')) pt.push(chip('鏡盾', 'good', '下一次受到的攻擊完全反彈給敵人'));
+    if (has('potRage')) pt.push(chip('狂暴藥', 'good', '本場戰鬥攻擊 +50%，受到的傷害 +30%'));
+    if (has('unyield')) pt.push(chip('不屈', 'good', `這段期間受到的傷害延後承受（已累積 ${Math.round(P.delayPool)}）`));
+    else if (P.delayPool > 0) pt.push(chip(`延遲傷害 ${Math.round(P.delayPool)}`, 'bad', '不屈期間延後的傷害，之後每回合扣一部分（最低留 1 點）'));
+    if (B.enchant) pt.push(chip(`附魔・${DMG_NAMES[B.enchant]}`, 'good', B.enchant === 'dot' ? '每次攻擊讓敵人中毒' : `攻擊改為${DMG_NAMES[B.enchant]}傷害（效果為本職的 75%）`));
+    if (B.lucky) pt.push(chip('幸運金幣', 'good', '獲勝時掉落階級 +1、金幣 ×2'));
+    const acc = [[P.judge, `審判 ×${P.judge}`, '下一次技能每層傷害 +20%'], [P.pact, `血契 ×${P.pact}`, '下一次技能每層傷害 +5%'], [P.volt, `電荷 ×${P.volt}`, '滿 3 層時下一次攻擊追加落雷'],
+      [P.qi, `氣 ×${P.qi}`, '氣功護體每層氣多持續 1 回合'], [P.bulwark > 0, `架盾力量 ${Math.round(P.bulwark)}`, '下一次攻擊追加這些傷害'], [P.debt > 0, `血債 ${Math.round(P.debt)}`, '之後的攻擊回復造成傷害的 50%，最多回復到這個量'],
+      [P.iai, '拔刀', '下一次攻擊必定爆擊且傷害 ×1.5'], [P.shout, '怒吼', '下一次攻擊必定爆擊並吸取 30%'], [P.holyMark, '審判印記', '下一次攻擊傷害 ×1.5 並無視護盾'], [P.chain > 0 && hasAcc('雙刃徽章'), `連斬 ${P.chain}`, '連續普通攻擊：第 2 次 +1 斬，第 3 次起 +2 斬']];
+    for (const [on, t, d] of acc) if (on) pt.push(chip(t, 'good', d));
+    if (stSum(P, 'atkMod')) pt.push(chip(stSum(P, 'atkMod') > 0 ? '攻擊↑' : '攻擊↓', stSum(P, 'atkMod') > 0 ? 'good' : 'bad', `攻擊 ${pct(stSum(P, 'atkMod'))}`));
+    if (stSum(P, 'defMod')) pt.push(chip(stSum(P, 'defMod') > 0 ? '防禦↑' : '防禦↓', stSum(P, 'defMod') > 0 ? 'good' : 'bad', `防禦 ${pct(stSum(P, 'defMod'))}`));
+    if (stSum(P, 'evaMod')) pt.push(chip('閃避↑', 'good', `閃避 +${Math.round(stSum(P, 'evaMod'))}%`));
+    if (G.phoenix) pt.push(chip('不死鳥之羽', 'good', '倒下時自動以最大生命 30% 復活一次'));
     $('#hud-status').innerHTML = pt.join('');
     // 技能按鈕
     const n = unlockedSkills(G.floor);
@@ -776,6 +835,7 @@ function swipe(el, cb) {
   let sx = 0, sy = 0, t0 = 0;
   el.addEventListener('touchstart', e => { const t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY; t0 = Date.now(); }, {passive: true});
   el.addEventListener('touchend', e => {
+    if (e.target.closest('[data-tip]')) return;
     const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
     if (Math.max(Math.abs(dx), Math.abs(dy)) < 30) { cb('tap'); return; }
     if (Math.abs(dy) > Math.abs(dx)) cb(dy < 0 ? 'u' : 'd'); else cb(dx < 0 ? 'l' : 'r');
@@ -789,7 +849,7 @@ function initInput() {
     else if (d === 'tap') act({type: 'attack'});
     else if (d === 'd') act({type: 'guard'});
   });
-  $('#view-wrap').addEventListener('click', e => { if ($('#scr-game').dataset.mode === 'battle' && !('ontouchstart' in window)) act({type: 'attack'}); });
+  $('#view-wrap').addEventListener('click', e => { if (e.target.closest('[data-tip]')) return; if ($('#scr-game').dataset.mode === 'battle' && !('ontouchstart' in window)) act({type: 'attack'}); });
   $('#bt-attack').onclick = () => act({type: 'attack'});
   $('#bt-guard').onclick = () => act({type: 'guard'});
   $$('.sk-btn').forEach((b, i) => b.onclick = () => act({type: 'skill', idx: i}));
@@ -823,7 +883,7 @@ function boot() {
     document.documentElement.style.setProperty('--atlas', `url("${ATLAS.src}")`);
     view = $('#view'); view.width = VIEW_W; view.height = VIEW_H;
     vctx = view.getContext('2d'); vctx.imageSmoothingEnabled = false; vimg = vctx.createImageData(VIEW_W, VIEW_H);
-    initTitle(); initInput(); show('scr-title'); loop();
+    initTitle(); initInput(); initTips(); show('scr-title'); loop();
   };
   ATLAS = new Image();
   ATLAS.onload = start;

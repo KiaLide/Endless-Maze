@@ -92,8 +92,8 @@ function baseStats() {
   s.crit = Math.max(0, s.crit + buffSum('crit'));
   s.eva = clamp(s.eva + buffSum('eva'), 0, 50);
   s.hit = 100 + buffSum('hit');
-  s.goldMul = Math.max(0, 1 + buffSum('gold') / 100) * (hasAcc('金幣袋') ? 1 + 0.5 * accScale() : 1);
-  s.healMul = Math.max(0, 1 + buffSum('heal') / 100) * (hasAcc('天使之羽') ? 1 + 0.3 * accScale() : 1);
+  s.goldMul = Math.max(0, 1 + buffSum('gold') / 100);
+  s.healMul = Math.max(0, 1 + buffSum('heal') / 100);
   return s;
 }
 function maxHp() { return baseStats().hp; }

@@ -116,6 +116,33 @@
    "effect": "本層進度 +3 步（不會跳過頭目）"
   },
   {
+   "id": "磨刀石",
+   "category": "特殊道具",
+   "key": "ench_slash",
+   "use": "battle",
+   "rarity": "普通",
+   "price_F": 45,
+   "effect": "本場戰鬥的攻擊改為斬擊傷害（效果為本職的 75%：弱點 ×1.15、抗性 ×0.85）"
+  },
+  {
+   "id": "秘銀粉",
+   "category": "特殊道具",
+   "key": "ench_magic",
+   "use": "battle",
+   "rarity": "普通",
+   "price_F": 45,
+   "effect": "本場戰鬥的攻擊改為魔法傷害（效果為本職的 75%：弱點 ×1.15、抗性 ×0.85）"
+  },
+  {
+   "id": "腐蝕毒液",
+   "category": "特殊道具",
+   "key": "ench_dot",
+   "use": "battle",
+   "rarity": "普通",
+   "price_F": 45,
+   "effect": "本場戰鬥每次攻擊都讓敵人中毒（每回合攻擊 ×0.25，3 回合），持續傷害依體質加成"
+  },
+  {
    "id": "生命之種",
    "category": "永久",
    "stat": "hp",
