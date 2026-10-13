@@ -126,14 +126,14 @@ function itemIcon(id) {
   if (id === '女神之種') return 'misc:seed_god';
   if (id === '不死鳥之羽') return 'misc:phoenix';
   if (it.category === '永久') return 'misc:seed';
-  if (it.category === '暫時') return 'misc:buff_' + it.stat;
+  if (it.category === '特殊道具') return 'misc:sp_' + it.key;
   return 'misc:scroll';
 }
 function itemDesc(id) {
   const it = ITEMS[id];
   if (!it) return '';
   if (it.category === '回復') return `回復最大生命 ${it.effect.heal_pct}%` + (G && G.cls === 'cleric' ? '（聖女 ×2）' : '');
-  if (it.category === '暫時') return `${STAT_NAMES[it.stat]} +${it.value}%，持續一場戰鬥`;
+  if (it.category === '特殊道具') return `${it.effect}（${{battle: '戰鬥中', any: '隨時', explore: '探索時'}[it.use]}）`;
   if (id === '女神之種') return '任選一個屬性 +1 點';
   if (it.category === '永久') return `${STAT_NAMES[it.stat]} 永久 +${it.value}${it.stat === 'crit' || it.stat === 'eva' ? '%' : ''}`;
   return it.effect || '';
@@ -187,13 +187,14 @@ function normalizeInv() {
   }
   G.inv = out;
 }
+function rollSpecial(rarity) { return pick(DATA.items.items.filter(i => i.category === '特殊道具' && i.rarity === rarity)).id; }
 function rollItemId(table) {
   const t = ITEM_DROP[table];
   let r = rnd() * t.reduce((s, x) => s + x[1], 0);
   for (const [id, w] of t) {
     if ((r -= w) > 0) continue;
     const stat = pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva']);
-    if (id.startsWith('buff')) return `${BUFF_NAMES[stat]}・${'小中大'[+id[4]]}`;
+    if (id === 'sp0' || id === 'sp1') return rollSpecial(id === 'sp0' ? '普通' : '稀有');
     if (id === 'seed') return SEED_NAMES[stat];
     return id;
   }
@@ -235,7 +236,7 @@ function itemBasePrice(id) {
   if (id.startsWith('女神')) return 600;
   if (it.category === '永久') return 300;
   if (it.category === '回復') return {小藥水: 25, 中藥水: 60, 大藥水: 120}[id] || 40;
-  return {小: 20, 中: 45, 大: 90}[id.slice(-1)] || 30;
+  return it.price_F || 30;
 }
 function itemSellValue(id) { return Math.max(1, Math.round(itemBasePrice(id) * floorF(G.floor) * 0.4)); }
 function sellValue(type, item) {

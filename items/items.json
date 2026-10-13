@@ -26,166 +26,94 @@
    "price_F": 120
   },
   {
-   "id": "活力藥劑・小",
-   "category": "暫時",
-   "stat": "hp",
-   "value": 10,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 20
+   "id": "震撼彈",
+   "category": "特殊道具",
+   "key": "stun",
+   "use": "battle",
+   "rarity": "普通",
+   "price_F": 40,
+   "effect": "打斷敵人的蓄力或強力攻擊並讓牠跳過下一次行動；頭目只會取消蓄力或強力攻擊"
   },
   {
-   "id": "活力藥劑・中",
-   "category": "暫時",
-   "stat": "hp",
-   "value": 20,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 45
+   "id": "煙霧彈",
+   "category": "特殊道具",
+   "key": "escape",
+   "use": "battle",
+   "rarity": "普通",
+   "price_F": 35,
+   "effect": "立刻逃離戰鬥（沒有掉落與金幣）；頭目戰不能使用"
   },
   {
-   "id": "活力藥劑・大",
-   "category": "暫時",
-   "stat": "hp",
-   "value": 35,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 90
+   "id": "火焰瓶",
+   "category": "特殊道具",
+   "key": "fire",
+   "use": "battle",
+   "rarity": "普通",
+   "price_F": 45,
+   "effect": "造成攻擊 ×2 的傷害（無視防禦），並灼燒 3 回合"
   },
   {
-   "id": "力量藥劑・小",
-   "category": "暫時",
-   "stat": "atk",
-   "value": 10,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 20
+   "id": "冰凍瓶",
+   "category": "特殊道具",
+   "key": "ice",
+   "use": "battle",
+   "rarity": "普通",
+   "price_F": 50,
+   "effect": "凍結敵人 1 回合；精英 50% 抵抗、頭目免疫，抵抗或免疫時改為減速"
   },
   {
-   "id": "力量藥劑・中",
-   "category": "暫時",
-   "stat": "atk",
-   "value": 20,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 45
+   "id": "萬能藥",
+   "category": "特殊道具",
+   "key": "cure",
+   "use": "any",
+   "rarity": "普通",
+   "price_F": 40,
+   "effect": "解除所有負面狀態，並回復最大生命 15%"
   },
   {
-   "id": "力量藥劑・大",
-   "category": "暫時",
-   "stat": "atk",
-   "value": 35,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 90
+   "id": "鏡盾卷軸",
+   "category": "特殊道具",
+   "key": "mirror",
+   "use": "battle",
+   "rarity": "稀有",
+   "price_F": 90,
+   "effect": "下一次受到的攻擊完全反彈給敵人，自己不受傷"
   },
   {
-   "id": "鐵壁藥劑・小",
-   "category": "暫時",
-   "stat": "def",
-   "value": 10,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 20
+   "id": "時之沙漏",
+   "category": "特殊道具",
+   "key": "hourglass",
+   "use": "battle",
+   "rarity": "稀有",
+   "price_F": 120,
+   "effect": "所有技能冷卻歸零"
   },
   {
-   "id": "鐵壁藥劑・中",
-   "category": "暫時",
-   "stat": "def",
-   "value": 20,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 45
+   "id": "狂暴藥",
+   "category": "特殊道具",
+   "key": "berserk",
+   "use": "battle",
+   "rarity": "稀有",
+   "price_F": 70,
+   "effect": "本場戰鬥攻擊 +50%，但受到的傷害 +30%"
   },
   {
-   "id": "鐵壁藥劑・大",
-   "category": "暫時",
-   "stat": "def",
-   "value": 35,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 90
+   "id": "幸運金幣",
+   "category": "特殊道具",
+   "key": "lucky",
+   "use": "battle",
+   "rarity": "稀有",
+   "price_F": 100,
+   "effect": "本場戰鬥獲勝時，掉落階級 +1、金幣 ×2"
   },
   {
-   "id": "疾風藥劑・小",
-   "category": "暫時",
-   "stat": "spd",
-   "value": 10,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 20
-  },
-  {
-   "id": "疾風藥劑・中",
-   "category": "暫時",
-   "stat": "spd",
-   "value": 20,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 45
-  },
-  {
-   "id": "疾風藥劑・大",
-   "category": "暫時",
-   "stat": "spd",
-   "value": 35,
-   "unit": "%",
-   "duration": "一場戰鬥",
-   "price_F": 90
-  },
-  {
-   "id": "鷹眼藥劑・小",
-   "category": "暫時",
-   "stat": "crit",
-   "value": 5,
-   "unit": "點",
-   "duration": "一場戰鬥",
-   "price_F": 20
-  },
-  {
-   "id": "鷹眼藥劑・中",
-   "category": "暫時",
-   "stat": "crit",
-   "value": 10,
-   "unit": "點",
-   "duration": "一場戰鬥",
-   "price_F": 45
-  },
-  {
-   "id": "鷹眼藥劑・大",
-   "category": "暫時",
-   "stat": "crit",
-   "value": 15,
-   "unit": "點",
-   "duration": "一場戰鬥",
-   "price_F": 90
-  },
-  {
-   "id": "幻影藥劑・小",
-   "category": "暫時",
-   "stat": "eva",
-   "value": 5,
-   "unit": "點",
-   "duration": "一場戰鬥",
-   "price_F": 20
-  },
-  {
-   "id": "幻影藥劑・中",
-   "category": "暫時",
-   "stat": "eva",
-   "value": 10,
-   "unit": "點",
-   "duration": "一場戰鬥",
-   "price_F": 45
-  },
-  {
-   "id": "幻影藥劑・大",
-   "category": "暫時",
-   "stat": "eva",
-   "value": 15,
-   "unit": "點",
-   "duration": "一場戰鬥",
-   "price_F": 90
+   "id": "傳送卷軸",
+   "category": "特殊道具",
+   "key": "teleport",
+   "use": "explore",
+   "rarity": "稀有",
+   "price_F": 80,
+   "effect": "本層進度 +3 步（不會跳過頭目）"
   },
   {
    "id": "生命之種",
@@ -248,22 +176,20 @@
  "drop_table": {
   "一般戰": {
    "小藥水": 30,
-   "中藥水": 15,
-   "大藥水": 5,
-   "暫時・小": 25,
-   "暫時・中": 15,
-   "暫時・大": 5,
-   "永久之種": 4.5,
+   "中藥水": 12,
+   "大藥水": 3,
+   "普通特殊道具": 35,
+   "稀有特殊道具": 10,
+   "永久之種": 9.5,
    "女神之種": 0.5
   },
   "精英戰": {
-   "小藥水": 20,
-   "中藥水": 15,
-   "大藥水": 10,
-   "暫時・小": 15,
-   "暫時・中": 20,
-   "暫時・大": 10,
-   "永久之種": 9,
+   "小藥水": 15,
+   "中藥水": 13,
+   "大藥水": 7,
+   "普通特殊道具": 30,
+   "稀有特殊道具": 20,
+   "永久之種": 14,
    "女神之種": 1
   }
  },

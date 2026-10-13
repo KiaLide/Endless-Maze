@@ -211,6 +211,7 @@ function applyTakenMods(P, d) {
   if (hasAcc('鐵布衫')) d *= 1 - 0.15 * accScale();
   if (hasAcc('狂戰士之血') && hpFrac(P) < 0.3) d *= 1 - 0.2 * accScale();
   if (stHas(P, 'guard')) d *= 0.5;   // 防禦姿態
+  if (stHas(P, 'potRage')) d *= 1.3;  // 狂暴藥
   // 護盾吸收
   const sh = stGet(P, 'shield');
   if (sh) { const a = Math.min(sh.v, d); sh.v -= a; d -= a; if (sh.v <= 0) stDel(P, 'shield'); }
@@ -335,6 +336,7 @@ async function playerTurn() {
   let act = await UI.waitAction(B);
   while (act.type === 'item' && !B.over) {
     await useItemInBattle(act.idx);
+    if (B.over) break;
     act = await UI.waitAction(B, true);
   }
   if (B.over) return;
@@ -452,9 +454,20 @@ async function useSkill(i) {
   }
 }
 
+// 回傳 null 表示可以用；否則回傳不能用的原因
+function itemBlock(id) {
+  const it = ITEMS[id], {E} = B;
+  if (it.category !== '特殊道具') return null;
+  if (it.use === 'explore') return `${id}不能在戰鬥中使用`;
+  if (it.key === 'escape' && E.rank === '頭目') return '頭目戰無法逃跑';
+  if (it.key === 'stun' && E.rank === '頭目' && !(E.charging || (E.intent && ['charge', 'heavy', 'special'].includes(E.intent.k)))) return '頭目現在沒有可以打斷的行動';
+  return null;
+}
 async function useItemInBattle(idx) {
-  const {P} = B;
+  const {P, E} = B;
   const id = G.inv[idx].id;
+  const block = itemBlock(id);
+  if (block) { toast(block); return; }
   removeAt(idx, 1);
   const it = ITEMS[id];
   UI.log(`${G.name}使用了${id}`);
@@ -462,14 +475,28 @@ async function useItemInBattle(idx) {
     let amt = P.maxHp * it.effect.heal_pct / 100 * baseStats().healMul;
     if (G.cls === 'cleric') amt *= 2;
     healUnit(P, amt);
-  } else if (it.category === '暫時') {
-    const map = {hp: null, atk: 'atkMod', def: 'defMod', spd: 'spdMod', crit: 'critMod', eva: 'evaMod'};
-    if (it.stat === 'hp') { const add = Math.round(P.maxHp * it.value / 100); P.maxHp += add; P.hp += add; UI.float(P, '最大生命 +' + add, 'status'); }
-    else {
-      const k = map[it.stat]; const v = it.stat === 'crit' || it.stat === 'eva' ? it.value : it.value / 100;
-      const cur = P.st.filter(s => s.k === k && s.fromItem);
-      if (!cur.length || cur[0].v < v) { P.st = P.st.filter(s => !(s.k === k && s.fromItem)); stAdd(P, k, v, 999, {fromItem: true}); }
-      UI.float(P, `${STAT_NAMES[it.stat]} +${it.value}%`, 'status');
+  } else if (it.category === '特殊道具') {
+    switch (it.key) {
+      case 'stun':
+        E.charging = false;
+        if (E.rank === '頭目') { E.intent = {k: 'attack', m: 1, hits: 1, extra: []}; UI.log(`${E.name}的行動被打斷了！`); }
+        else { E.intent = null; stAdd(E, 'freeze', 1, 99); UI.float(E, '暈眩', 'status'); UI.log(`${E.name}被震暈了，下一次行動跳過！`); }
+        break;
+      case 'escape': B.over = true; B.result = 'flee'; UI.log('你丟出煙霧彈，趁亂逃走了'); break;
+      case 'fire': await dealRaw(E, Math.round(atkOf(P) * 2), '火焰', 'burn'); if (!B.over) addDot(E, 'burn', atkOf(P) * 0.3 * dotMul(), 3); break;
+      case 'ice': {
+        const resist = E.rank === '頭目' || (E.rank === '精英' && chance(0.5));
+        if (resist) { stAdd(E, 'slow', 1, 1); UI.float(E, '減速', 'status'); }
+        else { stAdd(E, 'freeze', 1, 99); UI.float(E, '凍結', 'status'); }
+        break;
+      }
+      case 'cure':
+        P.st = P.st.filter(s => !(['poison', 'burn', 'slow', 'freeze', 'cursed'].includes(s.k) || (s.k.endsWith('Mod') && s.v < 0)));
+        healUnit(P, P.maxHp * 0.15); UI.float(P, '淨化', 'status'); break;
+      case 'mirror': stAdd(P, 'mirror', 1, 999); UI.float(P, '鏡盾', 'status'); break;
+      case 'hourglass': for (let i = 0; i < 3; i++) P.cds[i] = 0; UI.float(P, '冷卻歸零', 'status'); break;
+      case 'berserk': stAdd(P, 'atkMod', 0.5, 999); stAdd(P, 'potRage', 1, 999); UI.float(P, '狂暴', 'status'); break;
+      case 'lucky': B.lucky = true; UI.float(P, '好運', 'status'); break;
     }
   } else if (it.category === '永久') {
     const stat = it.stat === '任選' ? await UI.chooseStat() : it.stat;
@@ -482,6 +509,8 @@ async function useItemInBattle(idx) {
 
 // ---------- 敵人回合 ----------
 // ---------- 敵人意圖：事先決定下一次行動並顯示給玩家 ----------
+// 週期性特殊技能：精英與頭目第一次行動就發動，之後每 n 次行動一次；一般怪物第 n 次才發動
+function onCycle(E, n, t) { return E.rank === '基本' ? t % n === 0 : (t - 1) % n === 0; }
 function chargeChance(E) { return E.rank === '頭目' ? 0.25 : E.rank === '精英' ? 0.2 : 0.15; }
 function planIntent() {
   const {E} = B, fx = E.fx, t = E.turns + 1;
@@ -490,9 +519,9 @@ function planIntent() {
   else if (fx.selfDestruct && hpFrac(E) < fx.selfDestruct[0]) it = {k: 'boom', m: fx.selfDestruct[1]};
   else if (fx.potionOnce && !E.potionDone && hpFrac(E) < fx.potionOnce[0]) it = {k: 'potion'};
   else if (fx.healEvery && t % fx.healEvery[0] === 0) it = {k: 'heal'};
-  else if (fx.shieldEvery && t % fx.shieldEvery[0] === 0) it = {k: 'shield'};
+  else if (fx.shieldEvery && onCycle(E, fx.shieldEvery[0], t)) it = {k: 'shield'};
   else if (fx.randomAct) it = {k: 'rand', r: ri(0, 2)};
-  else if (fx.every && t % fx.every[0] === 0) { const ex = fx.every[2] || {}; it = {k: 'special', m: ex.hits ? 1 : fx.every[1], hits: ex.hits || 1}; }
+  else if (fx.every && onCycle(E, fx.every[0], t)) { const ex = fx.every[2] || {}; it = {k: 'special', m: ex.hits ? 1 : fx.every[1], hits: ex.hits || 1}; }
   else if (t > 1 && chance(chargeChance(E))) it = {k: 'charge'};
   else {
     let hits = 1, m = 1;
@@ -502,9 +531,9 @@ function planIntent() {
     it = {k: 'attack', m, hits};
   }
   it.extra = [];
-  if (fx.summon && t % fx.summon[0] === 0) it.extra.push('召喚幫手');
-  if (fx.cdEvery && t % fx.cdEvery[0] === 0) it.extra.push('封印技能');
-  if (fx.stripEvery && t % fx.stripEvery === 0) it.extra.push('消除增益');
+  if (fx.summon && onCycle(E, fx.summon[0], t)) it.extra.push('召喚幫手');
+  if (fx.cdEvery && onCycle(E, fx.cdEvery[0], t)) it.extra.push('封印技能');
+  if (fx.stripEvery && onCycle(E, fx.stripEvery, t)) it.extra.push('消除增益');
   E.intent = it;
 }
 // 玩家行動後，血量觸發的行為（自爆、喝藥）要即時反映在意圖上
@@ -525,6 +554,7 @@ function estHit(m) {
   return Math.max(1, Math.round(x));
 }
 function intentInfo() {
+  if (B && stHas(B.E, 'freeze')) return {text: '凍結／暈眩中：跳過下一次行動', warn: false};
   const it = B && B.E.intent; if (!it) return null;
   let t, warn = false;
   switch (it.k) {
@@ -575,12 +605,12 @@ async function enemyAct() {
   if (it.k === 'heal') { healUnit(E, E.maxHp * fx.healEvery[1]); UI.log(`${E.name}回復了生命`); await sleep(400); turnEnd(E); return; }
   if (it.k === 'shield') { stAdd(E, 'shield', Math.round(atkOf(E) * fx.shieldEvery[1]), 999); UI.float(E, '護盾', 'status'); UI.log(`${E.name}展開了護盾`); await sleep(400); turnEnd(E); return; }
   if (fx.cleanseEvery && E.turns % fx.cleanseEvery[0] === 0) { E.st = E.st.filter(s => !(['poison', 'burn', 'slow', 'cursed'].includes(s.k) || (s.k.endsWith('Mod') && s.v < 0))); healUnit(E, E.maxHp * fx.cleanseEvery[1]); UI.log(`${E.name}淨化了自己`); }
-  if (fx.stripEvery && E.turns % fx.stripEvery === 0) {
+  if (fx.stripEvery && onCycle(E, fx.stripEvery, E.turns)) {
     const pos = P.st.filter(s => (s.k.endsWith('Mod') && s.v > 0) || ['shield', 'smoke', 'nextCrit', 'parry', 'mikiri', 'hot'].includes(s.k));
     if (pos.length) { const t = pick(pos); P.st = P.st.filter(s => s !== t); UI.log(`${E.name}消除了你的一個增益`); }
   }
-  if (fx.cdEvery && E.turns % fx.cdEvery[0] === 0) { const n = unlockedSkills(G.floor); if (n) { P.cds[ri(0, n - 1)] += fx.cdEvery[1]; UI.log('技能被封印了！'); } }
-  if (fx.summon && E.turns % fx.summon[0] === 0) { B.summonsE.push({turns: fx.summon[2], mul: fx.summon[1]}); UI.log(`${E.name}召喚了幫手`); }
+  if (fx.cdEvery && onCycle(E, fx.cdEvery[0], E.turns)) { const n = unlockedSkills(G.floor); if (n) { P.cds[ri(0, n - 1)] += fx.cdEvery[1]; UI.log('技能被封印了！'); } }
+  if (fx.summon && onCycle(E, fx.summon[0], E.turns)) { B.summonsE.push({turns: fx.summon[2], mul: fx.summon[1]}); UI.log(`${E.name}召喚了幫手`); }
   // 攻擊
   if (it.k === 'charge') {
     E.charging = true; UI.enemySpecial(); UI.float(E, '蓄力', 'status'); UI.log(`${E.name}正在蓄力……`); await sleep(400);
@@ -628,6 +658,13 @@ async function eHit(mult, o = {}) {
     const p = stGet(P, 'parry'); stDel(P, 'parry');
     UI.float(P, '格擋', 'status'); UI.log('你擋下了攻擊並反擊！');
     await pHit(0, {skill: true, flat: atkOf(E) * 2.0 * p.v, sure: true});
+    return {miss: true, dmg: 0};
+  }
+  if (stHas(P, 'mirror')) {
+    stDel(P, 'mirror');
+    const rr = attackRoll(E, P, mult, {...o, sure: true});
+    UI.float(P, '反彈', 'status'); UI.log(`鏡盾把攻擊反彈了回去！`);
+    await dealRaw(E, rr.dmg, '反彈', 'dmg');
     return {miss: true, dmg: 0};
   }
   if (G.blockHits > 0) { G.blockHits--; UI.float(P, '結界擋下', 'status'); UI.log('守護結界擋下了攻擊'); await sleep(300); return {miss: true, dmg: 0}; }
@@ -702,13 +739,15 @@ async function finishBattle() {
   const isBig = E.rank !== '基本';
   if (isBig) { clearBuffs(b => b.dur === 'long'); if (G.poison && G.poison.left === 'long') G.poison = null; }
   if (B.result === 'lose') return {result: 'lose', monster: E};
+  if (B.result === 'flee') return {result: 'flee', monster: E};
   G.kills++;
   const F = floorF(G.floor);
   const base = E.rank === '頭目' ? 30 : E.rank === '精英' ? 15 : 5;
-  const gold = Math.round(base * F * (0.8 + rnd() * 0.4) * baseStats().goldMul) + E.stolen;
+  const gold = Math.round(base * F * (0.8 + rnd() * 0.4) * baseStats().goldMul * (B.lucky ? 2 : 1)) + E.stolen;
   G.gold += gold;
   const dropKind = E.rank === '頭目' ? 'boss' : E.rank === '精英' ? 'elite' : 'normal';
   const drops = [makeDrop(dropKind)];
+  if (B.lucky) drops.forEach(d => { if (d.item && d.item.tier) d.item.tier = Math.min(20, d.item.tier + 1); });
   if (E.fx.extraDrop) drops.push(makeDrop('normal'));
   return {result: 'win', monster: E, gold, drops};
 }

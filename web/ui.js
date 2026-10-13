@@ -397,6 +397,7 @@ async function doBattle(kind) {
   scene.mon = null; scene.monDead = 0;
   refreshHud();
   if (res.result === 'lose') { await gameOver(res.monster); return; }
+  if (res.result === 'flee') { toast('你逃離了戰鬥'); B = null; refreshHud(); return; }
   await modal(`<div class="banner"><h2>勝利</h2><p>打倒了${res.monster.name}，獲得 ${res.gold} 金幣。</p></div>`, [['拾取戰利品', 1, 'primary']], 'center');
   for (const d of res.drops) await takeDrop(d);
   B = null; refreshHud();
@@ -471,7 +472,7 @@ async function merchant() {
     { const own = chance(0.5); const pool = ACCS.map((a, i) => i).filter(i => own ? ACCS[i].class_id === G.cls : ACCS[i].class_id !== G.cls);
       goods.push({type: 'acc', item: {idx: pick(pool), roll: rollRoll()}, price: Math.round(150 * F * disc)}); }
     for (let i = 0; i < 2; i++) { const id = rollItemId('normal').replace(/^(生命|力量|守護|迅捷|慧眼|幻影)之種$/, '中藥水').replace('女神之種', '大藥水'); goods.push({type: 'item', item: id, price: priceOf(id)}); }
-    { const r = rnd(); const id = r < 0.05 ? '女神之種' : r < 0.35 ? SEED_NAMES[pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva'])] : pick(['小藥水', '中藥水']); goods.push({type: 'item', item: id, price: priceOf(id)}); }
+    { const r = rnd(); const id = r < 0.05 ? '女神之種' : r < 0.3 ? SEED_NAMES[pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva'])] : r < 0.7 ? rollSpecial('稀有') : pick(['小藥水', '中藥水']); goods.push({type: 'item', item: id, price: priceOf(id)}); }
     return goods;
   };
   let goods = rollGoods();
@@ -572,7 +573,7 @@ async function openInventory(inBattle) {
     if (!G.inv.length) { await modal('<div class="inv"><h3>道具欄</h3><p class="desc">背包是空的。</p></div>', [['關閉', null, 'primary']], 'wide'); return null; }
     const v = await modal(`<div class="inv"><h3>道具欄 <small>${G.inv.length} / 6 格</small></h3>
       <div class="inv-list">${G.inv.map((s, i) => `<button class="inv-item" data-use="${i}">${spr(itemIcon(s.id), 2)}<span><b>${s.id}</b> ×${s.n}<small>${itemDesc(s.id)}</small></span><em>使用</em></button>`).join('')}</div>
-      ${inBattle ? '<p class="hint">使用道具不消耗回合，用完可以繼續行動。</p>' : '<p class="hint">暫時 buff 在戰鬥外使用，效果會保留到下一場戰鬥結束。</p>'}</div>`,
+      ${inBattle ? '<p class="hint">使用道具不消耗回合，用完可以繼續行動。</p>' : '<p class="hint">標示「戰鬥中」的特殊道具只能在戰鬥裡使用。</p>'}</div>`,
       [['關閉', null, 'primary']], 'wide');
     if (v == null) return null;
     if (inBattle) return v;
@@ -586,8 +587,15 @@ async function useItemOutside(idx) {
   if (it.category === '回復') {
     if (G.hp >= maxHp()) { toast('生命已滿'); return; }
     removeAt(idx); const r = healPct(it.effect.heal_pct / 100, true); toast(`回復 ${r.healed} 生命`);
-  } else if (it.category === '暫時') {
-    removeAt(idx); addBuff(it.stat, it.value, 'next'); toast(`${id}：效果保留到下一場戰鬥結束`);
+  } else if (it.category === '特殊道具') {
+    if (it.use === 'battle') { toast(`${id}只能在戰鬥中使用`); return; }
+    if (it.key === 'cure') {
+      removeAt(idx); G.poison = null; clearBuffs(b => b.val < 0);
+      const r = healPct(0.15, true); toast(`解除負面狀態，回復 ${r.healed} 生命`);
+    } else if (it.key === 'teleport') {
+      if (G.floor % 5 === 0 && G.step >= STEPS_PER_FLOOR - 2) { toast('前方就是頭目，傳送不過去'); return; }
+      removeAt(idx); const res = applyFx([['progress', 3]]); toast(res.text.join('；') || '前進了 3 步');
+    }
   } else if (it.category === '永久') {
     const stat = it.stat === '任選' ? await chooseStat() : it.stat;
     if (!stat) return;

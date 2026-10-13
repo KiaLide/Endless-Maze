@@ -50,8 +50,10 @@ MON_TILE = {
 # 道具、防具、飾品、事件用的圖塊（相對 rltiles/）
 MISC_TILE = {
     'potion_s': 'item/potion/ruby', 'potion_m': 'item/potion/pink', 'potion_l': 'item/potion/golden',
-    'buff_hp': 'item/potion/emerald', 'buff_atk': 'item/potion/brown', 'buff_def': 'item/potion/dark',
-    'buff_spd': 'item/potion/cyan', 'buff_crit': 'item/potion/yellow', 'buff_eva': 'item/potion/white',
+    'sp_stun': 'item/misc/misc_tremorstones', 'sp_escape': 'item/potion/cloudy', 'sp_fire': 'item/potion/orange',
+    'sp_ice': 'item/potion/brilliant_blue', 'sp_cure': 'item/potion/emerald', 'sp_mirror': 'item/misc/misc_phantom_mirror',
+    'sp_hourglass': 'item/misc/misc_lantern', 'sp_berserk': 'item/potion/black', 'sp_lucky': 'item/gold/',
+    'sp_teleport': 'item/scroll/i-teleportation',
     'seed': 'item/gem/', 'seed_god': 'item/misc/orb_of_zot1', 'phoenix': 'item/misc/misc_fan',
     'gold': 'item/gold/', 'chest': 'item/misc/misc_box_of_beasts', 'scroll': 'item/scroll/',
     'armor_hp': 'item/armour/robe1', 'armor_atk': 'item/armour/troll_leather_armour', 'armor_def': 'item/armour/plate1',
