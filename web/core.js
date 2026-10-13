@@ -194,7 +194,7 @@ function rollItemId(table) {
   for (const [id, w] of t) {
     if ((r -= w) > 0) continue;
     const stat = pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva']);
-    if (id === 'sp0' || id === 'sp1') return rollSpecial(id === 'sp0' ? '普通' : '稀有');
+    if (id === 'sp0' || id === 'sp1') return rollSpecial(id === 'sp0' ? '常見' : '珍品');
     if (id === 'seed') return SEED_NAMES[stat];
     return id;
   }

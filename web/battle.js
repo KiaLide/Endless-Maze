@@ -452,7 +452,7 @@ async function normalAttack() {
       }
       if (hasAcc('巨人腕環') && i === 0) interruptCharge(B.E, '重擊');
       if (hasAcc('金幣袋') && !B.stole && chance(0.2 * accScale())) {
-        B.stole = true; const sid = rollSpecial('普通'); const rr = addItem(sid); UI.log(rr.ok ? `偷到了 ${sid}！` : '偷到東西，但道具欄滿了');
+        B.stole = true; const sid = rollSpecial('常見'); const rr = addItem(sid); UI.log(rr.ok ? `偷到了 ${sid}！` : '偷到東西，但道具欄滿了');
       }
       if (hasAcc('熔岩寶珠') && chance(0.2 * accScale())) addDot(B.E, 'burn', atkOf(P) * 0.3 * dotMul(), 3);
     }

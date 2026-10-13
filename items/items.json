@@ -30,7 +30,7 @@
    "category": "特殊道具",
    "key": "stun",
    "use": "battle",
-   "rarity": "普通",
+   "rarity": "常見",
    "price_F": 40,
    "effect": "打斷敵人的蓄力或強力攻擊並讓牠跳過下一次行動；頭目只會取消蓄力或強力攻擊"
   },
@@ -39,7 +39,7 @@
    "category": "特殊道具",
    "key": "escape",
    "use": "battle",
-   "rarity": "普通",
+   "rarity": "常見",
    "price_F": 35,
    "effect": "立刻逃離戰鬥（沒有掉落與金幣）；頭目戰不能使用"
   },
@@ -48,7 +48,7 @@
    "category": "特殊道具",
    "key": "fire",
    "use": "battle",
-   "rarity": "普通",
+   "rarity": "常見",
    "price_F": 45,
    "effect": "造成攻擊 ×2 的傷害（無視防禦），並灼燒 3 回合"
   },
@@ -57,7 +57,7 @@
    "category": "特殊道具",
    "key": "ice",
    "use": "battle",
-   "rarity": "普通",
+   "rarity": "常見",
    "price_F": 50,
    "effect": "凍結敵人 1 回合；精英 50% 抵抗、頭目免疫，抵抗或免疫時改為減速"
   },
@@ -66,7 +66,7 @@
    "category": "特殊道具",
    "key": "cure",
    "use": "any",
-   "rarity": "普通",
+   "rarity": "常見",
    "price_F": 40,
    "effect": "解除所有負面狀態，並回復最大生命 15%"
   },
@@ -75,7 +75,7 @@
    "category": "特殊道具",
    "key": "mirror",
    "use": "battle",
-   "rarity": "稀有",
+   "rarity": "珍品",
    "price_F": 90,
    "effect": "下一次受到的攻擊完全反彈給敵人，自己不受傷"
   },
@@ -84,7 +84,7 @@
    "category": "特殊道具",
    "key": "hourglass",
    "use": "battle",
-   "rarity": "稀有",
+   "rarity": "珍品",
    "price_F": 120,
    "effect": "所有技能冷卻歸零"
   },
@@ -93,7 +93,7 @@
    "category": "特殊道具",
    "key": "berserk",
    "use": "battle",
-   "rarity": "稀有",
+   "rarity": "珍品",
    "price_F": 70,
    "effect": "本場戰鬥攻擊 +50%，但受到的傷害 +30%"
   },
@@ -102,7 +102,7 @@
    "category": "特殊道具",
    "key": "lucky",
    "use": "battle",
-   "rarity": "稀有",
+   "rarity": "珍品",
    "price_F": 100,
    "effect": "本場戰鬥獲勝時，掉落階級 +1、金幣 ×2"
   },
@@ -111,7 +111,7 @@
    "category": "特殊道具",
    "key": "teleport",
    "use": "explore",
-   "rarity": "稀有",
+   "rarity": "珍品",
    "price_F": 80,
    "effect": "本層進度 +3 步（不會跳過頭目）"
   },
@@ -120,7 +120,7 @@
    "category": "特殊道具",
    "key": "ench_slash",
    "use": "battle",
-   "rarity": "普通",
+   "rarity": "常見",
    "price_F": 45,
    "effect": "本場戰鬥的攻擊改為斬擊傷害（效果為本職的 75%：弱點 ×1.15、抗性 ×0.85）"
   },
@@ -129,7 +129,7 @@
    "category": "特殊道具",
    "key": "ench_magic",
    "use": "battle",
-   "rarity": "普通",
+   "rarity": "常見",
    "price_F": 45,
    "effect": "本場戰鬥的攻擊改為魔法傷害（效果為本職的 75%：弱點 ×1.15、抗性 ×0.85）"
   },
@@ -138,7 +138,7 @@
    "category": "特殊道具",
    "key": "ench_dot",
    "use": "battle",
-   "rarity": "普通",
+   "rarity": "常見",
    "price_F": 45,
    "effect": "本場戰鬥每次攻擊都讓敵人中毒（每回合攻擊 ×0.25，3 回合），持續傷害依體質加成"
   },
@@ -205,8 +205,8 @@
    "小藥水": 30,
    "中藥水": 12,
    "大藥水": 3,
-   "普通特殊道具": 35,
-   "稀有特殊道具": 10,
+   "常見特殊道具": 35,
+   "珍品特殊道具": 10,
    "永久之種": 9.5,
    "女神之種": 0.5
   },
@@ -214,8 +214,8 @@
    "小藥水": 15,
    "中藥水": 13,
    "大藥水": 7,
-   "普通特殊道具": 30,
-   "稀有特殊道具": 20,
+   "常見特殊道具": 30,
+   "珍品特殊道具": 20,
    "永久之種": 14,
    "女神之種": 1
   }

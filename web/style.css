@@ -374,3 +374,8 @@ body { background: var(--ink); }
 .help-dl dt small { display: block; font-weight: 400; color: var(--dim); font-size: 11px; }
 .help-dl dd { margin: 0; font-size: 13px; color: #d6cce0; min-width: 0; }
 @media (max-width: 360px) { .help-dl div { grid-template-columns: 1fr; } }
+.sk-btn.off { opacity: .5; filter: grayscale(.6); cursor: default; }
+.help-tabs { grid-template-columns: repeat(3, 1fr); }
+.help-h small { font: 400 12px var(--body); color: var(--dim); }
+.formula { display: block; margin-top: 3px; color: var(--gold); font-size: 12px; }
+.ev-tag { font-weight: 700; letter-spacing: .1em; }

@@ -19,6 +19,19 @@ function equipIcon(type, item, scale = 2) {
 }
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c])); }
 
+// 技能簡介（長按技能按鈕時顯示，不寫數值；完整倍率在說明頁）
+const SKILL_BRIEF = {
+  swordsman0: '快速連砍兩刀。', swordsman1: '架起劍擋下敵人下一次攻擊，並借敵人的力量反擊。', swordsman2: '蓄滿力的一擊，必定爆擊。',
+  knight0: '盾擊後突刺，並削弱敵人的攻擊力。', knight1: '數回合內防禦大幅提升。', knight2: '結合攻擊與防禦力的猛烈衝鋒。',
+  rogue0: '從死角刺擊，非常容易爆擊。', rogue1: '敵人下一次攻擊必定落空，你的下一擊必定爆擊。', rogue2: '多段連刺，每一刀都可能爆擊。',
+  wizard0: '火球轟擊，部分無視敵人防禦。', wizard1: '冰霜傷害並凍結敵人；強敵改為減速。', wizard2: '召喚天雷，單發傷害極高。',
+  berserker0: '沉重的一擊。', berserker1: '數回合內攻擊大增、防禦下降。', berserker2: '連續旋轉劈砍，並吸取生命。',
+  cleric0: '聖光攻擊並回復少量生命。', cleric1: '大量回復並解除負面狀態。', cleric2: '強力的神聖一擊，之後數回合持續回復。',
+  fencer0: '快速突刺，有機會追加一擊。', fencer1: '數回合內閃避提升，閃避成功時反擊。', fencer2: '華麗的連續突刺，最後一擊必定爆擊。',
+  witch0: '攻擊並吸取大量生命。', witch1: '數回合內降低敵人的攻擊與防禦。', witch2: '重擊並召喚深淵魔物協助攻擊數回合。',
+  ranger0: '精準射擊，必定命中。', ranger1: '射擊並讓敵人長時間中毒。', ranger2: '大量箭矢連續落下。',
+  monk0: '快速的多段連打。', monk1: '回復生命並在數回合內提升防禦。', monk2: '一陣百裂拳後接上昇龍收尾。',
+};
 // 狀態說明（只寫效果，不寫數值）
 const TIPS = {
   poison: '中毒：每回合開始時受到毒傷害。', burn: '灼燒：每回合開始時受到火焰傷害。', freeze: '凍結／暈眩：跳過下一次行動。',
@@ -61,7 +74,14 @@ function initTips() {
   document.addEventListener('mouseout', e => { if (e.target.closest('[data-tip]')) hide(); });
   document.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el) showTip(el); });
   document.addEventListener('focusout', hide);
-  document.addEventListener('touchstart', e => { const el = e.target.closest('[data-tip]'); if (el) showTip(el); }, {passive: true});
+  let pressEl = null, pressT0 = 0;
+  document.addEventListener('touchstart', e => { const el = e.target.closest('[data-tip]'); pressEl = el; pressT0 = Date.now(); if (el) showTip(el); }, {passive: true});
+  // 長按按鈕只看說明，放開時不觸發按鈕
+  document.addEventListener('click', e => {
+    const el = e.target.closest('[data-tip]');
+    if (el && el === pressEl && Date.now() - pressT0 > 400) { e.stopImmediatePropagation(); e.preventDefault(); }
+    pressEl = null;
+  }, true);
   const end = () => hide();
   document.addEventListener('touchend', end); document.addEventListener('touchmove', end, {passive: true}); document.addEventListener('touchcancel', end);
   document.addEventListener('contextmenu', e => { if (e.target.closest('[data-tip]')) e.preventDefault(); });
@@ -419,15 +439,17 @@ function saveBest() {
 }
 
 // ---------- 事件 ----------
+// 事件分級：好事、壞事用籤詩的吉凶，選擇型事件用風險程度
+const GOOD_TIER = ['小吉', '中吉', '大吉', '天選'], BAD_TIER = ['小凶', '中凶', '大凶', '天譴'], CHOICE_TIER = ['尋常', '可疑', '危險', '命運'];
 function fxPreviewIcon(good) { return good ? 'misc:ev_good' : 'misc:ev_bad'; }
 async function randomEvent() {
   const n = unlockedSkills(G.floor);
   let ev; do { ev = pick(EVENTS); } while ((ev.req || 0) > n);
   scene.ev = fxPreviewIcon(ev.good);
-  const tierName = ['普通', '加重', '非常', '超級'][ev.tier];
+  const tierName = (ev.good ? GOOD_TIER : BAD_TIER)[ev.tier];
   const res = applyFx(ev.fx, !ev.good);
   refreshHud();
-  await modal(`<div class="ev ${ev.good ? 'good' : 'bad'}"><div class="ev-tag">${ev.good ? '好事' : '壞事'}・${tierName}</div>
+  await modal(`<div class="ev ${ev.good ? 'good' : 'bad'}"><div class="ev-tag">${tierName}</div>
     <div class="ev-icon">${spr(fxPreviewIcon(ev.good), 2)}</div><h3>${ev.name}</h3><p class="desc">${ev.desc}</p>
     <ul class="fx">${res.text.map(t => `<li>${t}</li>`).join('')}</ul></div>`, [['繼續', 1, 'primary']], 'center');
   scene.ev = null;
@@ -436,8 +458,8 @@ async function randomEvent() {
 async function choiceEvent() {
   const ev = pick(CHOICES);
   scene.ev = 'misc:ev_choice';
-  const tierName = ['普通', '加重', '非常', '超級'][ev.tier];
-  const i = await modal(`<div class="ev choice"><div class="ev-tag">選擇・${tierName}</div>
+  const tierName = CHOICE_TIER[ev.tier];
+  const i = await modal(`<div class="ev choice"><div class="ev-tag">抉擇・${tierName}</div>
     <div class="ev-icon">${spr('misc:ev_choice', 2)}</div><h3>${ev.name}</h3><p class="desc">${ev.desc}</p></div>`,
     ev.opts.map((o, k) => [o[0], k, 'opt']), 'center choice');
   const o = ev.opts[i];
@@ -533,7 +555,7 @@ async function merchant() {
     { const own = chance(0.5); const pool = ACCS.map((a, i) => i).filter(i => own ? ACCS[i].class_id === G.cls : ACCS[i].class_id !== G.cls);
       goods.push({type: 'acc', item: {idx: pick(pool), roll: rollRoll()}, price: Math.round(150 * F * disc)}); }
     for (let i = 0; i < 2; i++) { const id = rollItemId('normal').replace(/^(生命|力量|守護|迅捷|慧眼|幻影)之種$/, '中藥水').replace('女神之種', '大藥水'); goods.push({type: 'item', item: id, price: priceOf(id)}); }
-    { const r = rnd(); const id = r < 0.05 ? '女神之種' : r < 0.3 ? SEED_NAMES[pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva'])] : r < 0.7 ? rollSpecial('稀有') : pick(['小藥水', '中藥水']); goods.push({type: 'item', item: id, price: priceOf(id)}); }
+    { const r = rnd(); const id = r < 0.05 ? '女神之種' : r < 0.3 ? SEED_NAMES[pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva'])] : r < 0.7 ? rollSpecial('珍品') : pick(['小藥水', '中藥水']); goods.push({type: 'item', item: id, price: priceOf(id)}); }
     return goods;
   };
   let goods = rollGoods();
@@ -680,7 +702,7 @@ async function gameOver(mon) {
 
 
 // ---------- 說明頁 ----------
-const HELP_TABS = [['basic', '操作'], ['battle', '戰鬥'], ['status', '狀態'], ['body', '體質'], ['acc', '飾品'], ['item', '道具']];
+const HELP_TABS = [['basic', '操作'], ['battle', '戰鬥'], ['class', '職業'], ['skill', '技能'], ['status', '狀態'], ['body', '體質'], ['acc', '飾品'], ['item', '道具'], ['event', '事件']];
 function helpBody(tab) {
   const dl = rows => `<dl class="help-dl">${rows.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl>`;
   if (tab === 'basic') return dl([
@@ -701,6 +723,33 @@ function helpBody(tab) {
     ['特殊技能', '精英與頭目的特殊技能會在第一次行動就發動，之後固定間隔再發動。'],
     ['連擊', '連續命中的攻擊會讓傷害越來越高；被攻擊命中就中斷（防禦中被打也會中斷），中毒、灼燒不算。'],
     ['弱點與破防', '用敵人體質的弱點類型攻擊會削減破防值，歸零時敵人破防：跳過行動並受到更多傷害。'],
+  ]);
+  if (tab === 'class') {
+    const order = G ? [G.cls, ...CLASSES.filter(c => c !== G.cls)] : CLASSES;
+    return '<p class="hint">任何職業都能用任何武器；用自己職業的武器，技能才能發揮完整效果。</p>' + order.map(c => {
+      const ch = CHAR[c], s = ch.base_stats;
+      return `<h4 class="help-h">${ch.class_name}<small> ${ch.hero}${G && c === G.cls ? '（目前）' : ''}</small></h4>` + dl([
+        ['介紹', ch.desc],
+        ['武器', `${ch.weapon_type}・${DMG_NAMES[CLASS_DMG[c] || 'slash']}傷害`],
+        ['初始能力', ['hp', 'atk', 'def', 'spd', 'crit', 'eva'].map(k => `${STAT_NAMES[k]} ${s[k]}${k === 'crit' || k === 'eva' ? '%' : ''}`).join('、')],
+        [`被動<small>${ch.passive.name}</small>`, ch.passive.effect],
+        ['技能', SKILLS[c].map((k, i) => `<b>${k.name}</b>：${SKILL_BRIEF[c + i]}`).join('<br>')],
+      ]);
+    }).join('');
+  }
+  if (tab === 'skill') {
+    const order = G ? [G.cls, ...CLASSES.filter(c => c !== G.cls)] : CLASSES;
+    return `<p class="hint">傷害 ＝ 你的攻擊 × 技能倍率 × 防禦減免 × 浮動（0.9～1.1）。防禦減免 ＝ 1 − 敵方防禦 ÷（敵方防禦 ＋ 50）。爆擊時 ×1.5。用非本職武器時，技能倍率與效果 ×0.75。另外會乘上連擊、體質弱點、破防等加成。</p>` +
+      order.map(c => `<h4 class="help-h">${CHAR[c].class_name}${G && c === G.cls ? '（目前）' : ''}</h4>` +
+        dl(SKILLS[c].map((s, i) => [`${s.name}<small>${unlockText(i)}・CD ${s.cd}</small>`, `${SKILL_BRIEF[c + i]}<br><span class="formula">${s.text}</span>`])) +
+        `<p class="hint">被動・${CHAR[c].passive.name}：${CHAR[c].passive.effect}</p>`).join('');
+  }
+  if (tab === 'event') return dl([
+    ['一般事件', '走到某一步時自動發生，分好事與壞事。'],
+    ['好事分級', GOOD_TIER.join(' → ') + '，越後面越少見、效果越大。'],
+    ['壞事分級', BAD_TIER.join(' → ') + '，越後面越少見、後果越嚴重。'],
+    ['抉擇事件', '給你三個選項，選完才揭曉結果。分級：' + CHOICE_TIER.join(' → ') + '。'],
+    ['持續時間', '「數步」為接下來 3 步；「本層內」到這層結束；「長時間」到打完一場精英或頭目戰；「下一場戰鬥」到下一場戰鬥結束。'],
   ]);
   if (tab === 'status') return dl(Object.entries({
     中毒: TIPS.poison, 灼燒: TIPS.burn, '凍結／暈眩': TIPS.freeze, 減速: TIPS.slow, 詛咒: TIPS.cursed, 護盾: TIPS.shield, 破防: TIPS.broken,
@@ -800,7 +849,14 @@ function backToTitle() {
 }
 async function openSettings() {
   if (!G || !$('#modal').hidden) return;
-  if (busy) { toast('戰鬥或事件進行中，不能存檔或讀取'); return; }
+  if (B && !B.over) {   // 戰鬥中：只能看說明
+    while (true) {
+      const v = await modal('<div class="banner"><h3>設定</h3><p class="hint">戰鬥中不能存檔、讀取或回到標題。</p></div>', [['說明', 'help', 'opt'], ['關閉', 0, 'primary']], 'center choice');
+      if (v === 'help') { await openHelp(); continue; }
+      return;
+    }
+  }
+  if (busy) { toast('事件進行中，請稍候'); return; }
   busy = true;
   try {
     while (true) {
@@ -884,7 +940,8 @@ const UI = {
     $$('.sk-btn').forEach((b, i) => {
       const sk = SKILLS[G.cls][i];
       const locked = i >= n, cd = P.cds[i];
-      b.disabled = locked || cd > 0;
+      b.disabled = false; b.classList.toggle('off', locked || cd > 0);
+      b.dataset.tip = locked ? `${sk.name}：${SKILL_BRIEF[G.cls + i]}（通過第 ${SKILL_UNLOCK[i]} 層後解鎖）` : `${sk.name}：${SKILL_BRIEF[G.cls + i]}`;
       b.innerHTML = `<b>${locked ? '未解鎖' : sk.name}</b><small>${locked ? `第 ${SKILL_UNLOCK[i]} 層後` : cd > 0 ? `冷卻 ${cd}` : '可使用'}</small>`;
       b.title = locked ? '' : sk.text;
     });
@@ -938,7 +995,7 @@ function initInput() {
   $('#view-wrap').addEventListener('click', e => { if (e.target.closest('[data-tip]')) return; if ($('#scr-game').dataset.mode === 'battle' && !('ontouchstart' in window)) act({type: 'attack'}); });
   $('#bt-attack').onclick = () => act({type: 'attack'});
   $('#bt-guard').onclick = () => act({type: 'guard'});
-  $$('.sk-btn').forEach((b, i) => b.onclick = () => act({type: 'skill', idx: i}));
+  $$('.sk-btn').forEach((b, i) => b.onclick = () => { if (!b.classList.contains('off')) act({type: 'skill', idx: i}); });
   $('#bt-item').onclick = async () => { if (!actResolve) return; const idx = await openInventory(true); if (idx != null) act({type: 'item', idx}); };
   $('#btn-equip').onclick = () => openEquip();
   $('#btn-set').onclick = () => openSettings();
@@ -953,7 +1010,7 @@ function initInput() {
     } else {
       if (k === ' ' || k === 'enter' || k === 'w' || k === 'arrowup') act({type: 'attack'});
       else if (k === 's' || k === 'arrowdown') act({type: 'guard'});
-      else if (['1', '2', '3'].includes(k)) { const b = $$('.sk-btn')[+k - 1]; if (!b.disabled) b.click(); }
+      else if (['1', '2', '3'].includes(k)) { const b = $$('.sk-btn')[+k - 1]; if (!b.classList.contains('off')) b.click(); }
       else if (k === 'i') $('#bt-item').click(); else return;
     }
     e.preventDefault();
