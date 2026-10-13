@@ -21,7 +21,10 @@ const MONS = DATA.monsters.monsters;
 
 function regionIdx(f) { return f > 50 ? 5 : Math.floor((f - 1) / 10); }
 function floorF(f) { return 1 + 0.1 * (f - 1); }
-function unlockedSkills(f) { return f > 15 ? 3 : f > 10 ? 2 : f > 5 ? 1 : 0; }
+// 技能解鎖：技能 1 開局就有，技能 2 通過第 5 層、絕招通過第 15 層
+const SKILL_UNLOCK = [0, 5, 15];
+function unlockedSkills(f) { return SKILL_UNLOCK.filter(u => f > u).length; }
+const unlockText = i => SKILL_UNLOCK[i] ? `通過第 ${SKILL_UNLOCK[i]} 層解鎖` : '開局就有';
 
 // ============ 遊戲狀態 ============
 let G = null;
@@ -137,20 +140,52 @@ function itemDesc(id) {
 }
 function invCount() { return G.inv.length; }
 // 放入道具欄；放不下回傳 false
+// 道具欄：6 格，同一種道具只佔 1 格、最多 5 個；滿 5 個後多撿到的自動換成金幣
+const STACK_MAX = 5, INV_SLOTS = 6;
 function addItem(id, n = 1) {
+  const r = {added: 0, sold: 0, ok: true};
   for (let i = 0; i < n; i++) {
-    const slot = G.inv.find(s => s.id === id && s.n < 5);
-    if (slot) { slot.n++; continue; }
-    if (G.inv.length >= 6) return false;
-    G.inv.push({id, n: 1});
+    let slot = G.inv.find(s => s.id === id);
+    if (!slot) {
+      if (G.inv.length >= INV_SLOTS) { r.ok = false; break; }
+      slot = {id, n: 0}; G.inv.push(slot);
+    }
+    if (slot.n < STACK_MAX) { slot.n++; r.added++; }
+    else r.sold += itemSellValue(id);
   }
-  return true;
+  G.gold += r.sold;
+  return r;
 }
+function addItemText(id, r) {
+  const t = [];
+  if (r.added) t.push(`獲得 ${id}${r.added > 1 ? ' ×' + r.added : ''}`);
+  if (r.sold) t.push(`${id}已滿 ${STACK_MAX} 個，多的換成 ${r.sold} 金幣`);
+  if (!r.ok) t.push(`道具欄已滿，${id} 放不下`);
+  return t.join('；');
+}
+function canStack(id) { const s = G.inv.find(x => x.id === id); return s ? s.n < STACK_MAX : G.inv.length < INV_SLOTS; }
 function removeItem(id, n = 1) {
-  let left = n;
-  for (const s of G.inv) if (s.id === id && left > 0) { const t = Math.min(s.n, left); s.n -= t; left -= t; }
-  G.inv = G.inv.filter(s => s.n > 0);
-  return n - left;
+  const s = G.inv.find(x => x.id === id); if (!s) return 0;
+  const t = Math.min(s.n, n); s.n -= t;
+  G.inv = G.inv.filter(x => x.n > 0);
+  return t;
+}
+// 消耗指定格子的道具
+function removeAt(idx, n = 1) {
+  const s = G.inv[idx]; if (!s) return 0;
+  const t = Math.min(s.n, n); s.n -= t;
+  G.inv = G.inv.filter(x => x.n > 0);
+  return t;
+}
+// 合併重複的格子（舊存檔用），超過上限的換成金幣
+function normalizeInv() {
+  const out = [];
+  for (const s of G.inv) {
+    const o = out.find(x => x.id === s.id);
+    if (!o) { out.push({id: s.id, n: Math.min(s.n, STACK_MAX)}); if (s.n > STACK_MAX) G.gold += (s.n - STACK_MAX) * itemSellValue(s.id); continue; }
+    const room = STACK_MAX - o.n, add = Math.min(room, s.n); o.n += add; G.gold += (s.n - add) * itemSellValue(s.id);
+  }
+  G.inv = out;
 }
 function rollItemId(table) {
   const t = ITEM_DROP[table];
@@ -266,11 +301,11 @@ function applyFx(fx, isBad) {
         const durT = {steps: '數步', floor: '本層內', long: '長時間', next: '下一場戰鬥'}[c];
         out.text.push(`${STAT_NAMES[a]} ${v > 0 ? '+' : ''}${v}%（${durT}）`); break;
       }
-      case 'item': { const ok = addItem(a, b); out.text.push(ok ? `獲得 ${a} ×${b}` : `道具欄已滿，${a} 放不下`); break; }
+      case 'item': { out.text.push(addItemText(a, addItem(a, b))); break; }
       case 'randitem': {
         for (let i = 0; i < b; i++) {
           let id; do { id = rollItemId('normal'); } while (a === 'rare' && (id === '小藥水' || id.endsWith('・小')));
-          out.text.push(addItem(id) ? `獲得 ${id}` : `道具欄已滿，${id} 放不下`);
+          out.text.push(addItemText(id, addItem(id)));
         }
         break;
       }

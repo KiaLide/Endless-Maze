@@ -76,6 +76,7 @@
         <div class="bt-head"><span id="bt-name"></span><span id="bt-hptext" class="num"></span></div>
         <div class="bt-bar"><div id="bt-hp"></div></div>
         <div id="bt-status" class="bt-status"></div>
+        <p id="bt-intent" class="bt-intent" aria-live="polite"></p>
         <p id="bt-behavior" class="bt-behavior"></p>
       </div>
       <div id="floats" class="floats"></div>
@@ -96,7 +97,10 @@
     <div id="ctrl-battle" class="ctrl" hidden>
       <div class="order"><span>行動順序</span><div id="bt-order"></div></div>
       <div class="acts">
-        <button id="bt-attack" class="act attack">攻擊<small>點擊畫面也能攻擊</small></button>
+        <div class="act-row">
+          <button id="bt-attack" class="act attack">攻擊<small>點擊畫面也能攻擊</small></button>
+          <button id="bt-guard" class="act guard">防禦<small>傷害 −50%・冷卻 −1</small></button>
+        </div>
         <div class="skills-row">
           <button class="sk-btn"></button><button class="sk-btn"></button><button class="sk-btn"></button>
         </div>

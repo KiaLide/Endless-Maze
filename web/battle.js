@@ -115,6 +115,7 @@ async function startBattle(kind) {
     const n = unlockedSkills(G.floor); for (let i = 0; i < n; i++) P.cds[i] = Math.max(P.cds[i], SKILLS[G.cls][i].cd);
   }
   if (hasAcc('魔力護盾')) stAdd(P, 'shield', Math.round(P.atk * 3 * accScale()), 999);
+  planIntent();
   await UI.battleBegin(B);
   // 主迴圈
   while (!B.over) {
@@ -160,6 +161,7 @@ async function turnStart(u) {
     const hot = stGet(u, 'hot'); if (hot) healUnit(u, u.maxHp * hot.v);
     if (hasAcc('龍紋腰帶')) u.dragonStack = Math.min(0.5, u.dragonStack + 0.1 * accScale());
     if (hasAcc('氣功念珠') && stHas(u, 'qigong')) healUnit(u, u.maxHp * 0.05);
+    stDel(u, 'guard');
     for (let i = 0; i < 3; i++) if (u.cds[i] > 0) u.cds[i]--;
   } else {
     if (u.fx.regen) healUnit(u, u.maxHp * u.fx.regen);
@@ -208,6 +210,7 @@ function applyTakenMods(P, d) {
   if (hasAcc('守誓者之盾')) d *= 1 - 0.1 * accScale();
   if (hasAcc('鐵布衫')) d *= 1 - 0.15 * accScale();
   if (hasAcc('狂戰士之血') && hpFrac(P) < 0.3) d *= 1 - 0.2 * accScale();
+  if (stHas(P, 'guard')) d *= 0.5;   // 防禦姿態
   // 護盾吸收
   const sh = stGet(P, 'shield');
   if (sh) { const a = Math.min(sh.v, d); sh.v -= a; d -= a; if (sh.v <= 0) stDel(P, 'shield'); }
@@ -331,13 +334,19 @@ async function playerTurn() {
   // 使用道具不消耗回合：用完繼續選擇行動
   let act = await UI.waitAction(B);
   while (act.type === 'item' && !B.over) {
-    await useItemInBattle(act.id);
+    await useItemInBattle(act.idx);
     act = await UI.waitAction(B, true);
   }
   if (B.over) return;
   P.noDmgTurns++;
   if (act.type === 'attack') await normalAttack();
   else if (act.type === 'skill') await useSkill(act.idx);
+  else if (act.type === 'guard') {
+    stAdd(P, 'guard', 1, 999);
+    for (let i = 0; i < 3; i++) if (P.cds[i] > 0) P.cds[i]--;
+    UI.float(P, '防禦', 'status'); UI.log(`${G.name}擺出防禦姿態（受到傷害 −50%，技能冷卻 −1）`);
+    await sleep(300);
+  }
   // 召喚物追擊
   if (!B.over && B.summonP && B.summonP.turns > 0) {
     B.summonP.turns--;
@@ -347,6 +356,7 @@ async function playerTurn() {
   if (!B.over && hasAcc('疾風髮飾') && chance(0.2 * accScale())) { turnEnd(P); P.gauge = 50; UI.float(P, '疾風！', 'status'); return; }
   if (P.turns === 1 && hasAcc('疾風腰帶')) { turnEnd(P); P.gauge = 50; return; }
   turnEnd(P);
+  if (!B.over) updateIntentHP();
 }
 
 async function normalAttack() {
@@ -442,9 +452,10 @@ async function useSkill(i) {
   }
 }
 
-async function useItemInBattle(id) {
+async function useItemInBattle(idx) {
   const {P} = B;
-  removeItem(id, 1);
+  const id = G.inv[idx].id;
+  removeAt(idx, 1);
   const it = ITEMS[id];
   UI.log(`${G.name}使用了${id}`);
   if (it.category === '回復') {
@@ -470,7 +481,72 @@ async function useItemInBattle(id) {
 }
 
 // ---------- 敵人回合 ----------
+// ---------- 敵人意圖：事先決定下一次行動並顯示給玩家 ----------
+function chargeChance(E) { return E.rank === '頭目' ? 0.25 : E.rank === '精英' ? 0.2 : 0.15; }
+function planIntent() {
+  const {E} = B, fx = E.fx, t = E.turns + 1;
+  let it;
+  if (E.charging) it = {k: 'heavy', m: E.rank === '頭目' ? 3 : 2.5};
+  else if (fx.selfDestruct && hpFrac(E) < fx.selfDestruct[0]) it = {k: 'boom', m: fx.selfDestruct[1]};
+  else if (fx.potionOnce && !E.potionDone && hpFrac(E) < fx.potionOnce[0]) it = {k: 'potion'};
+  else if (fx.healEvery && t % fx.healEvery[0] === 0) it = {k: 'heal'};
+  else if (fx.shieldEvery && t % fx.shieldEvery[0] === 0) it = {k: 'shield'};
+  else if (fx.randomAct) it = {k: 'rand', r: ri(0, 2)};
+  else if (fx.every && t % fx.every[0] === 0) { const ex = fx.every[2] || {}; it = {k: 'special', m: ex.hits ? 1 : fx.every[1], hits: ex.hits || 1}; }
+  else if (t > 1 && chance(chargeChance(E))) it = {k: 'charge'};
+  else {
+    let hits = 1, m = 1;
+    if (fx.multi) { hits = fx.multi[0]; m = fx.multi[1]; }
+    if (fx.dualLow && hpFrac(E) < fx.dualLow) hits = 2;
+    if (fx.first && t === 1) m *= fx.first;
+    it = {k: 'attack', m, hits};
+  }
+  it.extra = [];
+  if (fx.summon && t % fx.summon[0] === 0) it.extra.push('召喚幫手');
+  if (fx.cdEvery && t % fx.cdEvery[0] === 0) it.extra.push('封印技能');
+  if (fx.stripEvery && t % fx.stripEvery === 0) it.extra.push('消除增益');
+  E.intent = it;
+}
+// 玩家行動後，血量觸發的行為（自爆、喝藥）要即時反映在意圖上
+function updateIntentHP() {
+  const {E} = B, fx = E.fx, it = E.intent;
+  if (!it || ['heavy', 'boom', 'potion'].includes(it.k)) return;
+  const extra = it.extra;
+  if (fx.selfDestruct && hpFrac(E) < fx.selfDestruct[0]) E.intent = {k: 'boom', m: fx.selfDestruct[1], extra};
+  else if (fx.potionOnce && !E.potionDone && hpFrac(E) < fx.potionOnce[0]) E.intent = {k: 'potion', extra};
+}
+// 預估一下對玩家的傷害（不含爆擊與浮動）
+function estHit(m) {
+  const {P, E} = B, d = defOf(P);
+  let x = atkOf(E) * m * (1 - d / (d + 50));
+  if (G.cls === 'knight') x *= 0.85;
+  if (G.cls === 'wizard') x *= 1.1;
+  if (stHas(P, 'guard')) x *= 0.5;
+  return Math.max(1, Math.round(x));
+}
+function intentInfo() {
+  const it = B && B.E.intent; if (!it) return null;
+  let t, warn = false;
+  switch (it.k) {
+    case 'attack': t = `攻擊${it.hits > 1 ? ` ${it.hits} 連擊` : ''}（約 ${estHit(it.m) * it.hits}）`; break;
+    case 'charge': t = '蓄力中：下一次行動會重擊'; warn = true; break;
+    case 'heavy': t = `蓄力重擊 ×${it.m}（約 ${estHit(it.m)}）`; warn = true; break;
+    case 'special': t = `強力攻擊${it.hits > 1 ? ` ${it.hits} 連擊` : ''}（約 ${estHit(it.m) * it.hits}）`; warn = true; break;
+    case 'boom': t = `準備自爆（約 ${estHit(it.m)}）`; warn = true; break;
+    case 'potion': t = '準備喝藥回復'; break;
+    case 'heal': t = '準備回復生命'; break;
+    case 'shield': t = '準備展開護盾'; break;
+    case 'rand': t = ['準備重擊 ×2（約 ' + estHit(2) + '）', '準備吃糖回復', '準備讓你頭昏（減速）'][it.r]; warn = it.r === 0; break;
+  }
+  if (it.extra && it.extra.length) t += '＋' + it.extra.join('、');
+  return {text: t, warn};
+}
+
 async function enemyTurn() {
+  await enemyAct();
+  if (!B.over && !B.E.intent) planIntent();
+}
+async function enemyAct() {
   const {P, E} = B;
   E.turns++;
   if (!(await turnStart(E))) { turnEnd(E); return; }
@@ -483,19 +559,21 @@ async function enemyTurn() {
   if (fx.batForm && !E.batDone && hpFrac(E) < 0.5) { E.batDone = true; E.batTurns = 2; UI.log(`${E.name}化為蝙蝠群！`); }
   if (fx.summonAt && !E.summonAtDone && hpFrac(E) < fx.summonAt[0]) { E.summonAtDone = true; B.summonsE.push({turns: 99, mul: fx.summonAt[1]}); UI.log(`${E.name}召喚了手下！`); }
   if (fx.randBuff) { const k = pick(['atkMod', 'defMod', 'spdMod']); stAdd(E, k, fx.randBuff, 999); UI.float(E, '強化', 'status'); }
+  const it = E.intent || {k: 'attack', m: 1, hits: 1};
+  E.intent = null;
   // 自爆
-  if (fx.selfDestruct && hpFrac(E) < fx.selfDestruct[0]) {
+  if (it.k === 'boom') {
     UI.log(`${E.name}自爆了！`);
     await eHit(fx.selfDestruct[1], {sure: true});
     E.hp = 0; E.selfDestructed = true; await checkDeathAsync(E); turnEnd(E); return;
   }
   // 喝藥
-  if (fx.potionOnce && !E.potionDone && hpFrac(E) < fx.potionOnce[0]) {
+  if (it.k === 'potion') {
     E.potionDone = true; healUnit(E, E.maxHp * fx.potionOnce[1]); UI.log(`${E.name}喝下了藥水`); await sleep(400); turnEnd(E); return;
   }
   // 週期行為
-  if (fx.healEvery && E.turns % fx.healEvery[0] === 0) { healUnit(E, E.maxHp * fx.healEvery[1]); UI.log(`${E.name}回復了生命`); await sleep(400); turnEnd(E); return; }
-  if (fx.shieldEvery && E.turns % fx.shieldEvery[0] === 0) { stAdd(E, 'shield', Math.round(atkOf(E) * fx.shieldEvery[1]), 999); UI.float(E, '護盾', 'status'); UI.log(`${E.name}展開了護盾`); await sleep(400); turnEnd(E); return; }
+  if (it.k === 'heal') { healUnit(E, E.maxHp * fx.healEvery[1]); UI.log(`${E.name}回復了生命`); await sleep(400); turnEnd(E); return; }
+  if (it.k === 'shield') { stAdd(E, 'shield', Math.round(atkOf(E) * fx.shieldEvery[1]), 999); UI.float(E, '護盾', 'status'); UI.log(`${E.name}展開了護盾`); await sleep(400); turnEnd(E); return; }
   if (fx.cleanseEvery && E.turns % fx.cleanseEvery[0] === 0) { E.st = E.st.filter(s => !(['poison', 'burn', 'slow', 'cursed'].includes(s.k) || (s.k.endsWith('Mod') && s.v < 0))); healUnit(E, E.maxHp * fx.cleanseEvery[1]); UI.log(`${E.name}淨化了自己`); }
   if (fx.stripEvery && E.turns % fx.stripEvery === 0) {
     const pos = P.st.filter(s => (s.k.endsWith('Mod') && s.v > 0) || ['shield', 'smoke', 'nextCrit', 'parry', 'mikiri', 'hot'].includes(s.k));
@@ -504,12 +582,16 @@ async function enemyTurn() {
   if (fx.cdEvery && E.turns % fx.cdEvery[0] === 0) { const n = unlockedSkills(G.floor); if (n) { P.cds[ri(0, n - 1)] += fx.cdEvery[1]; UI.log('技能被封印了！'); } }
   if (fx.summon && E.turns % fx.summon[0] === 0) { B.summonsE.push({turns: fx.summon[2], mul: fx.summon[1]}); UI.log(`${E.name}召喚了幫手`); }
   // 攻擊
-  if (fx.randomAct) {
-    const r = ri(0, 2);
+  if (it.k === 'charge') {
+    E.charging = true; UI.enemySpecial(); UI.float(E, '蓄力', 'status'); UI.log(`${E.name}正在蓄力……`); await sleep(400);
+  } else if (it.k === 'heavy') {
+    E.charging = false; UI.enemySpecial(); UI.log(`${E.name}釋放了蓄力重擊！`); await eHit(it.m);
+  } else if (it.k === 'rand') {
+    const r = it.r;
     if (r === 0) { UI.log(`${E.name}耍了一記重擊`); await eHit(2); }
     else if (r === 1) { healUnit(E, E.maxHp * 0.2); UI.log(`${E.name}吃了一顆糖`); }
     else { stAdd(P, 'slow', 1, 1); UI.float(P, '減速', 'status'); UI.log(`${E.name}讓你頭昏眼花`); }
-  } else if (fx.every && E.turns % fx.every[0] === 0) {
+  } else if (it.k === 'special') {
     const [, m, ex = {}] = fx.every;
     UI.enemySpecial();
     UI.log(`${E.name}發動了強力攻擊！`);
@@ -524,10 +606,7 @@ async function enemyTurn() {
     if (ex.atkDown) stAdd(P, 'atkMod', -ex.atkDown[0], ex.atkDown[1]);
     if (ex.burn) addDot(P, 'burn', atkOf(E) * 0.3, 3);
   } else {
-    let hits = 1, m = 1;
-    if (fx.multi) { hits = fx.multi[0]; m = fx.multi[1]; }
-    if (fx.dualLow && hpFrac(E) < fx.dualLow) hits = 2;
-    if (fx.first && E.turns === 1) m *= fx.first;
+    const hits = it.hits || 1, m = it.m || 1;
     for (let i = 0; i < hits && !B.over; i++) { await eHit(m); if (hits > 1) await sleep(150); }
     if (E.phase >= 3 && E.turns % 3 === 0 && !B.over) { UI.log('終焉！'); await eHit(4); }
   }

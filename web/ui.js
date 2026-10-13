@@ -275,7 +275,7 @@ function renderCarousel(dir = 0) {
     <p class="desc">${c.desc}</p>
     <dl class="stats">${['hp', 'atk', 'def', 'spd', 'crit', 'eva'].map(k => `<div><dt>${STAT_NAMES[k]}</dt><dd>${b[k]}${k === 'crit' || k === 'eva' ? '%' : ''}</dd></div>`).join('')}</dl>
     <p class="passive"><b>被動・${c.passive.name}</b>${c.passive.effect}</p>
-    <ul class="skills">${sk.map((s, i) => `<li><b>${s.name}</b><span>通過第 ${(i + 1) * 5} 層解鎖・CD ${s.cd}</span></li>`).join('')}</ul>
+    <ul class="skills">${sk.map((s, i) => `<li><b>${s.name}</b><span>${unlockText(i)}・CD ${s.cd}</span></li>`).join('')}</ul>
     <p class="wtype">武器：${c.weapon_type}</p>`;
 }
 
@@ -336,7 +336,7 @@ async function floorClear() {
   G.merchantStep = G.floor % 3 === 0 ? ri(0, 8) : -1;
   saveBest();
   const parts = [`<p>通過地下 ${passed} 層，回復 ${h.healed} 生命。</p>`];
-  const unlockAt = {6: 0, 11: 1, 16: 2};
+  const unlockAt = {[SKILL_UNLOCK[1] + 1]: 1, [SKILL_UNLOCK[2] + 1]: 2};
   if (unlockAt[G.floor] != null) {
     const sk = SKILLS[G.cls][unlockAt[G.floor]];
     parts.push(`<p class="unlock">解鎖技能：<b>${sk.name}</b><br><span>${sk.text}</span></p>`);
@@ -442,7 +442,8 @@ async function takeDrop(d) {
 }
 
 async function gainItem(id) {
-  if (addItem(id)) { toast(`獲得 ${id}`); return; }
+  const r0 = addItem(id);
+  if (r0.ok) { toast(addItemText(id, r0)); return; }
   const sell = Math.round(5 * floorF(G.floor));
   const v = await modal(`<div class="inv-full"><h3>道具欄已滿</h3><p>撿到了 ${spr(itemIcon(id), 1)} <b>${id}</b>。丟掉一格舊道具，或把它換成金幣。</p>
     <div class="inv-grid">${G.inv.map((s, i) => `<button class="slot" data-i="${i}">${spr(itemIcon(s.id), 2)}<span>${s.id} ×${s.n}</span></button>`).join('')}</div></div>`,
@@ -509,7 +510,7 @@ async function merchant() {
     }
     if (typeof v === 'string' && v.startsWith('sellitem:')) {
       const slot = G.inv[+v.slice(9)]; if (!slot) continue;
-      const gain = itemSellValue(slot.id); G.gold += gain; removeItem(slot.id, 1); toast(`賣掉 ${slot.id}，+${gain} 金幣`); continue;
+      const gain = itemSellValue(slot.id); G.gold += gain; removeAt(+v.slice(9), 1); toast(`賣掉 ${slot.id}，+${gain} 金幣`); continue;
     }
     if (typeof v === 'string' && v.startsWith('sell:')) {
       const t = v.slice(5), gain = sellValue(t, G[t]);
@@ -519,7 +520,8 @@ async function merchant() {
     if (!g || g.sold) continue;
     if (g.type === 'item') {
       if (G.gold < g.price) { toast('金幣不夠，可以到「出售」賣掉用不到的道具'); continue; }
-      if (!addItem(g.item)) { toast('道具欄已滿，先賣掉一些道具'); continue; }
+      if (!canStack(g.item)) { toast(G.inv.some(s => s.id === g.item) ? `${g.item}已經有 5 個了` : '道具欄已滿，先賣掉一些道具'); continue; }
+      addItem(g.item);
       G.gold -= g.price; g.sold = true; toast(`買下 ${g.item}`); continue;
     }
     // 裝備：先跟目前的比較，再決定要不要買
@@ -558,7 +560,7 @@ async function openEquip() {
     <dl class="stats">${['hp', 'atk', 'def', 'spd', 'crit', 'eva'].map(k => `<div><dt>${STAT_NAMES[k]}</dt><dd>${k === 'hp' ? `${G.hp}/${s.hp}` : fmtPct(s[k]) + (k === 'crit' || k === 'eva' ? '%' : '')}</dd></div>`).join('')}</dl>
     ${row('武器', 'weapon', G.weapon)}${row('防具', 'armor', G.armor)}${row('飾品', 'acc', G.acc)}
     <p class="passive"><b>被動・${c.passive.name}</b>${c.passive.effect}</p>
-    <ul class="skills">${SKILLS[G.cls].map((k, i) => `<li class="${i < n ? '' : 'locked'}"><b>${k.name}</b><span>${i < n ? `CD ${k.cd}・${k.text}` : `通過第 ${(i + 1) * 5} 層解鎖`}</span></li>`).join('')}</ul>
+    <ul class="skills">${SKILLS[G.cls].map((k, i) => `<li class="${i < n ? '' : 'locked'}"><b>${k.name}</b><span>${i < n ? `CD ${k.cd}・${k.text}` : unlockText(i)}</span></li>`).join('')}</ul>
     ${buffs || G.poison || G.phoenix ? `<ul class="buffs">${buffs}${G.poison ? '<li class="bad">中毒中</li>' : ''}${G.phoenix ? '<li class="good">持有不死鳥之羽</li>' : ''}</ul>` : ''}
     <p class="seeds">永久之種：${['hp', 'atk', 'def', 'spd', 'crit', 'eva'].map(k => `${STAT_NAMES[k]} ${G.seeds[k]}`).join('、')}</p>
   </div>`, [['關閉', 1, 'primary']], 'wide');
@@ -570,27 +572,26 @@ async function openInventory(inBattle) {
     if (!G.inv.length) { await modal('<div class="inv"><h3>道具欄</h3><p class="desc">背包是空的。</p></div>', [['關閉', null, 'primary']], 'wide'); return null; }
     const v = await modal(`<div class="inv"><h3>道具欄 <small>${G.inv.length} / 6 格</small></h3>
       <div class="inv-list">${G.inv.map((s, i) => `<button class="inv-item" data-use="${i}">${spr(itemIcon(s.id), 2)}<span><b>${s.id}</b> ×${s.n}<small>${itemDesc(s.id)}</small></span><em>使用</em></button>`).join('')}</div>
-      ${inBattle ? '<p class="hint">在戰鬥中使用道具會用掉這一回合。</p>' : '<p class="hint">暫時 buff 在戰鬥外使用，效果會保留到下一場戰鬥結束。</p>'}</div>`,
+      ${inBattle ? '<p class="hint">使用道具不消耗回合，用完可以繼續行動。</p>' : '<p class="hint">暫時 buff 在戰鬥外使用，效果會保留到下一場戰鬥結束。</p>'}</div>`,
       [['關閉', null, 'primary']], 'wide');
     if (v == null) return null;
-    const id = G.inv[v].id;
-    if (inBattle) return id;
-    await useItemOutside(id); refreshHud();
+    if (inBattle) return v;
+    await useItemOutside(v); refreshHud();
   }
 }
 document.addEventListener('click', e => { const s = e.target.closest('[data-use]'); if (s && modalResolve) modalResolve(+s.dataset.use); });
 
-async function useItemOutside(id) {
-  const it = ITEMS[id];
+async function useItemOutside(idx) {
+  const id = G.inv[idx].id, it = ITEMS[id];
   if (it.category === '回復') {
     if (G.hp >= maxHp()) { toast('生命已滿'); return; }
-    removeItem(id); const r = healPct(it.effect.heal_pct / 100, true); toast(`回復 ${r.healed} 生命`);
+    removeAt(idx); const r = healPct(it.effect.heal_pct / 100, true); toast(`回復 ${r.healed} 生命`);
   } else if (it.category === '暫時') {
-    removeItem(id); addBuff(it.stat, it.value, 'next'); toast(`${id}：效果保留到下一場戰鬥結束`);
+    removeAt(idx); addBuff(it.stat, it.value, 'next'); toast(`${id}：效果保留到下一場戰鬥結束`);
   } else if (it.category === '永久') {
     const stat = it.stat === '任選' ? await chooseStat() : it.stat;
     if (!stat) return;
-    removeItem(id); withMaxHpChange(() => { G.seeds[stat]++; }); toast(`${STAT_NAMES[stat]} 永久 +1 點`);
+    removeAt(idx); withMaxHpChange(() => { G.seeds[stat]++; }); toast(`${STAT_NAMES[stat]} 永久 +1 點`);
   }
 }
 async function chooseStat() {
@@ -636,6 +637,7 @@ function loadGame(i) {
   const s = readSlot(i); if (!s || !s.G) return false;
   newGame(s.G.name, s.G.cls);
   Object.assign(G, s.G);        // 以新局的預設值補齊舊存檔缺少的欄位
+  normalizeInv();
   B = null; busy = false; scene.mon = null; scene.ev = null; scene.monDead = 0;
   playerName = G.name;
   show('scr-game'); setMode('explore'); refreshHud();
@@ -708,6 +710,9 @@ const UI = {
     add(E, 'cursed', '詛咒', 'bad'); add(E, 'shield', '護盾', 'good');
     if (E.enraged) tags.push('<b class="chip good">狂暴</b>');
     $('#bt-status').innerHTML = tags.join('');
+    const ii = intentInfo();
+    const ie = $('#bt-intent'); ie.hidden = !ii;
+    if (ii) { ie.textContent = '下一步：' + ii.text; ie.classList.toggle('warn', ii.warn); }
     const order = predictOrder(6);
     $('#bt-order').innerHTML = order.map(o => o === 'P' ? `<i class="me">${spr('hero:' + G.cls, 0.32)}</i>` : `<i class="foe">${spr('mon:' + E.name, 0.6)}</i>`).join('');
     // 玩家
@@ -716,7 +721,7 @@ const UI = {
     const pt = [];
     const padd = (k, t, c) => { if (stHas(P, k)) pt.push(`<b class="chip ${c}">${t}</b>`); };
     padd('poison', '中毒', 'bad'); padd('burn', '灼燒', 'bad'); padd('slow', '減速', 'bad'); padd('freeze', '凍結', 'bad');
-    padd('shield', '護盾', 'good'); padd('parry', '格擋', 'good'); padd('smoke', '煙幕', 'good'); padd('mikiri', '見切', 'good'); padd('rage', '狂怒', 'good');
+    padd('guard', '防禦中', 'good'); padd('shield', '護盾', 'good'); padd('parry', '格擋', 'good'); padd('smoke', '煙幕', 'good'); padd('mikiri', '見切', 'good'); padd('rage', '狂怒', 'good');
     if (stSum(P, 'atkMod') > 0) pt.push('<b class="chip good">攻擊↑</b>'); if (stSum(P, 'atkMod') < 0) pt.push('<b class="chip bad">攻擊↓</b>');
     if (stSum(P, 'defMod') > 0) pt.push('<b class="chip good">防禦↑</b>'); if (stSum(P, 'defMod') < 0) pt.push('<b class="chip bad">防禦↓</b>');
     if (G.phoenix) pt.push('<b class="chip good">不死鳥之羽</b>');
@@ -727,7 +732,7 @@ const UI = {
       const sk = SKILLS[G.cls][i];
       const locked = i >= n, cd = P.cds[i];
       b.disabled = locked || cd > 0;
-      b.innerHTML = `<b>${locked ? '未解鎖' : sk.name}</b><small>${locked ? `第 ${(i + 1) * 5} 層後` : cd > 0 ? `冷卻 ${cd}` : '可使用'}</small>`;
+      b.innerHTML = `<b>${locked ? '未解鎖' : sk.name}</b><small>${locked ? `第 ${SKILL_UNLOCK[i]} 層後` : cd > 0 ? `冷卻 ${cd}` : '可使用'}</small>`;
       b.title = locked ? '' : sk.text;
     });
     $('#bt-item').disabled = !G.inv.length;
@@ -774,11 +779,13 @@ function initInput() {
     const mode = $('#scr-game').dataset.mode;
     if (mode === 'explore') { if (d === 'u') go('f'); if (d === 'l') go('l'); if (d === 'r') go('r'); }
     else if (d === 'tap') act({type: 'attack'});
+    else if (d === 'd') act({type: 'guard'});
   });
   $('#view-wrap').addEventListener('click', e => { if ($('#scr-game').dataset.mode === 'battle' && !('ontouchstart' in window)) act({type: 'attack'}); });
   $('#bt-attack').onclick = () => act({type: 'attack'});
+  $('#bt-guard').onclick = () => act({type: 'guard'});
   $$('.sk-btn').forEach((b, i) => b.onclick = () => act({type: 'skill', idx: i}));
-  $('#bt-item').onclick = async () => { if (!actResolve) return; const id = await openInventory(true); if (id) act({type: 'item', id}); };
+  $('#bt-item').onclick = async () => { if (!actResolve) return; const idx = await openInventory(true); if (idx != null) act({type: 'item', idx}); };
   $('#btn-equip').onclick = () => openEquip();
   $('#btn-set').onclick = () => openSettings();
   $('#btn-inv').onclick = () => { if ($('#scr-game').dataset.mode === 'battle') $('#bt-item').click(); else openInventory(false); };
@@ -791,6 +798,7 @@ function initInput() {
       else if (k === 'e') openEquip(); else if (k === 'i') openInventory(false); else return;
     } else {
       if (k === ' ' || k === 'enter' || k === 'w' || k === 'arrowup') act({type: 'attack'});
+      else if (k === 's' || k === 'arrowdown') act({type: 'guard'});
       else if (['1', '2', '3'].includes(k)) { const b = $$('.sk-btn')[+k - 1]; if (!b.disabled) b.click(); }
       else if (k === 'i') $('#bt-item').click(); else return;
     }
