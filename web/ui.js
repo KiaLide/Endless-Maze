@@ -22,7 +22,7 @@ function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': 
 // 技能簡介（長按技能按鈕時顯示，不寫數值；完整倍率在說明頁）
 const SKILL_BRIEF = {
   swordsman0: '快速連砍兩刀。', swordsman1: '架起劍擋下敵人下一次攻擊，並借敵人的力量反擊。', swordsman2: '蓄滿力的一擊，必定爆擊。',
-  knight0: '盾擊後突刺，並削弱敵人的攻擊力。', knight1: '數回合內防禦大幅提升。', knight2: '結合攻擊與防禦力的猛烈衝鋒。',
+  knight0: '盾擊後突刺，並削弱敵人的攻擊力。', knight1: '數回合內防禦大幅提升，被打中時會反擊。', knight2: '結合攻擊與防禦力的猛烈衝鋒。',
   rogue0: '從死角刺擊，非常容易爆擊。', rogue1: '敵人下一次攻擊必定落空，你的下一擊必定爆擊。', rogue2: '多段連刺，每一刀都可能爆擊。',
   wizard0: '火球轟擊，部分無視敵人防禦。', wizard1: '冰霜傷害並凍結敵人；強敵改為減速。', wizard2: '召喚天雷，單發傷害極高。',
   berserker0: '沉重的一擊。', berserker1: '數回合內攻擊大增、防禦下降。', berserker2: '連續旋轉劈砍，並吸取生命。',
@@ -52,6 +52,7 @@ const TIPS = {
   judge: '審判：使用技能時消耗，層數越多技能越痛。', pact: '血契：使用技能時消耗，層數越多技能越痛。', volt: '電荷：滿層時下一次攻擊追加落雷。',
   qi: '氣：氣功護體會依層數持續更久。', bulwark: '架盾力量：會加到下一次攻擊上。', debt: '血債：之後的攻擊會依此回復生命。',
   iai: '拔刀：下一次攻擊必定爆擊並強化。', shout: '怒吼：下一次攻擊必定爆擊並吸取生命。', holyMark: '聖印：每次回復生命累積，下一次攻擊消耗全部，層數越多越痛，並無視護盾。',
+  vg: '反擊架勢：每被打中一次累積，下一次攻擊消耗全部，層數越多越痛。', wall: '鋼鐵壁壘：防禦大幅提升，被攻擊命中時會反擊。',
   angel: '守護天使：完全擋下接下來的攻擊，數字是剩餘次數；擋下時不會中斷連擊。', undying: '不死吸血：狂怒期間攻擊會吸取生命，生命越低吸得越多。',
   chain: '連斬：連續普通攻擊會追加斬擊；用技能或防禦會歸零。', atkUp: '攻擊上升。', atkDown: '攻擊下降。', defUp: '防禦上升。', defDown: '防禦下降。', evaUp: '閃避上升。',
   evaDown: '閃避下降。', spdUp: '速度上升，行動變快。', spdDown: '速度下降，行動變慢。', hitUp: '命中上升。', hitDown: '命中下降，攻擊比較容易落空。',
@@ -1146,6 +1147,8 @@ const UI = {
     if (hasAcc('薔薇胸針') && P.roseStacks > 0) pt.push(chip(`薔薇 ×${P.roseStacks}`, 'good', TIPS.rose));
     if (hasAcc('守誓者之盾')) pt.push(chip(`守誓 ${2 - P.oathBlocks}`, P.oathBlocks < 2 ? 'good' : '', TIPS.oath));
     if (P.vetBreak) pt.push(chip('老兵反擊', 'good', TIPS.veteran));
+    if (P.vg) pt.push(chip(`反擊架勢 ×${P.vg}`, 'good', TIPS.vg));
+    if (has('wall')) pt.push(chip('壁壘反擊', 'good', TIPS.wall));
     if (P.holy) pt.push(chip(`聖印 ×${P.holy}`, 'good', TIPS.holyMark));
     if (P.angel) pt.push(chip(`守護天使 ×${P.angel}`, 'good', TIPS.angel));
     if (hasAcc('不死圖騰') && stHas(P, 'rage')) pt.push(chip('不死吸血', 'good', TIPS.undying));

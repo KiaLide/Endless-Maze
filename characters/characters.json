@@ -29,9 +29,9 @@
   "desc": "重甲長槍，以厚實的防禦守護同伴。",
   "base_stats": {
    "hp": 140,
-   "atk": 6,
+   "atk": 7,
    "def": 10,
-   "spd": 6,
+   "spd": 8,
    "crit": 3,
    "eva": 2
   },
@@ -40,7 +40,7 @@
   "image_pixel": "images/pixel/knight.png",
   "passive": {
    "name": "重甲守護",
-   "effect": "受到的傷害 −15%"
+   "effect": "受到的傷害 −15%；每次被攻擊命中累積 1 層「反擊架勢」（最多 3 層），下一次攻擊每層傷害 +20%"
   }
  },
  {
@@ -97,7 +97,7 @@
    "hp": 130,
    "atk": 10,
    "def": 4,
-   "spd": 8,
+   "spd": 9,
    "crit": 8,
    "eva": 2
   },

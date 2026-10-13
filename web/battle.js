@@ -143,7 +143,7 @@ async function startBattle(kind) {
   const P = {isP: true, name: G.name, hp: G.hp, maxHp: bs.hp, atk: bs.atk, def: bs.def, spd: bs.spd, crit: bs.crit,
     eva: bs.eva, hit: bs.hit, gauge: 0, st: [], cds: G.cds, turns: 0, noDmgTurns: 0, roseStacks: 0, dragonStack: 0,
     firstAttackDone: false, vetBreak: false, holy: 0, angel: 0, nextBoost: 1,
-    combo: 0, chain: 0, bulwark: 0, judge: 0, delayPool: 0, delayChunk: 0, volt: 0, lastSkill: -1, debt: 0, pact: 0, qi: 0,
+    combo: 0, vg: 0, chain: 0, bulwark: 0, judge: 0, delayPool: 0, delayChunk: 0, volt: 0, lastSkill: -1, debt: 0, pact: 0, qi: 0,
     normals: 0, oathBlocks: 0, skillMul: 1, dance: 0, extraAct: false, echo: null, voidG: 0};
   const E = {isP: false, name: m.name, data: m, fx: MON_FX[m.name] || {}, rank: m.rank, hp: ms.hp, maxHp: ms.hp,
     atk: ms.atk, def: ms.def, spd: ms.spd, crit: ms.crit, eva: ms.eva, hit: 100, gauge: 0, st: [], turns: 0,
@@ -330,6 +330,7 @@ function playerDmgMul(o = {}) {
   }
   if (hasAcc('審判天秤') && P.hp >= P.maxHp) m *= 1 + 0.2 * accScale();
   if (hasAcc('毒蛛胸針')) m *= 1 + 0.2 * accScale() * ((stHas(E, 'poison') ? 1 : 0) + (stHas(E, 'burn') ? 1 : 0));
+  if (G.cls === 'knight' && P.vg && !o.noVg) m *= 1 + 0.2 * P.vg;   // 重甲守護：反擊架勢
   if (o.skill) { m *= SKILL_POWER * (P.skillMul || 1); if (ownAcc('魔力護盾') && stHas(P, 'shield')) m *= 1 + 0.2 * accScale(); }
   if (hasAcc('龍紋腰帶')) m *= 1 + P.dragonStack;
   if (!P.firstAttackDone && hasAcc('獵人斗篷扣')) m *= 1 + 0.5 * accScale();
@@ -391,7 +392,7 @@ async function pHit(mult, o = {}) {
     return r;
   }
   let d = r.dmg;
-  P.landed = true;
+  P.landed = true; if (!o.noVg) P.vg = 0;
   const tm = typeMul();
   d *= tm;
   let execute = false;
@@ -482,7 +483,7 @@ const GUARD_INFO = {
   mikiri:  {name: '見切架式', sub: '讀招・反擊', tip: '見切架式（月影耳墜）：到你下一次行動前，蓄力重擊與強力攻擊必定閃開並強力反擊；一般攻擊只會減半傷害；技能冷卻多減 1。'},
   aim:     {name: '瞄準', sub: '減傷・強化瞄準射擊', tip: '瞄準（鷹眼單片鏡）：受到的傷害減半，下一次瞄準射擊大幅強化並必定爆擊；技能冷卻多減 1。'},
   mshield: {name: '魔力護盾', sub: '護盾・技能強化', tip: '魔力護盾：產生吸收傷害的護盾，護盾存在時技能更強；技能冷卻多減 1。'},
-  shout:   {name: '怒吼', sub: '減傷・下一擊必爆吸血', tip: '怒吼（狂戰士之血，生命低時）：受到的傷害減半，下一次攻擊必定爆擊並吸取生命；技能冷卻多減 1。'},
+  shout:   {name: '怒吼', sub: '不消耗回合・下一擊必爆吸血', tip: '怒吼（狂戰士之血，生命低時）：不消耗回合，下一次攻擊必定爆擊並吸取生命；不會減傷，也不會減少技能冷卻。'},
   qi:      {name: '運氣', sub: '回復・累積氣', tip: '運氣（氣功念珠）：回復生命並累積氣，氣功護體會依氣的層數持續更久；不減傷；技能冷卻多減 1。'},
 };
 async function doGuard() {
@@ -492,7 +493,7 @@ async function doGuard() {
     case 'mikiri': stAdd(P, 'guard', 1, 999); stAdd(P, 'mikiriStance', 1, 999); break;
     case 'aim': stAdd(P, 'guard', 1, 999); stAdd(P, 'aim', 1, 999); break;
     case 'mshield': stAdd(P, 'shield', Math.round(atkOf(P) * 2 * accScale()), 999); break;
-    case 'shout': stAdd(P, 'guard', 1, 999); P.shout = true; break;
+    case 'shout': P.shout = true; break;
     case 'qi': healUnit(P, P.maxHp * 0.08); P.qi = Math.min(3, P.qi + 1); break;
     case 'iai': stAdd(P, 'guard', 1, 999); P.iai = true; break;
     default: stAdd(P, 'guard', 1, 999);
@@ -509,8 +510,11 @@ async function playerTurn() {
   if (B.over) return;
   // 使用道具不消耗回合：用完繼續選擇行動
   let act = await UI.waitAction(B);
-  while (act.type === 'item' && !B.over) {
-    await useItemInBattle(act.idx);
+  // 道具、怒吼（狂戰士之血）不消耗回合
+  while ((act.type === 'item' || (act.type === 'guard' && guardKind() === 'shout')) && !B.over) {
+    if (act.type === 'item') await useItemInBattle(act.idx);
+    else if (P.shout) toast('已經在怒吼狀態，下一次攻擊才會消耗');
+    else { P.shout = true; UI.float(P, '怒吼', 'status'); UI.log(`${G.name}：怒吼！`); await sleep(250); }
     if (B.over) break;
     act = await UI.waitAction(B, true);
   }
@@ -625,7 +629,7 @@ async function skillBody(i, pw) {
     case 'swordsman1': if (!echo) { stAdd(P, 'parry', 1, 999); UI.float(P, '格擋架勢', 'status'); } break;
     case 'swordsman2': await pHit(3.5, {...o, forceCrit: true}); break;
     case 'knight0': { const r = await pHit(1.3, o); if (!r.miss) stAdd(E, 'atkMod', -0.2 * s, 2); break; }
-    case 'knight1': stAdd(P, 'defMod', 1 * s, 3); UI.float(P, '防禦 ×2', 'status'); break;
+    case 'knight1': stAdd(P, 'defMod', 1 * s, 3); if (!echo) stAdd(P, 'wall', 1, 3); UI.float(P, '防禦 ×2', 'status'); break;
     case 'knight2': await pHit(0, {...o, flat: atkOf(P) * 3 + defOf(P) * 2}); break;
     case 'rogue0': {
       await pHit(1.2, {...o, critBonus: 50});
@@ -1022,6 +1026,8 @@ async function eHit(mult, o = {}) {
   d = Math.round(d);
   P.hp = Math.max(0, P.hp - d);
   painStore(d);
+  if (d > 0 && G.cls === 'knight') P.vg = Math.min(3, (P.vg || 0) + 1);   // 重甲守護：被打中累積反擊架勢
+  if (d > 0 && stHas(P, 'wall') && P.hp > 0 && !B.over) { UI.log('鋼鐵壁壘反擊！'); await pHit(0.6, {sure: true, noVg: true}); }
   if (d > 0) {
     if (hasAcc('血牙項鍊')) P.debt += d;
     if (ownAcc('審判之槍穗')) P.judge = Math.min(5, P.judge + 1);
