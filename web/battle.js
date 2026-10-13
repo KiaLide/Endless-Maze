@@ -120,7 +120,7 @@ function spdOf(u) {
   let s = u.spd * (1 + stSum(u, 'spdMod'));
   if (stHas(u, 'slow')) s *= 0.5;
   if (stHas(u, 'haste')) s *= 1.5;
-  if (u.isP && hasAcc('疾風腰帶') && B && B.E) s = Math.max(s, spdOf(B.E) * (1 + 0.2 * accScale()));   // 至少比敵人快 20%
+  if (u.isP && hasAcc('疾風腰帶') && B && B.E) s = Math.max(s, spdOf(B.E) * (1 + 0.1 * accScale()));   // 至少比敵人快 10%
   if (!u.isP) {
     if (stHas(u, 'poison') && hasAcc('毒藤箭袋')) s *= 1 - 0.3 * accScale();
     if (u.fx.spdUpLow && hpFrac(u) < u.fx.spdUpLow[0]) s *= 1 + u.fx.spdUpLow[1];
@@ -434,7 +434,7 @@ async function pHit(mult, o = {}) {
     if (over > 0 && ownAcc('血月墜飾')) P.pact = Math.min(10, P.pact + 1);   // 血契
   }
   // 血牙項鍊：用攻擊討回血債
-  if (hasAcc('血牙項鍊') && P.debt > 0) { const h = Math.min(d * 0.5 * accScale(), P.debt); P.debt -= h; healUnit(P, h); }
+  if (hasAcc('血牙項鍊') && P.debt > 0) { const h = Math.min(d * 0.25 * accScale(), P.debt); P.debt -= h; healUnit(P, h); }
   if (volt) { P.volt = 0; UI.log('雷鳴！'); E.gauge -= 30; await pHit(1.5 * accScale(), {sure: true, noProc: true}); if (B.over) return {...r, dmg: d}; }
   // 爆擊相關
   if (r.crit) {
@@ -480,9 +480,9 @@ const GUARD_INFO = {
   bulwark: {name: '架盾', sub: '大幅減傷・蓄力', tip: '架盾（城塞之心）：大幅減少受到的傷害，擋下的力量會加到下一次攻擊；技能冷卻多減 1。'},
   iai:     {name: '納刀', sub: '減傷・下一擊拔刀', tip: '納刀（居合之鍔）：受到的傷害減半，下一次攻擊必定爆擊並強化；技能冷卻多減 1。'},
   mikiri:  {name: '見切架式', sub: '讀招・反擊', tip: '見切架式（月影耳墜）：到你下一次行動前，蓄力重擊與強力攻擊必定閃開並強力反擊；一般攻擊只會減半傷害；技能冷卻多減 1。'},
-  aim:     {name: '瞄準', sub: '強化瞄準射擊', tip: '瞄準（鷹眼單片鏡）：下一次瞄準射擊大幅強化並必定爆擊；這次不會減傷；技能冷卻多減 1。'},
+  aim:     {name: '瞄準', sub: '減傷・強化瞄準射擊', tip: '瞄準（鷹眼單片鏡）：受到的傷害減半，下一次瞄準射擊大幅強化並必定爆擊；技能冷卻多減 1。'},
   mshield: {name: '魔力護盾', sub: '護盾・技能強化', tip: '魔力護盾：產生吸收傷害的護盾，護盾存在時技能更強；技能冷卻多減 1。'},
-  shout:   {name: '怒吼', sub: '下一擊必爆・吸血', tip: '怒吼（狂戰士之血，生命低時）：不減傷，下一次攻擊必定爆擊並吸取生命；技能冷卻多減 1。'},
+  shout:   {name: '怒吼', sub: '減傷・下一擊必爆吸血', tip: '怒吼（狂戰士之血，生命低時）：受到的傷害減半，下一次攻擊必定爆擊並吸取生命；技能冷卻多減 1。'},
   qi:      {name: '運氣', sub: '回復・累積氣', tip: '運氣（氣功念珠）：回復生命並累積氣，氣功護體會依氣的層數持續更久；不減傷；技能冷卻多減 1。'},
 };
 async function doGuard() {
@@ -490,9 +490,9 @@ async function doGuard() {
   for (let i = 0; i < 3; i++) if (P.cds[i] > 0) P.cds[i]--;
   switch (kind) {
     case 'mikiri': stAdd(P, 'guard', 1, 999); stAdd(P, 'mikiriStance', 1, 999); break;
-    case 'aim': stAdd(P, 'aim', 1, 999); break;
+    case 'aim': stAdd(P, 'guard', 1, 999); stAdd(P, 'aim', 1, 999); break;
     case 'mshield': stAdd(P, 'shield', Math.round(atkOf(P) * 2 * accScale()), 999); break;
-    case 'shout': P.shout = true; break;
+    case 'shout': stAdd(P, 'guard', 1, 999); P.shout = true; break;
     case 'qi': healUnit(P, P.maxHp * 0.08); P.qi = Math.min(3, P.qi + 1); break;
     case 'iai': stAdd(P, 'guard', 1, 999); P.iai = true; break;
     default: stAdd(P, 'guard', 1, 999);
@@ -583,6 +583,7 @@ function skillCd(i) {
   let cd = SKILLS[G.cls][i].cd;
   if (B && B.skillHalf) cd = Math.ceil(cd / 2);
   if (G.cls === 'knight' && i === 2 && hasAcc('騎兵號角')) cd -= 2;
+  if (G.cls === 'ranger' && i === 2 && ownAcc('流星箭羽')) cd -= 3;
   if (G.cls === 'cleric' && i === 2 && hasAcc('審判天秤')) cd -= 3;
   return Math.max(1, cd);
 }
@@ -597,7 +598,7 @@ async function useSkill(i, echo = false) {
   if (ownAcc('血月墜飾') && P.pact) { P.skillMul *= 1 + 0.05 * P.pact * accScale(); P.pact = 0; }
   if (hasAcc('雷鳴指環') && P.lastSkill !== i) P.volt = Math.min(3, P.volt + 1);
   P.lastSkill = i;
-  if (ownAcc('賢者之石')) P.cds.forEach((v, j) => { if (j !== i && v > 0) P.cds[j]--; });
+  if (ownAcc('賢者之石')) { const c = P.cds.map((v, j) => j).filter(j => j !== i && P.cds[j] > 0); if (c.length) P.cds[pick(c)]--; }   // 隨機一個其他技能 CD −1
   if (mythic('wizard')) P.echo = i;
   UI.skillBanner(sk.name);
   UI.log(`${G.name}使用了${sk.name}`);
@@ -652,7 +653,7 @@ async function skillBody(i, pw) {
     case 'wizard2': await pHit(5.0, o); break;
     case 'berserker0': await pHit(1.8, o); break;
     case 'berserker1': stAdd(P, 'atkMod', 0.5 * s, 3); stAdd(P, 'defMod', -0.3 * pw, 3); if (!echo) stAdd(P, 'rage', 1, 3); UI.float(P, '狂怒', 'status'); break;
-    case 'berserker2': await multiHit(5 + (hasAcc('暴風腰帶') ? 2 : 0), 0.8, {lifesteal: 0.2 * s}); break;
+    case 'berserker2': await multiHit(5 + (hasAcc('暴風腰帶') ? 1 : 0), 0.8, {lifesteal: 0.2 * s}); break;
     case 'cleric0': { await pHit(1.3, o); healUnit(P, P.maxHp * 0.08 * s * baseStats().healMul); break; }
     case 'cleric1': {
       const h = healUnit(P, P.maxHp * 0.4 * s * baseStats().healMul);

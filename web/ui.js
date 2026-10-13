@@ -109,7 +109,7 @@ function skillNotes(i) {
   if (c === 'witch' && i === 2 && hasAcc('深淵之鑰')) n.push('深淵之鑰：召喚物留場更久');
   if (c === 'wizard' && i === 1 && hasAcc('永凍水晶')) n.push('永凍水晶：凍結更久');
   if (c === 'ranger' && i === 0 && stHas(B.P, 'aim')) n.push('瞄準完成：這次大幅強化並必定爆擊');
-  if (c === 'ranger' && i === 2 && ownAcc('流星箭羽')) n.push('流星箭羽：可以打斷蓄力');
+  if (c === 'ranger' && i === 2 && ownAcc('流星箭羽')) n.push('流星箭羽：冷卻縮短，可以打斷蓄力');
   if (c === 'rogue' && i === 0 && ownAcc('蛇牙項鍊')) n.push('蛇牙項鍊：引爆敵人身上的毒');
   if (c === 'wizard' && i === 0 && ownAcc('熔岩寶珠')) n.push('熔岩寶珠：引爆敵人身上的灼燒');
   if (c === 'monk' && i === 1 && ownAcc('氣功念珠') && B.P.qi) n.push('氣功念珠：依氣的層數持續更久');
