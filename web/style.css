@@ -380,3 +380,7 @@ body { background: var(--ink); }
 .formula { display: block; margin-top: 3px; color: var(--gold); font-size: 12px; }
 .ev-tag { font-weight: 700; letter-spacing: .1em; }
 .act.guard.alt { background: linear-gradient(180deg, #5a3a7a, #33204a); box-shadow: inset 0 1px 0 rgba(230,200,255,.25), inset 0 -3px 0 rgba(0,0,0,.45), inset 0 0 0 1px #b08ae0, 0 0 10px rgba(176,138,224,.35); }
+/* 不能使用的道具 */
+.inv-item.off { opacity: .5; }
+.inv-item.off em { color: var(--dim); }
+.eq-row .tag.warn { display: inline-block; margin-left: 6px; font-size: 11px; }

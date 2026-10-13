@@ -181,11 +181,13 @@ function advance() {
 // 預測接下來 n 次行動的順序（給畫面上的行動條顯示）
 function predictOrder(n) {
   const {P, E} = B;
-  let gp = P.gauge, ge = E.gauge; const sp = spdOf(P), se = spdOf(E); const out = [];
+  // 減速、加速只到該單位下一次行動結束；之後用一般速度
+  const base = u => { let s = spdOf(u); if (stHas(u, 'slow')) s /= 0.5; if (stHas(u, 'haste')) s /= 1.5; return s; };
+  let gp = P.gauge, ge = E.gauge, sp = spdOf(P), se = spdOf(E); const out = [];
   for (let i = 0; i < n; i++) {
     const tP = (100 - gp) / sp, tE = (100 - ge) / se, t = Math.max(0, Math.min(tP, tE));
     gp += sp * t; ge += se * t;
-    if (gp >= 100 - 1e-9) { out.push('P'); gp = 0; } else { out.push('E'); ge = 0; }
+    if (gp >= 100 - 1e-9) { out.push('P'); gp = 0; sp = base(P); } else { out.push('E'); ge = 0; se = base(E); }
   }
   return out;
 }
@@ -240,6 +242,7 @@ function turnEnd(u) {
   u.st.forEach(s => { if (s.turns < 900) s.turns--; });
   u.st = u.st.filter(s => s.turns > 0);
   stDel(u, 'slow'); stDel(u, 'haste');
+  if (!u.isP && !stHas(u, 'poison')) u.venom = 0;
   u.gauge = 0;
 }
 
@@ -266,18 +269,19 @@ async function dealRaw(u, d, label, cls) {
   await checkDeathAsync(u);
 }
 function painStore(d) { if (d > 0 && mythic('witch') && B.E.hp > 0) B.E.pain.push({per: d / 3, left: 3}); }
-function applyTakenMods(P, d) {
+// commit = false 時只計算不改狀態（給意圖預告用）；noShield 時不經過護盾
+function applyTakenMods(P, d, commit = true, noShield = false) {
   if (G.cls === 'knight') d *= 0.85;
   if (G.cls === 'wizard') d *= 1.1;
   if (stHas(P, 'guard')) {   // 防禦姿態；城塞之心改為架盾 −75%，擋下的量累積成下一擊的追加傷害
     const f = hasAcc('城塞之心') ? 0.5 - 0.25 * accScale() : 0.5;
-    if (hasAcc('城塞之心')) P.bulwark += d * (1 - f);
+    if (hasAcc('城塞之心') && commit) P.bulwark += d * (1 - f);
     d *= f;
   }
   if (stHas(P, 'potRage')) d *= 1.3;  // 狂暴藥
   // 護盾吸收
   const sh = stGet(P, 'shield');
-  if (sh) { const a = Math.min(sh.v, d); sh.v -= a; d -= a; if (sh.v <= 0) stDel(P, 'shield'); }
+  if (sh && commit && !noShield) { const a = Math.min(sh.v, d); sh.v -= a; d -= a; if (sh.v <= 0) stDel(P, 'shield'); }
   return d;
 }
 
@@ -321,7 +325,7 @@ function playerDmgMul(o = {}) {
   }
   if (hasAcc('審判天秤') && P.hp >= P.maxHp) m *= 1 + 0.2 * accScale();
   if (hasAcc('毒蛛胸針')) m *= 1 + 0.2 * accScale() * ((stHas(E, 'poison') ? 1 : 0) + (stHas(E, 'burn') ? 1 : 0));
-  if (o.skill) { m *= SKILL_POWER * (P.skillMul || 1); if (hasAcc('魔力護盾') && stHas(P, 'shield')) m *= 1 + 0.2 * accScale(); }
+  if (o.skill) { m *= SKILL_POWER * (P.skillMul || 1); if (ownAcc('魔力護盾') && stHas(P, 'shield')) m *= 1 + 0.2 * accScale(); }
   if (hasAcc('龍紋腰帶')) m *= 1 + P.dragonStack;
   if (!P.firstAttackDone && hasAcc('獵人斗篷扣')) m *= 1 + 0.5 * accScale();
   m *= P.nextBoost;
@@ -420,14 +424,14 @@ async function pHit(mult, o = {}) {
   if (ls > 0) {
     const over = d * ls - (P.maxHp - P.hp);
     healUnit(P, d * ls);
-    if (over > 0 && hasAcc('血月墜飾')) P.pact = Math.min(10, P.pact + 1);   // 血契
+    if (over > 0 && ownAcc('血月墜飾')) P.pact = Math.min(10, P.pact + 1);   // 血契
   }
   // 血牙項鍊：用攻擊討回血債
   if (hasAcc('血牙項鍊') && P.debt > 0) { const h = Math.min(d * 0.5 * accScale(), P.debt); P.debt -= h; healUnit(P, h); }
   if (volt) { P.volt = 0; UI.log('雷鳴！'); E.gauge -= 30; await pHit(1.5 * accScale(), {sure: true, noProc: true}); if (B.over) return {...r, dmg: d}; }
   // 爆擊相關
   if (r.crit) {
-    if (hasAcc('劍心之石')) { const c = P.cds.map((v, i) => i).filter(i => P.cds[i] > 0); if (c.length) P.cds[pick(c)]--; }
+    if (ownAcc('劍心之石')) { const c = P.cds.map((v, i) => i).filter(i => P.cds[i] > 0); if (c.length) P.cds[pick(c)]--; }
   }
   if (hasAcc('薔薇胸針')) P.roseStacks = Math.min(5, P.roseStacks + 1);
   // 反彈、反擊、灼燒攻擊者
@@ -522,8 +526,8 @@ async function playerTurn() {
     UI.log('深淵魔物攻擊！');
     await pHit(0.8 * B.summonP.mul, {sure: true, lifesteal: 0.3, skill: true});
   }
-  if (P.turns === 1 && hasAcc('疾風腰帶')) { turnEnd(P); P.gauge = 50; return; }
   turnEnd(P);
+  if (P.turns === 1 && hasAcc('疾風腰帶')) P.gauge = 50;
   afterPlayerTurnGauge(P);
   if (!B.over) updateIntentHP();
 }
@@ -543,7 +547,7 @@ async function normalAttack() {
     const r = await pHit(mult * hm, {normal: true});
     if (!r.miss) {
       if (hasAcc('蛇牙項鍊')) {   // 疊毒：每次 1 層，最多 5 層
-        const E = B.E; E.venom = Math.min(5, E.venom + 1);
+        const E = B.E; if (!stHas(E, 'poison')) E.venom = 0; E.venom = Math.min(5, E.venom + 1);
         stDel(E, 'poison'); stAdd(E, 'poison', atkOf(P) * 0.15 * E.venom * accScale(), 3); UI.float(E, `毒 ×${E.venom}`, 'status');
       }
       if (hasAcc('巨人腕環') && i === 0) interruptCharge(B.E, '重擊');
@@ -566,22 +570,26 @@ async function normalAttack() {
 }
 function dotMul() { return 1; }
 
+// 實際會套用的冷卻（事件、飾品會改變）；技能按鈕也用這個顯示
+function skillCd(i) {
+  let cd = SKILLS[G.cls][i].cd;
+  if (B && B.skillHalf) cd = Math.ceil(cd / 2);
+  if (G.cls === 'knight' && i === 2 && hasAcc('騎兵號角')) cd -= 2;
+  if (G.cls === 'cleric' && i === 2 && hasAcc('審判天秤')) cd -= 3;
+  return Math.max(1, cd);
+}
 async function useSkill(i, echo = false) {
   const {P, E} = B;
   const sk = SKILLS[G.cls][i];
   if (echo) return echoSkill(i, sk);
-  let cd = sk.cd;
-  if (B.skillHalf) cd = Math.ceil(cd / 2);
-  if (G.cls === 'knight' && i === 2 && hasAcc('騎兵號角')) cd -= 2;
-  if (G.cls === 'cleric' && i === 2 && hasAcc('審判天秤')) cd -= 3;
-  P.cds[i] = Math.max(1, cd);
+  P.cds[i] = skillCd(i);
   P.chain = 0;
   P.skillMul = 1;
-  if (hasAcc('審判之槍穗') && P.judge) { P.skillMul *= 1 + 0.2 * P.judge * accScale(); UI.log(`審判 ×${P.judge}！`); P.judge = 0; }
-  if (hasAcc('血月墜飾') && P.pact) { P.skillMul *= 1 + 0.05 * P.pact * accScale(); P.pact = 0; }
+  if (ownAcc('審判之槍穗') && P.judge) { P.skillMul *= 1 + 0.2 * P.judge * accScale(); UI.log(`審判 ×${P.judge}！`); P.judge = 0; }
+  if (ownAcc('血月墜飾') && P.pact) { P.skillMul *= 1 + 0.05 * P.pact * accScale(); P.pact = 0; }
   if (hasAcc('雷鳴指環') && P.lastSkill !== i) P.volt = Math.min(3, P.volt + 1);
   P.lastSkill = i;
-  if (hasAcc('賢者之石')) P.cds.forEach((v, j) => { if (j !== i && v > 0) P.cds[j]--; });
+  if (ownAcc('賢者之石')) P.cds.forEach((v, j) => { if (j !== i && v > 0) P.cds[j]--; });
   if (mythic('wizard')) P.echo = i;
   UI.skillBanner(sk.name);
   UI.log(`${G.name}使用了${sk.name}`);
@@ -729,7 +737,7 @@ async function useItemInBattle(idx) {
   } else if (it.category === '永久') {
     const stat = it.stat === '任選' ? await UI.chooseStat() : it.stat;
     withMaxHpChange(() => { G.seeds[stat]++; });
-    const bs = baseStats(); P.maxHp = bs.hp; P.atk = bs.atk; P.def = bs.def; P.spd = bs.spd; P.crit = bs.crit; P.eva = bs.eva;
+    const bs = baseStats(); if (bs.hp > P.maxHp) P.hp += bs.hp - P.maxHp; P.maxHp = bs.hp; P.atk = bs.atk; P.def = bs.def; P.spd = bs.spd; P.crit = bs.crit; P.eva = bs.eva;
     UI.float(P, `${STAT_NAMES[stat]} +1 點`, 'status');
   }
   await sleep(300);
@@ -790,31 +798,69 @@ function updateIntentHP() {
   else if (fx.potionOnce && !E.potionDone && hpFrac(E) < fx.potionOnce[0]) E.intent = {k: 'potion', extra};
 }
 // 預估一下對玩家的傷害（不含爆擊與浮動）
-function estHit(m) {
-  const {P, E} = B, d = defOf(P);
-  let x = atkOf(E) * m * (1 - d / (d + 50));
-  if (G.cls === 'knight') x *= 0.85;
-  if (G.cls === 'wizard') x *= 1.1;
-  if (stHas(P, 'guard')) x *= 0.5;
-  return Math.max(1, Math.round(x));
+function oathReady() { return stHas(B.P, 'guard') && hasAcc('守誓者之盾') && B.P.oathBlocks < 2; }
+// 敵人回合開始時才會觸發的強化（狂暴、第 2 階段），預告要先算進去
+function pendingAtkMul(E) {
+  let k = 1; const fx = E.fx;
+  if (fx.enrage && !E.enraged && hpFrac(E) < fx.enrage[0]) k *= 1 + fx.enrage[1];
+  if (fx.phases && E.phase < 2 && hpFrac(E) < 0.66) k *= 1.3;
+  return k;
 }
+// 預估一下對玩家的單下傷害（與 eHit 同一套減傷，不含爆擊、浮動與護盾）
+function estOne(m, o = {}) {
+  const {P, E} = B, d = defOf(P);
+  if ((o.heavy || o.special) && oathReady()) return 0;
+  let mult = m;
+  if (E.fx.execute && hpFrac(P) < E.fx.execute[0]) mult *= E.fx.execute[1];
+  let x = atkOf(E) * pendingAtkMul(E) * mult * (1 - d / (d + 50));
+  if ((o.heavy || o.special) && hasAcc('鐵布衫')) x *= 1 - 0.5 * accScale();
+  return applyTakenMods(P, x, false);
+}
+// 第一下會被完全擋掉的狀態
+function firstBlock(o = {}) {
+  const P = B.P;
+  if (stHas(P, 'parry')) return '格擋';
+  if (stHas(P, 'mikiriStance')) return '見切';
+  if (stHas(P, 'mirror')) return '鏡盾';
+  if (G.blockHits > 0) return '結界';
+  if (!o.sure && stHas(P, 'smoke')) return '煙幕';
+  return null;
+}
+// 預告文字：「約 N」或「0（格擋）」
+function estText(m, hits = 1, o = {}) {
+  const P = B.P, blk = firstBlock(o), n = hits - (blk ? 1 : 0);
+  if (n <= 0) return `0，${blk}擋下`;
+  if ((o.heavy || o.special) && oathReady()) return '0，守誓之盾擋下';
+  let total = estOne(m, o) * n;
+  const sh = stGet(P, 'shield'); if (sh) total = Math.max(0, total - sh.v);
+  if (stHas(P, 'unyield')) return `約 ${Math.round(total)}，延後承受`;
+  return `約 ${Math.max(blk ? 0 : 1, Math.round(total))}${blk ? `，${blk}擋下第一下` : ''}${sh ? '，護盾吸收後' : ''}`;
+}
+function estHit(m) { return Math.max(1, Math.round(estOne(m))); }
 function intentInfo() {
   if (B && stHas(B.E, 'broken')) return {text: `破防中：跳過下一次行動，受到傷害 ×${BREAK_DMG}`, warn: false};
   if (B && stHas(B.E, 'freeze')) return {text: '凍結／暈眩中：跳過下一次行動', warn: false};
   const it = B && B.E.intent; if (!it) return null;
   let t, warn = false;
   switch (it.k) {
-    case 'attack': t = `攻擊${it.hits > 1 ? ` ${it.hits} 連擊` : ''}（約 ${estHit(it.m) * it.hits}）`; break;
-    case 'charge': t = '蓄力中：下一次行動會重擊'; warn = true; break;
-    case 'heavy': t = `蓄力重擊 ×${it.m}（約 ${estHit(it.m)}）`; warn = true; break;
-    case 'special': t = `強力攻擊${it.hits > 1 ? ` ${it.hits} 連擊` : ''}（約 ${estHit(it.m) * it.hits}）`; warn = true; break;
-    case 'boom': t = `準備自爆（約 ${estHit(it.m)}）`; warn = true; break;
+    case 'attack': t = `攻擊${it.hits > 1 ? ` ${it.hits} 連擊` : ''}（${estText(it.m, it.hits)}）`; break;
+    case 'charge':
+      if (stHas(B.E, 'cursed') && hasAcc('咒術人偶')) { t = '想要蓄力，但會被詛咒反噬'; break; }
+      t = '蓄力中：下一次行動會重擊'; warn = true; break;
+    case 'heavy': t = `蓄力重擊 ×${it.m}（${estText(it.m, 1, {heavy: true})}）`; warn = true; break;
+    case 'special': t = `強力攻擊${it.hits > 1 ? ` ${it.hits} 連擊` : ''}（${estText(it.m, it.hits, {special: true})}）`; warn = true; break;
+    case 'boom': t = `準備自爆（${estText(it.m, 1, {sure: true})}）`; warn = true; break;
     case 'potion': t = '準備喝藥回復'; break;
     case 'heal': t = '準備回復生命'; break;
     case 'shield': t = '準備展開護盾'; break;
-    case 'rand': t = ['準備重擊 ×2（約 ' + estHit(2) + '）', '準備吃糖回復', '準備讓你頭昏（減速）'][it.r]; warn = it.r === 0; break;
+    case 'rand': t = ['準備重擊 ×2（' + estText(2) + '）', '準備吃糖回復', '準備讓你頭昏（減速）'][it.r]; warn = it.r === 0; break;
   }
   if (it.extra && it.extra.length) t += '＋' + it.extra.join('、');
+  // 第 3 階段每 3 次行動追加終焉一擊；手下每回合攻擊
+  const E = B.E;
+  if (it.k === 'attack' && E.fx.phases && (E.phase >= 3 || hpFrac(E) < 0.33) && (E.turns + 1) % 3 === 0) { t += `＋終焉一擊（${estText(4)}）`; warn = true; }
+  const mons = B.summonsE.filter(x => x.turns > 0);
+  if (mons.length) { const d = defOf(B.P); t += `＋手下攻擊（約 ${Math.round(mons.reduce((a, x) => a + applyTakenMods(B.P, atkOf(E) * x.mul * (1 - d / (d + 50)), false), 0))}）`; }
   if (mythic('ranger') && B.E.future.length) t += '　→ ' + B.E.future.map(intentShort).join(' → ');
   return {text: t, warn};
 }
@@ -944,11 +990,15 @@ async function eHit(mult, o = {}) {
     return r;
   }
   comboBreak();   // 被攻擊命中（含防禦中）就中斷連擊；閃避、格擋、鏡盾、見切不算（無雙：減半）
-  let d = applyTakenMods(P, r.dmg);
+  let d = r.dmg;
   const big = o.heavy || o.special;
-  if (big && stHas(P, 'guard') && hasAcc('守誓者之盾') && P.oathBlocks < 2) { P.oathBlocks++; d = 0; UI.float(P, '完全擋下', 'status'); UI.log(`守誓之盾擋下了這一擊（剩 ${2 - P.oathBlocks} 次）`); }
-  if (big && hasAcc('鐵布衫')) { d *= 1 - 0.5 * accScale(); E.gauge -= 50; UI.log('鐵布衫硬吃下來，反震延後了敵人的行動'); }
-  if (stHas(P, 'unyield')) { P.delayPool += d; d = 0; UI.float(P, '不屈', 'status'); }
+  // 完全擋下、延後承受的傷害不會消耗護盾
+  if (big && oathReady()) { P.oathBlocks++; d = 0; UI.float(P, '完全擋下', 'status'); UI.log(`守誓之盾擋下了這一擊（剩 ${2 - P.oathBlocks} 次）`); }
+  else {
+    if (big && hasAcc('鐵布衫')) { d *= 1 - 0.5 * accScale(); E.gauge -= 50; UI.log('鐵布衫硬吃下來，反震延後了敵人的行動'); }
+    if (stHas(P, 'unyield')) { P.delayPool += Math.round(applyTakenMods(P, d, true, true)); d = 0; UI.float(P, '不屈', 'status'); }
+    else d = applyTakenMods(P, d);
+  }
   d = Math.round(d);
   // 不死圖騰、老兵勳章
   if (P.hp - d <= 0) {
@@ -959,7 +1009,7 @@ async function eHit(mult, o = {}) {
   painStore(d);
   if (d > 0) {
     if (hasAcc('血牙項鍊')) P.debt += d;
-    if (hasAcc('審判之槍穗')) P.judge = Math.min(5, P.judge + 1);
+    if (ownAcc('審判之槍穗')) P.judge = Math.min(5, P.judge + 1);
     if (big && hasAcc('老兵勳章')) { P.nextBoost *= 1 + 1 * accScale(); UI.log('老兵的反擊時機到了！'); }
   }
   if (P.hp > 0 && hasAcc('不屈紋章') && !P.unyieldUsed && hpFrac(P) < 0.3) { P.unyieldUsed = true; stAdd(P, 'unyield', 1, 2); UI.float(P, '不屈', 'status'); UI.log('不屈！接下來 2 回合的傷害延後承受'); }

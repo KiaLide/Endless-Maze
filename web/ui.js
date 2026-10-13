@@ -53,7 +53,69 @@ const TIPS = {
   qi: '氣：氣功護體會依層數持續更久。', bulwark: '架盾力量：會加到下一次攻擊上。', debt: '血債：之後的攻擊會依此回復生命。',
   iai: '拔刀：下一次攻擊必定爆擊並強化。', shout: '怒吼：下一次攻擊必定爆擊並吸取生命。', holyMark: '審判印記：下一次攻擊強化並無視護盾。',
   chain: '連斬：連續普通攻擊會追加斬擊；用技能或防禦會歸零。', atkUp: '攻擊上升。', atkDown: '攻擊下降。', defUp: '防禦上升。', defDown: '防禦下降。', evaUp: '閃避上升。',
+  evaDown: '閃避下降。', spdUp: '速度上升，行動變快。', spdDown: '速度下降，行動變慢。', hitUp: '命中上升。', hitDown: '命中下降，攻擊比較容易落空。',
+  critUp: '爆擊率上升。', critDown: '爆擊率下降。',
+  stack: '越戰越強：每次行動後攻擊力都會再提高。', phase2: '第二階段：攻擊與速度提升。', phase3: '最終階段：攻擊與速度提升，並會定期發動終焉一擊。',
+  bat: '蝙蝠化：化成蝙蝠群，非常難以命中。', minion: '手下：每次敵人行動後，手下也會攻擊你，並中斷連擊。',
+  iceArmor: '冰甲：前幾次受到的攻擊傷害降低，打碎後恢復正常。', stone: '石化：開場幾回合身體堅硬，受到的傷害降低。',
+  nextCrit: '必定爆擊：你的下一次攻擊必定爆擊。', hot: '持續回復：每回合開始時回復生命。', qigong: '氣功護體：防禦提升中。',
+  summon: '深淵魔物：每次你行動後追擊敵人並吸取生命，數字是剩餘回合。', nextBoost: '下一擊強化：你的下一次攻擊傷害提高。',
+  dragon: '龍紋：沒有受傷的回合會累積增傷，受到傷害就歸零。', rose: '薔薇：命中會累積，薔薇終舞會依層數強化。',
+  oath: '守誓之盾：防禦中可以完全擋下蓄力重擊或強力攻擊，數字是本場剩餘次數。', veteran: '老兵意志：本場戰鬥第一次受到致命傷時會撐住。',
+  unyieldReady: '不屈待命：生命第一次低於一定程度時，之後的傷害會延後承受。', cdhalf: '這場戰鬥使用技能後的冷卻減半。',
+  nextFirst: '下一場戰鬥由你先攻。', nextEnemyFirst: '下一場戰鬥由敵人先攻。', nextEnemyHp: '下一個敵人的生命降低。',
+  nextCdStart: '下一場戰鬥開始時，技能都在冷卻中。', dropGuard: '裝備保底：接下來幾步拿到的裝備，數值不會低於標準。',
 };
+// 能力增減的標籤（依正負顯示上升或下降）
+function modChips(u) {
+  const out = [];
+  for (const [k, n, up, dn] of [['atkMod', '攻擊', 'atkUp', 'atkDown'], ['defMod', '防禦', 'defUp', 'defDown'], ['spdMod', '速度', 'spdUp', 'spdDown'],
+    ['evaMod', '閃避', 'evaUp', 'evaDown'], ['hitMod', '命中', 'hitUp', 'hitDown'], ['critMod', '爆擊', 'critUp', 'critDown']]) {
+    const v = stSum(u, k); if (v) out.push(chip(n + (v > 0 ? '↑' : '↓'), v > 0 ? 'good' : 'bad', TIPS[v > 0 ? up : dn]));
+  }
+  if (stHas(u, 'haste')) out.push(chip('加速', 'good', TIPS.haste));
+  return out;
+}
+// 下一次攻擊必定爆擊的條件（與 pHit 相同）
+function sureCrit() {
+  const {P, E} = B, it = E.intent;
+  if (P.iai || P.shout) return true;
+  if (!P.firstAttackDone && hasAcc('居合之鍔')) return true;
+  if (hasAcc('破軍護符') && E.charging) return true;
+  return hasAcc('影刃耳環') && it && !['attack', 'heavy', 'special', 'boom'].includes(it.k) && !(it.k === 'rand' && it.r === 0);
+}
+// 攻擊按鈕說明：依飾品變化
+function attackTip(P) {
+  const t = ['攻擊：用目前的武器普通攻擊。'];
+  if (hasAcc('百裂綁手')) t.push(`普通攻擊改成打兩下${accOwn() ? '，每 3 次讓連環拳冷卻縮短' : ''}。`);
+  if (hasAcc('雙刃徽章')) t.push('連續普通攻擊會追加連斬。');
+  if (hasAcc('蛇牙項鍊')) t.push('命中會讓敵人中毒並疊加。');
+  if (hasAcc('熔岩寶珠')) t.push('命中有機會讓敵人灼燒。');
+  if (hasAcc('巨人腕環')) t.push('命中可以打斷敵人的蓄力。');
+  if (hasAcc('金幣袋') && !B.stole) t.push('命中有機會偷到道具。');
+  if (hasAcc('舞者腳鍊')) t.push(P.noDmgTurns >= 4 ? '舞姬之步已就緒：這次攻擊傷害大幅提高！' : '連續數回合沒受傷時，下一次普通攻擊大幅強化。');
+  if (G.cls === 'monk') t.push('有機會追加連打。');
+  t.push('連續命中會累積連擊。');
+  return t.join('');
+}
+// 技能按鈕說明：飾品、武器帶來的變化
+function skillNotes(i) {
+  const c = G.cls, n = [];
+  if (B && B.skillHalf) n.push('這場戰鬥冷卻減半');
+  if (c === 'knight' && i === 2 && hasAcc('騎兵號角')) n.push('騎兵號角：冷卻縮短');
+  if (c === 'cleric' && i === 2 && hasAcc('審判天秤')) n.push('審判天秤：冷卻縮短');
+  if (c === 'berserker' && i === 2 && hasAcc('暴風腰帶')) n.push('暴風腰帶：段數增加');
+  if (c === 'witch' && i === 2 && hasAcc('深淵之鑰')) n.push('深淵之鑰：召喚物留場更久');
+  if (c === 'wizard' && i === 1 && hasAcc('永凍水晶')) n.push('永凍水晶：凍結更久');
+  if (c === 'ranger' && i === 0 && stHas(B.P, 'aim')) n.push('瞄準完成：這次大幅強化並必定爆擊');
+  if (c === 'ranger' && i === 2 && ownAcc('流星箭羽')) n.push('流星箭羽：可以打斷蓄力');
+  if (c === 'rogue' && i === 0 && ownAcc('蛇牙項鍊')) n.push('蛇牙項鍊：引爆敵人身上的毒');
+  if (c === 'wizard' && i === 0 && ownAcc('熔岩寶珠')) n.push('熔岩寶珠：引爆敵人身上的灼燒');
+  if (c === 'monk' && i === 1 && ownAcc('氣功念珠') && B.P.qi) n.push('氣功念珠：依氣的層數持續更久');
+  if (G.weapon.cls !== c) n.push('非本職武器：效果較弱');
+  if (mythic('wizard')) n.push('創世：下一回合會回響一次');
+  return n.length ? '（' + n.join('；') + '）' : '';
+}
 function bodyTip(b) {
   const d = BODY[b], weak = [], res = [];
   for (const k of ['slash', 'magic', 'dot']) { if (d[k] > 1) weak.push(DMG_NAMES[k]); if (d[k] < 1) res.push(DMG_NAMES[k]); }
@@ -305,14 +367,19 @@ function refreshHud() {
   const mh = maxHp();
   const hp = B && !B.over ? B.P.hp : G.hp, mhp = B && !B.over ? B.P.maxHp : mh;
   $('#hp-fill').style.width = (100 * hp / mhp) + '%';
-  $('#hp-text').textContent = `${hp} / ${mhp}`;
+  $('#hp-text').textContent = `${Math.round(hp)} / ${mhp}`;
   $('#hud-gold').textContent = G.gold;
   $$('.mi-equip').forEach(e => e.innerHTML = spr('wstrip:' + G.weapon.cls, 0.7, G.weapon.tier - 1));
   $$('.mi-inv').forEach(e => { if (!e.firstChild) e.innerHTML = spr('misc:potion_s', 0.7); });
   const st = [];
   if (G.phoenix) st.push(chip('不死鳥之羽', 'good', TIPS.phoenix));
   if (G.poison) st.push(chip('中毒', 'bad', TIPS.poisonWalk));
-  if (G.blockHits) st.push(chip('結界', 'good', TIPS.barrier));
+  if (G.blockHits) st.push(chip(`結界 ×${G.blockHits}`, 'good', TIPS.barrier));
+  if (G.next.first) st.push(G.next.first === 'player' ? chip('下一戰先攻', 'good', TIPS.nextFirst) : chip('下一戰敵人先攻', 'bad', TIPS.nextEnemyFirst));
+  if (G.next.enemyHp) st.push(chip('下一敵人生命↓', 'good', TIPS.nextEnemyHp));
+  if (G.next.skill === 'cdhalf') st.push(chip('下一戰冷卻減半', 'good', TIPS.cdhalf));
+  if (G.next.skill === 'cdstart') st.push(chip('下一戰技能冷卻中', 'bad', TIPS.nextCdStart));
+  if (G.dropFloor > 0) st.push(chip('裝備保底', 'good', TIPS.dropGuard));
   const agg = {};
   G.buffs.forEach(b => { agg[b.stat] = (agg[b.stat] || 0) + b.val; });
   for (const k in agg) if (agg[k]) st.push(chip(`${STAT_NAMES[k]}${agg[k] > 0 ? '↑' : '↓'}`, agg[k] > 0 ? 'good' : 'bad', `${STAT_NAMES[k]}${agg[k] > 0 ? '上升' : '下降'}中（事件效果）。`));
@@ -492,8 +559,21 @@ async function doBattle(kind) {
 
 // 裝備比較卡片；base 有值時，在數值下方標出與目前裝備的差距
 // 與目前裝備的數值差（▲ 綠、▼ 紅）
+// 非本職裝備的提示
+function offTag(type, it) {
+  if (type === 'weapon' && it.cls !== G.cls) return '<span class="tag warn">非本職：技能效果 ×0.75</span>';
+  if (type === 'acc' && ACCS[it.idx].class_id !== G.cls) return '<span class="tag warn">非本職：技能詞條無效，其餘 ×0.75</span>';
+  return '';
+}
+// 換上這件裝備後整體能力的變化（含城塞之心這類依其他能力計算的加成）
+function statsIfEquip(type, it) {
+  const key = type === 'weapon' ? 'weapon' : type === 'armor' ? 'armor' : 'acc', old = G[key];
+  G[key] = it; const s = baseStats(); G[key] = old; return s;
+}
 function deltaHtml(type, it, base) {
-  const a = equipStats(type, it), b = base ? equipStats(type, base) : {};
+  const keys0 = ['hp', 'atk', 'def', 'spd', 'crit', 'eva'];
+  const sa = statsIfEquip(type, it), sb = statsIfEquip(type, base || null);
+  const a = Object.fromEntries(keys0.map(k => [k, sa[k]])), b = Object.fromEntries(keys0.map(k => [k, sb[k]]));
   const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])].filter(k => Math.round(((a[k] || 0) - (b[k] || 0)) * 10));
   return keys.length ? `<p class="delta">${keys.map(k => { const v = (a[k] || 0) - (b[k] || 0); return `<span class="${v > 0 ? 'up' : 'down'}">${STAT_NAMES[k] || k} ${v > 0 ? '▲+' : '▼'}${fmtPct(v)}${k === 'crit' || k === 'eva' ? '%' : ''}</span>`; }).join('')}</p>` : '<p class="delta">數值與目前相同</p>';
 }
@@ -638,14 +718,14 @@ document.addEventListener('click', e => {
 async function openEquip() {
   if (busy && !B) return;
   const s = baseStats(), c = CHAR[G.cls];
-  const row = (label, type, it) => it ? `<div class="eq-row">${equipIcon(type, it, 2)}<div><small>${label}</small><b style="color:${RARITY_COLOR[rarityOf(type, it)]}">${equipName(type, it)}</b>
+  const row = (label, type, it) => it ? `<div class="eq-row">${equipIcon(type, it, 2)}<div><small>${label}</small><b style="color:${RARITY_COLOR[rarityOf(type, it)]}">${equipName(type, it)}</b>${offTag(type, it)}
       <span>${type !== 'acc' ? `第 ${it.tier} 階・` : ''}數值 ${Math.round(it.roll * 100)}%・${statLine(equipStats(type, it))}</span>${type === 'acc' ? `<span class="affix">${ACCS[it.idx].affix}</span>` : ''}${type === 'weapon' ? mythicLine(it, 'span') : ''}</div></div>`
     : `<div class="eq-row empty"><span class="spr-blank"></span><div><small>${label}</small><b>（無）</b></div></div>`;
   const n = unlockedSkills(G.floor);
   const buffs = G.buffs.map(b => `<li class="${b.val > 0 ? 'good' : 'bad'}">${STAT_NAMES[b.stat]} ${b.val > 0 ? '+' : ''}${b.val}%（${{steps: `剩 ${b.left} 步`, floor: '本層內', long: '長時間', next: '下一場戰鬥'}[b.dur]}）</li>`).join('');
   await modal(`<div class="equip">
     <div class="eq-hero">${spr('hero:' + G.cls, 1.6)}<div><h3>${esc(G.name)}</h3><p>${c.class_name}・${c.hero}</p><p class="gold">金幣 ${G.gold}</p></div></div>
-    <dl class="stats">${['hp', 'atk', 'def', 'spd', 'crit', 'eva'].map(k => `<div><dt>${STAT_NAMES[k]}</dt><dd>${k === 'hp' ? `${G.hp}/${s.hp}` : fmtPct(s[k]) + (k === 'crit' || k === 'eva' ? '%' : '')}</dd></div>`).join('')}</dl>
+    <dl class="stats">${['hp', 'atk', 'def', 'spd', 'crit', 'eva'].map(k => `<div><dt>${STAT_NAMES[k]}</dt><dd>${k === 'hp' ? `${Math.round(B && !B.over ? B.P.hp : G.hp)}/${B && !B.over ? B.P.maxHp : s.hp}` : fmtPct(s[k]) + (k === 'crit' || k === 'eva' ? '%' : '')}</dd></div>`).join('')}</dl>
     ${row('武器', 'weapon', G.weapon)}${row('防具', 'armor', G.armor)}${row('飾品', 'acc', G.acc)}
     <p class="passive"><b>被動・${c.passive.name}</b>${c.passive.effect}</p>
     <ul class="skills">${SKILLS[G.cls].map((k, i) => `<li class="${i < n ? '' : 'locked'}"><b>${k.name}</b><span>${i < n ? `CD ${k.cd}・${k.text}` : unlockText(i)}</span></li>`).join('')}</ul>
@@ -654,12 +734,20 @@ async function openEquip() {
   </div>`, [['關閉', 1, 'primary']], 'wide');
 }
 
+// 現在不能用的原因（null 表示可以用）
+function itemWhyNot(id, inBattle) {
+  const it = ITEMS[id];
+  if (inBattle) return B && !B.over ? itemBlock(id) : null;
+  if (it.category === '特殊道具' && it.use === 'battle') return `${id}只能在戰鬥中使用`;
+  if (it.category === '回復' && G.hp >= maxHp()) return '生命已滿';
+  return null;
+}
 async function openInventory(inBattle) {
   if (!inBattle && busy) return null;
   while (true) {
     if (!G.inv.length) { await modal('<div class="inv"><h3>道具欄</h3><p class="desc">背包是空的。</p></div>', [['關閉', null, 'primary']], 'wide'); return null; }
     const v = await modal(`<div class="inv"><h3>道具欄 <small>${G.inv.length} / 6 格</small></h3>
-      <div class="inv-list">${G.inv.map((s, i) => `<button class="inv-item" data-use="${i}">${spr(itemIcon(s.id), 2)}<span><b>${s.id}</b> ×${s.n}<small>${itemDesc(s.id)}</small></span><em>使用</em></button>`).join('')}</div>
+      <div class="inv-list">${G.inv.map((s, i) => { const why = itemWhyNot(s.id, inBattle); return `<button class="inv-item${why ? ' off' : ''}" data-use="${i}"${why ? ` data-tip="${esc(why)}"` : ''}>${spr(itemIcon(s.id), 2)}<span><b>${s.id}</b> ×${s.n}<small>${itemDesc(s.id)}</small></span><em>${why ? '不能用' : '使用'}</em></button>`; }).join('')}</div>
       ${inBattle ? '<p class="hint">使用道具不消耗回合，用完可以繼續行動。</p>' : '<p class="hint">標示「戰鬥中」的特殊道具只能在戰鬥裡使用。</p>'}</div>`,
       [['關閉', null, 'primary']], 'wide');
     if (v == null) return null;
@@ -901,17 +989,28 @@ const UI = {
     const tm = typeMul();
     tags.push(chip(E.body, 'body', bodyTip(E.body)));
     if (stHas(E, 'broken')) tags.push(chip('破防中', 'bad', TIPS.broken));
-    else tags.push(chip(`破防 ${E.breakV}/${E.breakMax}`, tm > 1 ? 'warn' : '', `破防值：用牠弱點的傷害類型攻擊會削減，歸零時破防（跳過行動、受到更多傷害）。${tm > 1 ? '你現在打的是弱點！' : '你現在打的不是弱點。'}`));
+    else {
+      const cleave = mythic('berserker'), hot = tm > 1 || cleave;
+      tags.push(chip(`破防 ${E.breakV}/${E.breakMax}`, hot ? 'warn' : '', `破防值：用牠弱點的傷害類型攻擊會削減，歸零時破防（跳過行動、受到更多傷害）。${tm > 1 ? '你現在打的是弱點！' : cleave ? '劈開萬物：你的每次攻擊都會削減破防值。' : '你現在打的不是弱點。'}`));
+    }
     if (stHas(E, 'poison')) tags.push(chip(E.venom ? `中毒 ×${E.venom}` : '中毒', 'bad', TIPS.poison));
     if (stHas(E, 'burn')) tags.push(chip('灼燒', 'bad', TIPS.burn));
     if (stHas(E, 'freeze')) tags.push(chip('凍結', 'bad', TIPS.freeze));
     if (stHas(E, 'slow')) tags.push(chip('減速', 'bad', TIPS.slow));
     if (stHas(E, 'cursed')) tags.push(chip('詛咒', 'bad', TIPS.cursed));
     if (E.pain.length) tags.push(chip('痛苦轉嫁', 'bad', TIPS.pain));
-    if (stHas(E, 'shield')) tags.push(chip('護盾', 'good', TIPS.shield));
-    if (stSum(E, 'atkMod') < 0) tags.push(chip('攻擊↓', 'bad', TIPS.atkDown));
-    if (stSum(E, 'defMod') < 0) tags.push(chip('防禦↓', 'bad', TIPS.defDown));
+    if (stHas(E, 'shield')) tags.push(chip(`護盾 ${Math.round(stGet(E, 'shield').v)}`, 'good', TIPS.shield));
+    tags.push(...modChips(E));
     if (E.enraged) tags.push(chip('狂暴', 'good', TIPS.enraged));
+    if (E.stack) tags.push(chip(`攻擊 +${Math.round(E.stack * 100)}%`, 'good', TIPS.stack));
+    if (E.phase >= 2) tags.push(chip(`第 ${E.phase} 階段`, 'good', E.phase >= 3 ? TIPS.phase3 : TIPS.phase2));
+    if (E.batTurns > 0) tags.push(chip('蝙蝠化', 'good', TIPS.bat));
+    const mons = B.summonsE.filter(x => x.turns > 0).length;
+    if (mons) tags.push(chip(`手下 ×${mons}`, 'good', TIPS.minion));
+    if (E.fx.iceArmor && E.iceHits < E.fx.iceArmor) tags.push(chip(`冰甲 ${E.fx.iceArmor - E.iceHits}`, 'good', TIPS.iceArmor));
+    if (E.fx.stoneStart && E.turns < E.fx.stoneStart) tags.push(chip('石化', 'good', TIPS.stone));
+    if (E.fx.defUpLow && hpFrac(E) < E.fx.defUpLow[0]) tags.push(chip('防禦↑', 'good', TIPS.defUp));
+    if (E.fx.spdUpLow && hpFrac(E) < E.fx.spdUpLow[0]) tags.push(chip('速度↑', 'good', TIPS.spdUp));
     $('#bt-status').innerHTML = tags.join('');
     const ii = intentInfo();
     const ie = $('#bt-intent'); ie.hidden = !ii;
@@ -932,24 +1031,40 @@ const UI = {
     if (P.echo != null) pt.push(chip('回響・' + SKILLS[G.cls][P.echo].name, 'good', TIPS.echo));
     if (has('freeze')) pt.push(chip('凍結', 'bad', TIPS.freeze));
     if (has('guard')) pt.push(hasAcc('城塞之心') ? chip('架盾', 'good', TIPS.bulwarkGuard) : chip('防禦中', 'good', TIPS.guard));
-    for (const [k, n] of [['shield', '護盾'], ['parry', '格擋'], ['smoke', '煙幕'], ['mikiri', '見切'], ['rage', '狂怒'], ['mikiriStance', '見切架式'], ['aim', '瞄準'], ['mirror', '鏡盾'], ['potRage', '狂暴藥'], ['unyield', '不屈']])
+    if (has('shield')) pt.push(chip(`護盾 ${Math.round(stGet(P, 'shield').v)}`, 'good', TIPS.shield));
+    if (G.blockHits) pt.push(chip(`結界 ×${G.blockHits}`, 'good', TIPS.barrier));
+    if (has('nextCrit') || sureCrit()) pt.push(chip('必定爆擊', 'good', TIPS.nextCrit));
+    if (has('hot') || has('qigong')) pt.push(chip(has('hot') ? '持續回復' : '氣功護體', 'good', has('hot') ? TIPS.hot : TIPS.qigong));
+    if (B.summonP && B.summonP.turns > 0) pt.push(chip(`深淵魔物 ×${B.summonP.turns}`, 'good', TIPS.summon));
+    if (P.nextBoost > 1) pt.push(chip('下一擊強化', 'good', TIPS.nextBoost));
+    if (hasAcc('龍紋腰帶') && P.dragonStack > 0) pt.push(chip(`龍紋 +${Math.round(P.dragonStack * 100)}%`, 'good', TIPS.dragon));
+    if (hasAcc('薔薇胸針') && P.roseStacks > 0) pt.push(chip(`薔薇 ×${P.roseStacks}`, 'good', TIPS.rose));
+    if (hasAcc('守誓者之盾')) pt.push(chip(`守誓 ${2 - P.oathBlocks}`, P.oathBlocks < 2 ? 'good' : '', TIPS.oath));
+    if (hasAcc('老兵勳章') && !P.veteranUsed) pt.push(chip('老兵意志', 'good', TIPS.veteran));
+    if (hasAcc('不屈紋章') && !P.unyieldUsed) pt.push(chip('不屈待命', 'good', TIPS.unyieldReady));
+    if (B.skillHalf) pt.push(chip('技能冷卻減半', 'good', TIPS.cdhalf));
+    for (const [k, n] of [['parry', '格擋'], ['smoke', '煙幕'], ['mikiri', '見切'], ['rage', '狂怒'], ['mikiriStance', '見切架式'], ['aim', '瞄準'], ['mirror', '鏡盾'], ['potRage', '狂暴藥'], ['unyield', '不屈']])
       if (has(k)) pt.push(chip(n, 'good', TIPS[k]));
     if (!has('unyield') && P.delayPool > 0) pt.push(chip('延遲傷害', 'bad', TIPS.delay));
     if (B.enchant) pt.push(chip(`附魔・${DMG_NAMES[B.enchant]}`, 'good', B.enchant === 'dot' ? '附魔：每次攻擊讓敵人中毒。' : `附魔：攻擊改為${DMG_NAMES[B.enchant]}傷害（效果比本職稍弱）。`));
     if (B.lucky) pt.push(chip('幸運金幣', 'good', TIPS.lucky));
-    const acc = [[P.judge, `審判 ×${P.judge}`, 'judge'], [P.pact, `血契 ×${P.pact}`, 'pact'], [P.volt, `電荷 ×${P.volt}`, 'volt'], [P.qi, `氣 ×${P.qi}`, 'qi'],
+    const acc = [[P.judge && ownAcc('審判之槍穗'), `審判 ×${P.judge}`, 'judge'], [P.pact && ownAcc('血月墜飾'), `血契 ×${P.pact}`, 'pact'], [P.volt, `電荷 ×${P.volt}`, 'volt'], [P.qi, `氣 ×${P.qi}`, 'qi'],
       [P.bulwark > 0, '架盾力量', 'bulwark'], [P.debt > 0, '血債', 'debt'], [P.iai, '拔刀', 'iai'], [P.shout, '怒吼', 'shout'], [P.holyMark, '審判印記', 'holyMark'], [P.chain > 0 && hasAcc('雙刃徽章'), `連斬 ${P.chain}`, 'chain']];
     for (const [on, t, k] of acc) if (on) pt.push(chip(t, 'good', TIPS[k]));
-    if (stSum(P, 'atkMod')) pt.push(chip(stSum(P, 'atkMod') > 0 ? '攻擊↑' : '攻擊↓', stSum(P, 'atkMod') > 0 ? 'good' : 'bad', stSum(P, 'atkMod') > 0 ? TIPS.atkUp : TIPS.atkDown));
-    if (stSum(P, 'defMod')) pt.push(chip(stSum(P, 'defMod') > 0 ? '防禦↑' : '防禦↓', stSum(P, 'defMod') > 0 ? 'good' : 'bad', stSum(P, 'defMod') > 0 ? TIPS.defUp : TIPS.defDown));
-    if (stSum(P, 'evaMod')) pt.push(chip('閃避↑', 'good', TIPS.evaUp));
+    pt.push(...modChips(P));
     if (G.phoenix) pt.push(chip('不死鳥之羽', 'good', TIPS.phoenix));
     $('#hud-status').innerHTML = pt.join('');
+    $('#hud-gold').textContent = G.gold;
     // 防禦按鈕：依飾品與狀態變成不同動作
     const gi = GUARD_INFO[guardKind()], gb = $('#bt-guard');
-    gb.innerHTML = `${gi.name}<small>${gi.sub}</small>`; gb.dataset.tip = gi.tip;
+    const gk = guardKind(), gnote = [];
+    if (['guard', 'bulwark', 'iai'].includes(gk)) {
+      if (hasAcc('守誓者之盾')) gnote.push(P.oathBlocks < 2 ? '守誓之盾：防禦中能完全擋下蓄力重擊或強力攻擊。' : '守誓之盾：本場的次數已用完。');
+      if (hasAcc('鐵壁戒指')) gnote.push('鐵壁戒指：防禦中被攻擊時會反擊。');
+    }
+    gb.innerHTML = `${gi.name}<small>${gi.sub}</small>`; gb.dataset.tip = gi.tip + gnote.join('');
     gb.classList.toggle('alt', gi !== GUARD_INFO.guard);
-    $('#bt-attack').dataset.tip = '攻擊：用目前的武器普通攻擊。連續命中會累積連擊。';
+    $('#bt-attack').dataset.tip = attackTip(P);
     $('#bt-item').dataset.tip = '道具：使用道具不消耗回合，用完還能繼續行動。';
     // 技能按鈕
     const n = unlockedSkills(G.floor);
@@ -957,9 +1072,9 @@ const UI = {
       const sk = SKILLS[G.cls][i];
       const locked = i >= n, cd = P.cds[i];
       b.disabled = false; b.classList.toggle('off', locked || cd > 0);
-      b.dataset.tip = locked ? `${sk.name}：${SKILL_BRIEF[G.cls + i]}（通過第 ${SKILL_UNLOCK[i]} 層後解鎖）` : `${sk.name}：${SKILL_BRIEF[G.cls + i]}`;
+      b.dataset.tip = locked ? `${sk.name}：${SKILL_BRIEF[G.cls + i]}（通過第 ${SKILL_UNLOCK[i]} 層後解鎖）` : `${sk.name}：${SKILL_BRIEF[G.cls + i]}${skillNotes(i)}`;
       b.innerHTML = `<b>${locked ? '未解鎖' : sk.name}</b><small>${locked ? `第 ${SKILL_UNLOCK[i]} 層後` : cd > 0 ? `冷卻 ${cd}` : '可使用'}</small>`;
-      b.title = locked ? '' : sk.text;
+      b.title = locked ? '' : `${sk.text}；冷卻 ${skillCd(i)}`;
     });
     $('#bt-item').disabled = !G.inv.length;
   },
