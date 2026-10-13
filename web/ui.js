@@ -43,7 +43,7 @@ const TIPS = {
   parry: '格擋：擋下敵人下一次攻擊並反擊。', smoke: '煙幕：敵人下一次攻擊必定落空，你的下一擊必定爆擊。', mikiri: '見切：閃避提高，閃避成功時反擊。',
   rage: '狂怒：攻擊大幅上升，防禦下降。', mikiriStance: '見切架式：到你下一次行動前，蓄力重擊與強力攻擊必定閃開並強力反擊；一般攻擊只減半傷害。', aim: '瞄準：下一次瞄準射擊大幅強化並必定爆擊。',
   mirror: '鏡盾：下一次受到的攻擊會完全反彈給敵人。', potRage: '狂暴藥：攻擊上升，但受到的傷害也增加。',
-  unyield: '不屈：這段期間受到的傷害會延後，之後分幾回合慢慢扣。', delay: '延遲傷害：不屈期間延後的傷害，之後每回合扣一部分。',
+  unyield: '不屈：這段期間受到的傷害減半。', delay: '延遲傷害：不屈期間延後的傷害，之後每回合扣一部分。',
   combo: '連擊：每打中一段就累積，傷害越來越高；被攻擊命中就會中斷。中毒、灼燒不會中斷。多段攻擊多的職業每層加成較少、上限較高。',
   haste: '加速：速度上升，行動變快。', mercy: '慈悲：每回合開始時回復生命。', echo: '回響：上一個技能會在這回合以較弱的威力自動再施放一次。',
   pain: '痛苦轉嫁：你受到的傷害，會在牠接下來的行動時以詛咒傷害還給牠。', future: '先見：看得到敵人接下來的數次行動。',
@@ -63,8 +63,8 @@ const TIPS = {
   nextCrit: '必定爆擊：你的下一次攻擊必定爆擊。', hot: '持續回復：每回合開始時回復生命。', qigong: '氣功護體：防禦提升中。',
   summon: '深淵魔物：每次你行動後追擊敵人並吸取生命，數字是剩餘回合。', nextBoost: '下一擊強化：你的下一次攻擊傷害提高。',
   dragon: '龍紋：沒有受傷的回合會累積增傷，受到傷害就歸零。', rose: '薔薇：命中會累積，薔薇終舞會依層數強化。',
-  oath: '守誓之盾：防禦中可以完全擋下蓄力重擊或強力攻擊，數字是本場剩餘次數。', veteran: '老兵反擊：下一次攻擊傷害大幅提高，並削減敵人的破防值。',
-  unyieldReady: '不屈待命：生命第一次低於一定程度時，之後的傷害會延後承受。', cdhalf: '這場戰鬥使用技能後的冷卻減半。',
+  oath: '守誓之盾：防禦中可以完全擋下蓄力重擊或強力攻擊，並且反擊。', veteran: '老兵反擊：下一次攻擊傷害大幅提高，並削減敵人的破防值。',
+  unyieldReady: '不屈待命：生命第一次降得很低時，會回復部分生命，接下來幾回合受到的傷害減半。', cdhalf: '這場戰鬥使用技能後的冷卻減半。',
   nextFirst: '下一場戰鬥由你先攻。', nextEnemyFirst: '下一場戰鬥由敵人先攻。', nextEnemyHp: '下一個敵人的生命降低。',
   nextCdStart: '下一場戰鬥開始時，技能都在冷卻中。', dropGuard: '裝備保底：接下來幾步拿到的裝備，數值不會低於標準。',
 };
@@ -1145,7 +1145,7 @@ const UI = {
     if (P.nextBoost > 1) pt.push(chip('下一擊強化', 'good', TIPS.nextBoost));
     if (hasAcc('龍紋腰帶') && P.dragonStack > 0) pt.push(chip(`龍紋 +${Math.round(P.dragonStack * 100)}%`, 'good', TIPS.dragon));
     if (hasAcc('薔薇胸針') && P.roseStacks > 0) pt.push(chip(`薔薇 ×${P.roseStacks}`, 'good', TIPS.rose));
-    if (hasAcc('守誓者之盾')) pt.push(chip(`守誓 ${2 - P.oathBlocks}`, P.oathBlocks < 2 ? 'good' : '', TIPS.oath));
+    if (hasAcc('守誓者之盾') && has('guard')) pt.push(chip('守誓', 'good', TIPS.oath));
     if (P.vetBreak) pt.push(chip('老兵反擊', 'good', TIPS.veteran));
     if (P.vg) pt.push(chip(`反擊架勢 ×${P.vg}`, 'good', TIPS.vg));
     if (has('wall')) pt.push(chip('壁壘反擊', 'good', TIPS.wall));
@@ -1170,7 +1170,7 @@ const UI = {
     const gi = GUARD_INFO[guardKind()], gb = $('#bt-guard');
     const gk = guardKind(), gnote = [];
     if (['guard', 'bulwark', 'iai'].includes(gk)) {
-      if (hasAcc('守誓者之盾')) gnote.push(P.oathBlocks < 2 ? '守誓之盾：防禦中能完全擋下蓄力重擊或強力攻擊。' : '守誓之盾：本場的次數已用完。');
+      if (hasAcc('守誓者之盾')) gnote.push('守誓之盾：防禦中能完全擋下蓄力重擊或強力攻擊，並且反擊。');
       if (hasAcc('鐵壁戒指')) gnote.push('鐵壁戒指：防禦中被攻擊時會反擊。');
     }
     gb.innerHTML = `${gi.name}<small>${gi.sub}</small>`; gb.dataset.tip = gi.tip + gnote.join('');

@@ -284,6 +284,7 @@ function applyTakenMods(P, d, commit = true, noShield = false) {
     d *= f;
   }
   if (stHas(P, 'potRage')) d *= 1.3;  // 狂暴藥
+  if (stHas(P, 'unyield')) d *= 1 - 0.5 * accScale();   // 不屈：受到的傷害減半
   // 護盾吸收
   const sh = stGet(P, 'shield');
   if (sh && commit && !noShield) { const a = Math.min(sh.v, d); sh.v -= a; d -= a; if (sh.v <= 0) stDel(P, 'shield'); }
@@ -377,7 +378,7 @@ async function pHit(mult, o = {}) {
   if (shadowReady()) o.forceCrit = true;
   if (hasAcc('破軍護符') && E.charging) { o.forceCrit = true; dm *= 1 + 0.5 * accScale(); }
   if (P.iai) { P.iai = false; o.forceCrit = true; dm *= 1 + 0.5 * accScale(); UI.log('拔刀！'); }
-  if (P.shout) { P.shout = false; o.forceCrit = true; o.lifesteal = (o.lifesteal || 0) + 0.3 * accScale(); }
+  if (P.shout) { P.shout = false; o.forceCrit = true; o.lifesteal = (o.lifesteal || 0) + 0.15 * accScale(); }
   const holy = P.holy > 0; if (holy) { dm *= 1 + 0.25 * P.holy * accScale(); UI.log(`聖印 ×${P.holy}！`); P.holy = 0; }
   const shatter = hasAcc('永凍水晶') && stHas(E, 'freeze');
   if (shatter) { dm *= 1 + 1 * accScale(); stDel(E, 'freeze'); UI.log('碎冰！'); }
@@ -819,7 +820,7 @@ function updateIntentHP() {
 function shadowReady() { return hasAcc('影刃耳環') && B.E.gauge < 50 * accScale(); }   // 影刃耳環：敵人剛出完手
 // 不死圖騰：狂怒期間生命越低吸取越多（每少 10% 生命 +6%，最多 50%）
 function undyingSteal() { return Math.min(0.5, Math.floor((1 - hpFrac(B.P)) * 10 + 1e-9) * 0.06) * accScale(); }
-function oathReady() { return stHas(B.P, 'guard') && hasAcc('守誓者之盾') && B.P.oathBlocks < 2; }
+function oathReady() { return stHas(B.P, 'guard') && hasAcc('守誓者之盾'); }   // 守誓者之盾：防禦中不限次數
 // 敵人回合開始時才會觸發的強化（狂暴、第 2 階段），預告要先算進去
 function pendingAtkMul(E) {
   let k = 1; const fx = E.fx;
@@ -855,7 +856,6 @@ function estText(m, hits = 1, o = {}) {
   if ((o.heavy || o.special) && oathReady()) return '0，守誓之盾擋下';
   let total = estOne(m, o) * n;
   const sh = stGet(P, 'shield'); if (sh) total = Math.max(0, total - sh.v);
-  if (stHas(P, 'unyield')) return `約 ${Math.round(total)}，延後承受`;
   return `約 ${Math.max(blk ? 0 : 1, Math.round(total))}${blk ? `，${blk}擋下第一下` : ''}${sh ? '，護盾吸收後' : ''}`;
 }
 function estHit(m) { return Math.max(1, Math.round(estOne(m))); }
@@ -1017,11 +1017,11 @@ async function eHit(mult, o = {}) {
   let d = r.dmg;
   const big = o.heavy || o.special;
   // 完全擋下、延後承受的傷害不會消耗護盾
-  if (big && oathReady()) { P.oathBlocks++; d = 0; UI.float(P, '完全擋下', 'status'); UI.log(`守誓之盾擋下了這一擊（剩 ${2 - P.oathBlocks} 次）`); }
+  let oathHit = false;
+  if (big && oathReady()) { oathHit = true; d = 0; UI.float(P, '完全擋下', 'status'); UI.log('守誓之盾擋下了這一擊！'); }
   else {
     if (big && hasAcc('鐵布衫')) { d *= 1 - 0.5 * accScale(); E.gauge -= 50; UI.log('鐵布衫硬吃下來，反震延後了敵人的行動'); }
-    if (stHas(P, 'unyield')) { P.delayPool += Math.round(applyTakenMods(P, d, true, true)); d = 0; UI.float(P, '不屈', 'status'); }
-    else d = applyTakenMods(P, d);
+    d = applyTakenMods(P, d);
   }
   d = Math.round(d);
   P.hp = Math.max(0, P.hp - d);
@@ -1033,7 +1033,12 @@ async function eHit(mult, o = {}) {
     if (ownAcc('審判之槍穗')) P.judge = Math.min(5, P.judge + 1);
     if (big && hasAcc('老兵勳章')) { P.nextBoost *= 1 + 1 * accScale(); P.vetBreak = true; UI.log('老兵的反擊時機到了！'); }
   }
-  if (P.hp > 0 && hasAcc('不屈紋章') && !P.unyieldUsed && hpFrac(P) < 0.3) { P.unyieldUsed = true; stAdd(P, 'unyield', 1, 2); UI.float(P, '不屈', 'status'); UI.log('不屈！接下來 2 回合的傷害延後承受'); }
+  // 不屈紋章：生命首次低於 30% 時，回復已損生命 30%，接下來 3 回合受到的傷害減半
+  if (P.hp > 0 && hasAcc('不屈紋章') && !P.unyieldUsed && hpFrac(P) < 0.3) {
+    P.unyieldUsed = true; healUnit(P, (P.maxHp - P.hp) * 0.3 * accScale()); stAdd(P, 'unyield', 1, 3);
+    UI.float(P, '不屈', 'status'); UI.log('不屈！回復了生命，接下來 3 回合受到的傷害減半');
+  }
+  if (oathHit && !B.over) { UI.log('守誓反擊！'); await pHit(1.5 * accScale(), {sure: true}); }
   P.noDmgTurns = 0; if (hasAcc('龍紋腰帶')) P.dragonStack = 0;
   UI.float(P, d, r.crit ? 'crit' : 'dmg'); UI.hitPlayer();
   if (E.fx.lifesteal) healUnit(E, d * E.fx.lifesteal);
