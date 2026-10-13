@@ -19,6 +19,29 @@ function equipIcon(type, item, scale = 2) {
 }
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c])); }
 
+// 狀態說明（只寫效果，不寫數值）
+const TIPS = {
+  poison: '中毒：每回合開始時受到毒傷害。', burn: '灼燒：每回合開始時受到火焰傷害。', freeze: '凍結／暈眩：跳過下一次行動。',
+  slow: '減速：速度下降，行動變慢。', cursed: '詛咒：攻擊與防禦下降。', shield: '護盾：先吸收受到的傷害，打破後才會扣生命。',
+  broken: '破防中：跳過下一次行動，這段期間受到的傷害大幅增加。', enraged: '狂暴：攻擊力上升。',
+  guard: '防禦中：到你下一次行動前，受到的傷害減半；被攻擊命中仍會中斷連擊。', bulwarkGuard: '架盾：到你下一次行動前，大幅減少受到的傷害，擋下的力量會加到下一次攻擊。',
+  parry: '格擋：擋下敵人下一次攻擊並反擊。', smoke: '煙幕：敵人下一次攻擊必定落空，你的下一擊必定爆擊。', mikiri: '見切：閃避提高，閃避成功時反擊。',
+  rage: '狂怒：攻擊大幅上升，防禦下降。', mikiriStance: '見切架式：下一次攻擊必定閃開並反擊。', aim: '瞄準：下一次瞄準射擊大幅強化並必定爆擊。',
+  mirror: '鏡盾：下一次受到的攻擊會完全反彈給敵人。', potRage: '狂暴藥：攻擊上升，但受到的傷害也增加。',
+  unyield: '不屈：這段期間受到的傷害會延後，之後分幾回合慢慢扣。', delay: '延遲傷害：不屈期間延後的傷害，之後每回合扣一部分。',
+  combo: '連擊：連續命中的攻擊會讓傷害越來越高；被攻擊命中就會中斷。中毒、灼燒不會中斷。',
+  lucky: '幸運金幣：這場戰鬥獲勝時，掉落更好、金幣更多。', phoenix: '不死鳥之羽：倒下時會自動復活一次。',
+  poisonWalk: '中毒：每走一步都會扣生命。', barrier: '守護結界：擋下接下來的攻擊。',
+  judge: '審判：使用技能時消耗，層數越多技能越痛。', pact: '血契：使用技能時消耗，層數越多技能越痛。', volt: '電荷：滿層時下一次攻擊追加落雷。',
+  qi: '氣：氣功護體會依層數持續更久。', bulwark: '架盾力量：會加到下一次攻擊上。', debt: '血債：之後的攻擊會依此回復生命。',
+  iai: '拔刀：下一次攻擊必定爆擊並強化。', shout: '怒吼：下一次攻擊必定爆擊並吸取生命。', holyMark: '審判印記：下一次攻擊強化並無視護盾。',
+  chain: '連斬：連續普通攻擊會追加斬擊；用技能或防禦會歸零。', atkUp: '攻擊上升。', atkDown: '攻擊下降。', defUp: '防禦上升。', defDown: '防禦下降。', evaUp: '閃避上升。',
+};
+function bodyTip(b) {
+  const d = BODY[b], weak = [], res = [];
+  for (const k of ['slash', 'magic', 'dot']) { if (d[k] > 1) weak.push(DMG_NAMES[k]); if (d[k] < 1) res.push(DMG_NAMES[k]); }
+  return `${b}：${d.desc}。弱點：${weak.join('、') || '無'}；抗性：${res.join('、') || '無'}。`;
+}
 // 狀態標籤：data-tip 是懸停（電腦）或長按（手機）時顯示的實際效果
 function chip(text, cls, tip) { return `<b class="chip ${cls}" data-tip="${esc(tip || text)}" tabindex="0">${text}</b>`; }
 const pct = v => `${v > 0 ? '+' : ''}${Math.round(v * 100)}%`;
@@ -38,13 +61,21 @@ function initTips() {
   document.addEventListener('mouseout', e => { if (e.target.closest('[data-tip]')) hide(); });
   document.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el) showTip(el); });
   document.addEventListener('focusout', hide);
-  let pressT = 0;
-  document.addEventListener('touchstart', e => { const el = e.target.closest('[data-tip]'); if (!el) return; clearTimeout(pressT); pressT = setTimeout(() => showTip(el), 350); }, {passive: true});
-  const end = () => { clearTimeout(pressT); hide(); };
+  document.addEventListener('touchstart', e => { const el = e.target.closest('[data-tip]'); if (el) showTip(el); }, {passive: true});
+  const end = () => hide();
   document.addEventListener('touchend', end); document.addEventListener('touchmove', end, {passive: true}); document.addEventListener('touchcancel', end);
   document.addEventListener('contextmenu', e => { if (e.target.closest('[data-tip]')) e.preventDefault(); });
 }
-function show(id) { $$('.screen').forEach(s => s.hidden = s.id !== id); }
+// 依迷宮視窗的長寬比決定畫布高度（寬固定 160 像素）
+function fitView() {
+  if (!view) return;
+  const r = $('#view-wrap').getBoundingClientRect();
+  const h = r.width ? clamp(Math.round(VIEW_W * r.height / r.width), 120, 340) : 200;
+  if (h === VIEW_H && view.height === h) return;
+  VIEW_H = h; view.width = VIEW_W; view.height = VIEW_H;
+  vctx.imageSmoothingEnabled = false; vimg = vctx.createImageData(VIEW_W, VIEW_H);
+}
+function show(id) { $$('.screen').forEach(s => s.hidden = s.id !== id); if (id === 'scr-game') requestAnimationFrame(fitView); }
 let toastT = 0;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 1800); }
 
@@ -67,7 +98,8 @@ function modal(html, buttons = [], cls = '') {
 }
 
 // ============ 場景渲染（簡易光線投射） ============
-const VIEW_W = 160, VIEW_H = 160;
+const VIEW_W = 160;
+let VIEW_H = 200;   // 依畫面比例調整，讓迷宮填滿可用空間
 // 十字路口：玩家停在路口前，前、左、右三條通道都延伸到霧裡，看不到盡頭
 const MAP_N = 31, MAP_C = 15;
 const MAP = Array.from({length: MAP_N}, (_, y) => Array.from({length: MAP_N}, (_, x) => (x === MAP_C || y === MAP_C) && x > 0 && y > 0 && x < MAP_N - 1 && y < MAP_N - 1 ? '.' : '#').join(''));
@@ -119,7 +151,7 @@ function renderView() {
     const isFloor = y > horizon;
     const p = isFloor ? y - horizon : horizon - y;
     if (p < 0.5) { for (let x = 0; x < W; x++) { const i = (y * W + x) * 4; d[i] = T.fog[0]; d[i + 1] = T.fog[1]; d[i + 2] = T.fog[2]; d[i + 3] = 255; } continue; }
-    const rowDist = (H * 0.5) / p;
+    const rowDist = (W * 0.5) / p;
     const sx = (dirX - plX) * rowDist / W * 2, sy = (dirY - plY) * rowDist / W * 2;
     let fx = cam.x + rowDist * (dirX - plX), fy = cam.y + rowDist * (dirY - plY);
     const tex = isFloor ? T.floor : T.ceil, avg = isFloor ? T.floorAvg : T.ceilAvg;
@@ -149,7 +181,7 @@ function renderView() {
     }
     const dist = side === 0 ? sdx - ddx : sdy - ddy;
     zbuf[x] = dist;
-    const lh = H / dist;
+    const lh = W / dist;
     const top = Math.floor(horizon - lh / 2), bot = Math.floor(horizon + lh / 2);
     let wx = side === 0 ? cam.y + dist * ry : cam.x + dist * rx; wx -= Math.floor(wx);
     const tx = Math.floor(wx * 32) & 31;
@@ -251,17 +283,15 @@ function refreshHud() {
   $('#hp-fill').style.width = (100 * hp / mhp) + '%';
   $('#hp-text').textContent = `${hp} / ${mhp}`;
   $('#hud-gold').textContent = G.gold;
+  $$('.mi-equip').forEach(e => e.innerHTML = spr('wstrip:' + G.weapon.cls, 0.7, G.weapon.tier - 1));
+  $$('.mi-inv').forEach(e => { if (!e.firstChild) e.innerHTML = spr('misc:potion_s', 0.7); });
   const st = [];
-  if (G.phoenix) st.push(chip('不死鳥之羽', 'good', '倒下時自動以最大生命 30% 復活一次'));
-  if (G.poison) st.push(chip('中毒', 'bad', `每走一步扣最大生命 ${Math.round(G.poison.pct * 100)}%（${G.poison.left === 'long' ? '持續到打完精英或頭目' : `剩 ${G.poison.left} 步`}）`));
-  if (G.blockHits) st.push(chip(`結界 ×${G.blockHits}`, 'good', `守護結界：擋下接下來 ${G.blockHits} 次攻擊`));
+  if (G.phoenix) st.push(chip('不死鳥之羽', 'good', TIPS.phoenix));
+  if (G.poison) st.push(chip('中毒', 'bad', TIPS.poisonWalk));
+  if (G.blockHits) st.push(chip('結界', 'good', TIPS.barrier));
   const agg = {};
   G.buffs.forEach(b => { agg[b.stat] = (agg[b.stat] || 0) + b.val; });
-  const durText = b => ({steps: `剩 ${b.left} 步`, floor: '本層內', long: '到打完精英或頭目', next: '到下一場戰鬥結束'}[b.dur]);
-  for (const k in agg) if (agg[k]) {
-    const list = G.buffs.filter(b => b.stat === k).map(b => `${b.val > 0 ? '+' : ''}${b.val}%（${durText(b)}）`).join('、');
-    st.push(chip(`${STAT_NAMES[k]}${agg[k] > 0 ? '↑' : '↓'}`, agg[k] > 0 ? 'good' : 'bad', `${STAT_NAMES[k]} ${agg[k] > 0 ? '+' : ''}${agg[k]}%：${list}`));
-  }
+  for (const k in agg) if (agg[k]) st.push(chip(`${STAT_NAMES[k]}${agg[k] > 0 ? '↑' : '↓'}`, agg[k] > 0 ? 'good' : 'bad', `${STAT_NAMES[k]}${agg[k] > 0 ? '上升' : '下降'}中（事件效果）。`));
   $('#hud-status').innerHTML = st.join('');
   cam.region = r;
 }
@@ -324,6 +354,8 @@ function setMode(m) {
   $('#ctrl-battle').hidden = m !== 'battle';
   $('#battle-top').hidden = m !== 'battle';
   $('#scr-game').dataset.mode = m;
+  if (m !== 'battle') $('#bt-intent').hidden = true;
+  requestAnimationFrame(fitView);
 }
 
 async function go(dir) {
@@ -646,6 +678,67 @@ async function gameOver(mon) {
   show('scr-class'); renderCarousel();
 }
 
+
+// ---------- 說明頁 ----------
+const HELP_TABS = [['basic', '操作'], ['battle', '戰鬥'], ['status', '狀態'], ['body', '體質'], ['acc', '飾品'], ['item', '道具']];
+function helpBody(tab) {
+  const dl = rows => `<dl class="help-dl">${rows.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl>`;
+  if (tab === 'basic') return dl([
+    ['選路', '手機在畫面上往上、左、右滑動；電腦用方向鍵或 W、A、D。每一步會遇到戰鬥或事件，10 步為一層。'],
+    ['樓層', '每 5 層最後一步是頭目；第 3、6、9…層會在某一步遇到暗商。每過一層回復部分生命。'],
+    ['裝備', '武器、防具、飾品各一格。撿到裝備時可以比較後換上或換成金幣。非本職武器的技能效果較弱。'],
+    ['道具欄', '6 格，同種道具只佔一格、最多 5 個，點哪一格就用哪一格。'],
+    ['存檔', '設定裡可以存檔、讀取，共 3 格，只能在探索時使用。'],
+    ['狀態標籤', '生命條與敵人名稱下方的小標籤，電腦滑鼠移上去、手機按住，就會顯示效果。'],
+  ]);
+  if (tab === 'battle') return dl([
+    ['行動順序', '速度決定行動條累積快慢，畫面下方顯示接下來的出手順序。'],
+    ['攻擊／技能', '每回合選一個。技能有冷卻，冷卻整局共通、跨戰鬥延續；技能 1 開局就有，技能 2、絕招隨樓層解鎖。'],
+    ['防禦', '到你下一次行動前受到的傷害減半，並讓技能冷卻多減 1。部分飾品會把防禦換成別的動作。'],
+    ['道具', '戰鬥中使用道具不消耗回合，用完可以繼續行動。'],
+    ['意圖預告', '敵人下一步要做什麼會先顯示出來。看到蓄力、強力攻擊時，可以防禦、打斷或先下手。'],
+    ['蓄力', '所有怪物都可能蓄力：蓄力那次不攻擊，下一次行動會重擊。'],
+    ['特殊技能', '精英與頭目的特殊技能會在第一次行動就發動，之後固定間隔再發動。'],
+    ['連擊', '連續命中的攻擊會讓傷害越來越高；被攻擊命中就中斷（防禦中被打也會中斷），中毒、灼燒不算。'],
+    ['弱點與破防', '用敵人體質的弱點類型攻擊會削減破防值，歸零時敵人破防：跳過行動並受到更多傷害。'],
+  ]);
+  if (tab === 'status') return dl(Object.entries({
+    中毒: TIPS.poison, 灼燒: TIPS.burn, '凍結／暈眩': TIPS.freeze, 減速: TIPS.slow, 詛咒: TIPS.cursed, 護盾: TIPS.shield, 破防: TIPS.broken,
+    防禦中: TIPS.guard, 格擋: TIPS.parry, 煙幕: TIPS.smoke, 見切: TIPS.mikiri, 狂怒: TIPS.rage, 鏡盾: TIPS.mirror, 不屈: TIPS.unyield,
+    連擊: TIPS.combo, 不死鳥之羽: TIPS.phoenix,
+  }).map(([k, v]) => [k, v.replace(/^[^：]+：/, '')]));
+  if (tab === 'body') return `<p class="hint">法師、聖女、魔女是魔法傷害，其他職業是斬擊傷害；中毒、灼燒是持續傷害。附魔道具可以改變傷害類型，但效果比本職稍弱。</p>` +
+    dl(Object.keys(BODY).map(b => [b, bodyTip(b).replace(/^[^：]+：/, '')]));
+  if (tab === 'acc') return CLASSES.map(c => `<h4 class="help-h">${CHAR[c].class_name}</h4>` +
+    dl(ACCS.filter(a => a.class_id === c).map(a => [`${a.style}<small>${a.name}</small>`, a.affix]))).join('') +
+    '<p class="hint">飾品任何職業都能裝備；非本職時，跟技能有關的效果無效，其餘效果較弱。</p>';
+  if (tab === 'item') {
+    const SP = {stun: '打斷敵人的蓄力或強力攻擊，讓牠跳過下一次行動（頭目只會被打斷）。', escape: '逃離戰鬥，沒有掉落；頭目戰不能用。',
+      fire: '造成無視防禦的火焰傷害，並讓敵人灼燒。', ice: '凍結敵人；精英可能抵抗、頭目免疫，這時改為減速。', cure: '解除所有負面狀態並回復少量生命。',
+      mirror: '下一次受到的攻擊完全反彈給敵人。', hourglass: '所有技能冷卻歸零。', berserk: '這場戰鬥攻擊上升，但受到的傷害也增加。',
+      lucky: '這場戰鬥獲勝時，掉落更好、金幣更多。', teleport: '在本層直接前進幾步（不會跳過頭目）。',
+      ench_slash: '這場戰鬥的攻擊改為斬擊傷害（比本職稍弱）。', ench_magic: '這場戰鬥的攻擊改為魔法傷害（比本職稍弱）。', ench_dot: '這場戰鬥每次攻擊都讓敵人中毒。'};
+    const USE = {battle: '戰鬥中', any: '隨時', explore: '探索時'};
+    return dl(DATA.items.items.map(i => {
+      if (i.category === '回復') return [i.id, `回復${i.id === '大藥水' ? '大量' : i.id === '中藥水' ? '中量' : '少量'}生命；聖女使用效果加倍。`];
+      if (i.category === '特殊道具') return [`${i.id}<small>${USE[i.use]}・${i.rarity}</small>`, SP[i.key]];
+      if (i.id === '女神之種') return [i.id, '任選一個能力永久提升。'];
+      if (i.category === '永久') return [i.id, `${STAT_NAMES[i.stat]}永久提升。`];
+      return [i.id, '倒下時自動復活一次；只能從事件取得。'];
+    }));
+  }
+  return '';
+}
+async function openHelp() {
+  let tab = 'basic';
+  while (true) {
+    const v = await modal(`<div class="help"><h3>說明</h3><div class="help-tabs" role="tablist">${HELP_TABS.map(([k, n]) => `<button class="help-tab${k === tab ? ' on' : ''}" role="tab" aria-selected="${k === tab}" data-help="${k}">${n}</button>`).join('')}</div><div class="help-body">${helpBody(tab)}</div></div>`, [['返回', 0, 'primary']], 'wide');
+    if (typeof v === 'string' && v.startsWith('help:')) { tab = v.slice(5); continue; }
+    return;
+  }
+}
+document.addEventListener('click', e => { const t = e.target.closest('[data-help]'); if (t && modalResolve) modalResolve('help:' + t.dataset.help); });
+
 // ============ 設定、存檔、讀取 ============
 const SAVE_SLOTS = 3;
 const saveKey = i => 'em-save-' + i;
@@ -711,9 +804,10 @@ async function openSettings() {
   busy = true;
   try {
     while (true) {
-      const v = await modal('<div class="banner"><h3>設定</h3></div>', [['存檔', 'save', 'opt'], ['讀取', 'load', 'opt'], ['回到標題', 'title', 'opt'], ['關閉', 0, 'primary']], 'center choice');
+      const v = await modal('<div class="banner"><h3>設定</h3></div>', [['存檔', 'save', 'opt'], ['讀取', 'load', 'opt'], ['說明', 'help', 'opt'], ['回到標題', 'title', 'opt'], ['關閉', 0, 'primary']], 'center choice');
       if (v === 'save') { await doSave(); continue; }
       if (v === 'load') { if (await doLoad(false)) return; continue; }
+      if (v === 'help') { await openHelp(); continue; }
       if (v === 'title') {
         const ok = await modal('<div class="banner"><h3>回到標題？</h3><p>目前沒有存檔的進度會遺失。</p></div>', [['回到標題', 1, 'primary'], ['取消', 0]], 'center');
         if (ok) { backToTitle(); return; }
@@ -731,7 +825,7 @@ const UI = {
     scene.mon = 'mon:' + B.E.name; scene.monDead = 0;
     scene.monScale = B.E.rank === '頭目' ? 3 : B.E.rank === '精英' ? 2.6 : 2.2;
     $('#bt-name').innerHTML = `${B.E.rank !== '基本' ? `<em class="rank ${B.E.rank === '頭目' ? 'boss' : 'elite'}">${B.E.rank}</em>` : ''}${B.E.name}`;
-    $('#bt-behavior').textContent = B.E.data.behavior;
+    $('#bt-name').dataset.tip = `${B.E.name}：${B.E.data.behavior}`;
     $('#log').textContent = '';
     this.battleRefresh(B);
     UI.log(B.E.rank === '頭目' ? `頭目「${B.E.name}」擋住了去路！` : `${B.E.name}出現了！`);
@@ -742,19 +836,19 @@ const UI = {
     $('#bt-hp').style.width = (100 * E.hp / E.maxHp) + '%';
     $('#bt-hptext').textContent = `${E.hp} / ${E.maxHp}`;
     const tags = [];
-    const bd = BODY[E.body], tm = typeMul();
-    tags.push(chip(E.body, 'body', `${E.body}：${bd.desc}。斬擊 ×${bd.slash.toFixed(1)}、魔法 ×${bd.magic.toFixed(1)}、持續 ×${bd.dot.toFixed(1)}。你目前是${DMG_NAMES[hitType()]}傷害 ×${tm.toFixed(2)}${B.enchant ? '（附魔）' : ''}`));
-    if (stHas(E, 'broken')) tags.push(chip('破防中', 'bad', '跳過下一次行動，受到的傷害 ×1.5'));
-    else tags.push(chip(`破防 ${E.breakV}/${E.breakMax}`, tm > 1 ? 'warn' : '', `用牠弱點的傷害類型攻擊，每次行動削減 1 點；歸零時破防：跳過下一次行動、受到傷害 ×1.5，之後恢復。${tm > 1 ? '你現在打的是弱點！' : '你現在打的不是弱點。'}`));
-    const dot = (u, k, n) => { const s = stGet(u, k); if (s) tags.push(chip(n, 'bad', `每回合開始受到 ${Math.max(1, Math.round(s.v * BODY[E.body].dot))} 傷害，剩 ${s.turns} 回合`)); };
-    dot(E, 'poison', E.venom ? `中毒 ×${E.venom}` : '中毒'); dot(E, 'burn', '灼燒');
-    if (stHas(E, 'freeze')) tags.push(chip('凍結', 'bad', '跳過下一次行動'));
-    if (stHas(E, 'slow')) tags.push(chip('減速', 'bad', '速度 −50%，到牠下一次行動結束'));
-    if (stHas(E, 'cursed')) tags.push(chip('詛咒', 'bad', `攻擊、防禦下降（剩 ${stGet(E, 'cursed').turns} 回合）`));
-    if (stHas(E, 'shield')) tags.push(chip('護盾', 'good', `可吸收 ${Math.round(stGet(E, 'shield').v)} 傷害`));
-    if (stSum(E, 'atkMod') < 0) tags.push(chip('攻擊↓', 'bad', `攻擊 ${pct(stSum(E, 'atkMod'))}`));
-    if (stSum(E, 'defMod') < 0) tags.push(chip('防禦↓', 'bad', `防禦 ${pct(stSum(E, 'defMod'))}`));
-    if (E.enraged) tags.push(chip('狂暴', 'good', `攻擊 +${Math.round(E.enraged * 100)}%`));
+    const tm = typeMul();
+    tags.push(chip(E.body, 'body', bodyTip(E.body)));
+    if (stHas(E, 'broken')) tags.push(chip('破防中', 'bad', TIPS.broken));
+    else tags.push(chip(`破防 ${E.breakV}/${E.breakMax}`, tm > 1 ? 'warn' : '', `破防值：用牠弱點的傷害類型攻擊會削減，歸零時破防（跳過行動、受到更多傷害）。${tm > 1 ? '你現在打的是弱點！' : '你現在打的不是弱點。'}`));
+    if (stHas(E, 'poison')) tags.push(chip(E.venom ? `中毒 ×${E.venom}` : '中毒', 'bad', TIPS.poison));
+    if (stHas(E, 'burn')) tags.push(chip('灼燒', 'bad', TIPS.burn));
+    if (stHas(E, 'freeze')) tags.push(chip('凍結', 'bad', TIPS.freeze));
+    if (stHas(E, 'slow')) tags.push(chip('減速', 'bad', TIPS.slow));
+    if (stHas(E, 'cursed')) tags.push(chip('詛咒', 'bad', TIPS.cursed));
+    if (stHas(E, 'shield')) tags.push(chip('護盾', 'good', TIPS.shield));
+    if (stSum(E, 'atkMod') < 0) tags.push(chip('攻擊↓', 'bad', TIPS.atkDown));
+    if (stSum(E, 'defMod') < 0) tags.push(chip('防禦↓', 'bad', TIPS.defDown));
+    if (E.enraged) tags.push(chip('狂暴', 'good', TIPS.enraged));
     $('#bt-status').innerHTML = tags.join('');
     const ii = intentInfo();
     const ie = $('#bt-intent'); ie.hidden = !ii;
@@ -765,33 +859,25 @@ const UI = {
     $('#hp-fill').style.width = (100 * P.hp / P.maxHp) + '%';
     $('#hp-text').textContent = `${Math.round(P.hp)} / ${P.maxHp}`;
     const pt = [];
-    const has = k => stHas(P, k), gs = k => stGet(P, k);
-    if (P.combo) pt.push(chip(`連擊 ${P.combo}`, 'combo', `連續命中的攻擊次數。每次 +6% 傷害（目前 +${Math.min(P.combo, 10) * 6}%，最多 +60%）。被攻擊命中就會中斷；中毒、灼燒不算。`));
-    for (const [k, n] of [['poison', '中毒'], ['burn', '灼燒']]) if (has(k)) pt.push(chip(n, 'bad', `每回合開始受到 ${Math.max(1, Math.round(gs(k).v))} 傷害，剩 ${gs(k).turns} 回合`));
-    if (has('slow')) pt.push(chip('減速', 'bad', '速度 −50%，到你下一次行動結束'));
-    if (has('freeze')) pt.push(chip('凍結', 'bad', '跳過下一次行動'));
-    if (has('guard')) pt.push(chip(hasAcc('城塞之心') ? '架盾' : '防禦中', 'good', `到你下一次行動前，受到的傷害 ${hasAcc('城塞之心') ? '−75%' : '−50%'}`));
-    if (has('shield')) pt.push(chip('護盾', 'good', `可吸收 ${Math.round(gs('shield').v)} 傷害`));
-    if (has('parry')) pt.push(chip('格擋', 'good', '擋下敵人下一次攻擊，並反擊敵人攻擊 ×2.0'));
-    if (has('smoke')) pt.push(chip('煙幕', 'good', '敵人下一次攻擊必定落空；你下一擊必定爆擊'));
-    if (has('mikiri')) pt.push(chip('見切', 'good', `閃避 +30%，閃避成功時反擊（剩 ${gs('mikiri').turns} 回合）`));
-    if (has('rage')) pt.push(chip('狂怒', 'good', `攻擊 +50%、防禦 −30%（剩 ${gs('rage').turns} 回合）`));
-    if (has('mikiriStance')) pt.push(chip('見切架式', 'good', '下一次攻擊必定閃開並反擊 ×1.2'));
-    if (has('aim')) pt.push(chip('瞄準', 'good', '下一次瞄準射擊傷害 ×2 且必定爆擊'));
-    if (has('mirror')) pt.push(chip('鏡盾', 'good', '下一次受到的攻擊完全反彈給敵人'));
-    if (has('potRage')) pt.push(chip('狂暴藥', 'good', '本場戰鬥攻擊 +50%，受到的傷害 +30%'));
-    if (has('unyield')) pt.push(chip('不屈', 'good', `這段期間受到的傷害延後承受（已累積 ${Math.round(P.delayPool)}）`));
-    else if (P.delayPool > 0) pt.push(chip(`延遲傷害 ${Math.round(P.delayPool)}`, 'bad', '不屈期間延後的傷害，之後每回合扣一部分（最低留 1 點）'));
-    if (B.enchant) pt.push(chip(`附魔・${DMG_NAMES[B.enchant]}`, 'good', B.enchant === 'dot' ? '每次攻擊讓敵人中毒' : `攻擊改為${DMG_NAMES[B.enchant]}傷害（效果為本職的 75%）`));
-    if (B.lucky) pt.push(chip('幸運金幣', 'good', '獲勝時掉落階級 +1、金幣 ×2'));
-    const acc = [[P.judge, `審判 ×${P.judge}`, '下一次技能每層傷害 +20%'], [P.pact, `血契 ×${P.pact}`, '下一次技能每層傷害 +5%'], [P.volt, `電荷 ×${P.volt}`, '滿 3 層時下一次攻擊追加落雷'],
-      [P.qi, `氣 ×${P.qi}`, '氣功護體每層氣多持續 1 回合'], [P.bulwark > 0, `架盾力量 ${Math.round(P.bulwark)}`, '下一次攻擊追加這些傷害'], [P.debt > 0, `血債 ${Math.round(P.debt)}`, '之後的攻擊回復造成傷害的 50%，最多回復到這個量'],
-      [P.iai, '拔刀', '下一次攻擊必定爆擊且傷害 ×1.5'], [P.shout, '怒吼', '下一次攻擊必定爆擊並吸取 30%'], [P.holyMark, '審判印記', '下一次攻擊傷害 ×1.5 並無視護盾'], [P.chain > 0 && hasAcc('雙刃徽章'), `連斬 ${P.chain}`, '連續普通攻擊：第 2 次 +1 斬，第 3 次起 +2 斬']];
-    for (const [on, t, d] of acc) if (on) pt.push(chip(t, 'good', d));
-    if (stSum(P, 'atkMod')) pt.push(chip(stSum(P, 'atkMod') > 0 ? '攻擊↑' : '攻擊↓', stSum(P, 'atkMod') > 0 ? 'good' : 'bad', `攻擊 ${pct(stSum(P, 'atkMod'))}`));
-    if (stSum(P, 'defMod')) pt.push(chip(stSum(P, 'defMod') > 0 ? '防禦↑' : '防禦↓', stSum(P, 'defMod') > 0 ? 'good' : 'bad', `防禦 ${pct(stSum(P, 'defMod'))}`));
-    if (stSum(P, 'evaMod')) pt.push(chip('閃避↑', 'good', `閃避 +${Math.round(stSum(P, 'evaMod'))}%`));
-    if (G.phoenix) pt.push(chip('不死鳥之羽', 'good', '倒下時自動以最大生命 30% 復活一次'));
+    const has = k => stHas(P, k);
+    if (P.combo) pt.push(chip(`連擊 ${P.combo}`, 'combo', TIPS.combo));
+    if (has('poison')) pt.push(chip('中毒', 'bad', TIPS.poison));
+    if (has('burn')) pt.push(chip('灼燒', 'bad', TIPS.burn));
+    if (has('slow')) pt.push(chip('減速', 'bad', TIPS.slow));
+    if (has('freeze')) pt.push(chip('凍結', 'bad', TIPS.freeze));
+    if (has('guard')) pt.push(hasAcc('城塞之心') ? chip('架盾', 'good', TIPS.bulwarkGuard) : chip('防禦中', 'good', TIPS.guard));
+    for (const [k, n] of [['shield', '護盾'], ['parry', '格擋'], ['smoke', '煙幕'], ['mikiri', '見切'], ['rage', '狂怒'], ['mikiriStance', '見切架式'], ['aim', '瞄準'], ['mirror', '鏡盾'], ['potRage', '狂暴藥'], ['unyield', '不屈']])
+      if (has(k)) pt.push(chip(n, 'good', TIPS[k]));
+    if (!has('unyield') && P.delayPool > 0) pt.push(chip('延遲傷害', 'bad', TIPS.delay));
+    if (B.enchant) pt.push(chip(`附魔・${DMG_NAMES[B.enchant]}`, 'good', B.enchant === 'dot' ? '附魔：每次攻擊讓敵人中毒。' : `附魔：攻擊改為${DMG_NAMES[B.enchant]}傷害（效果比本職稍弱）。`));
+    if (B.lucky) pt.push(chip('幸運金幣', 'good', TIPS.lucky));
+    const acc = [[P.judge, `審判 ×${P.judge}`, 'judge'], [P.pact, `血契 ×${P.pact}`, 'pact'], [P.volt, `電荷 ×${P.volt}`, 'volt'], [P.qi, `氣 ×${P.qi}`, 'qi'],
+      [P.bulwark > 0, '架盾力量', 'bulwark'], [P.debt > 0, '血債', 'debt'], [P.iai, '拔刀', 'iai'], [P.shout, '怒吼', 'shout'], [P.holyMark, '審判印記', 'holyMark'], [P.chain > 0 && hasAcc('雙刃徽章'), `連斬 ${P.chain}`, 'chain']];
+    for (const [on, t, k] of acc) if (on) pt.push(chip(t, 'good', TIPS[k]));
+    if (stSum(P, 'atkMod')) pt.push(chip(stSum(P, 'atkMod') > 0 ? '攻擊↑' : '攻擊↓', stSum(P, 'atkMod') > 0 ? 'good' : 'bad', stSum(P, 'atkMod') > 0 ? TIPS.atkUp : TIPS.atkDown));
+    if (stSum(P, 'defMod')) pt.push(chip(stSum(P, 'defMod') > 0 ? '防禦↑' : '防禦↓', stSum(P, 'defMod') > 0 ? 'good' : 'bad', stSum(P, 'defMod') > 0 ? TIPS.defUp : TIPS.defDown));
+    if (stSum(P, 'evaMod')) pt.push(chip('閃避↑', 'good', TIPS.evaUp));
+    if (G.phoenix) pt.push(chip('不死鳥之羽', 'good', TIPS.phoenix));
     $('#hud-status').innerHTML = pt.join('');
     // 技能按鈕
     const n = unlockedSkills(G.floor);
@@ -881,8 +967,8 @@ function boot() {
     if (started) return; started = true;
     if (ATLAS.naturalWidth) { AW = ATLAS.naturalWidth; AH = ATLAS.naturalHeight; }
     document.documentElement.style.setProperty('--atlas', `url("${ATLAS.src}")`);
-    view = $('#view'); view.width = VIEW_W; view.height = VIEW_H;
-    vctx = view.getContext('2d'); vctx.imageSmoothingEnabled = false; vimg = vctx.createImageData(VIEW_W, VIEW_H);
+    view = $('#view'); vctx = view.getContext('2d'); fitView();
+    addEventListener('resize', fitView);
     initTitle(); initInput(); initTips(); show('scr-title'); loop();
   };
   ATLAS = new Image();

@@ -805,6 +805,7 @@ async function eHit(mult, o = {}) {
     if (stHas(P, 'mikiri')) await pHit(0.8, {skill: true, sure: true});
     return r;
   }
+  P.combo = 0;   // 被攻擊命中（含防禦中）就中斷連擊；閃避、格擋、鏡盾、見切不算
   let d = applyTakenMods(P, r.dmg);
   const big = o.heavy || o.special;
   if (big && stHas(P, 'guard') && hasAcc('守誓者之盾') && P.oathBlocks < 2) { P.oathBlocks++; d = 0; UI.float(P, '完全擋下', 'status'); UI.log(`守誓之盾擋下了這一擊（剩 ${2 - P.oathBlocks} 次）`); }
@@ -818,7 +819,6 @@ async function eHit(mult, o = {}) {
   }
   P.hp = Math.max(0, P.hp - d);
   if (d > 0) {
-    P.combo = 0;
     if (hasAcc('血牙項鍊')) P.debt += d;
     if (hasAcc('審判之槍穗')) P.judge = Math.min(5, P.judge + 1);
     if (big && hasAcc('老兵勳章')) { P.nextBoost *= 1 + 1 * accScale(); UI.log('老兵的反擊時機到了！'); }

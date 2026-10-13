@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.DisplayCutout;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.webkit.WebSettings;
@@ -32,7 +34,24 @@ public class MainActivity extends Activity {
         s.setAllowUniversalAccessFromFileURLs(true);
         web.setWebViewClient(new WebViewClient());
         web.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        setContentView(web);
+        // 外層容器：依前鏡頭（瀏海、挖孔）與狀態列預留上方空間，避免畫面被鏡頭擋住
+        FrameLayout root = new FrameLayout(this);
+        root.setBackgroundColor(Color.parseColor("#0b0910"));
+        root.addView(web, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        root.setOnApplyWindowInsetsListener((v, insets) -> {
+            int l = 0, t = 0, r = 0, b = 0;
+            if (android.os.Build.VERSION.SDK_INT >= 30) {
+                android.graphics.Insets cut = insets.getInsetsIgnoringVisibility(WindowInsets.Type.displayCutout() | WindowInsets.Type.statusBars());
+                android.graphics.Insets nav = insets.getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars());
+                l = cut.left; t = cut.top; r = cut.right; b = Math.max(cut.bottom, nav.bottom / 2);
+            } else if (android.os.Build.VERSION.SDK_INT >= 28) {
+                DisplayCutout c = insets.getDisplayCutout();
+                if (c != null) { l = c.getSafeInsetLeft(); t = c.getSafeInsetTop(); r = c.getSafeInsetRight(); b = c.getSafeInsetBottom(); }
+            }
+            v.setPadding(l, t, r, b);
+            return insets;
+        });
+        setContentView(root);
         web.loadUrl("file:///android_asset/index.html");
         hideSystemBars();
     }

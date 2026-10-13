@@ -55,18 +55,18 @@
 
   <!-- 遊戲 -->
   <section id="scr-game" class="screen" hidden data-mode="explore">
-    <header class="hud">
-      <div class="hud-row">
+    <header class="hud frame">
+      <div class="hud-top">
         <div class="hud-floor"><b id="hud-floor">地下 1 層</b><span id="hud-region">幽暗森林</span></div>
-        <div id="hud-steps" class="steps" aria-label="本層進度"></div>
         <div class="hud-gold"><i class="coin"></i><b id="hud-gold">0</b></div>
+        <nav class="hud-menu" aria-label="選單">
+          <button id="btn-equip" class="mbtn" aria-label="裝備"><i class="mi mi-equip"></i><span>裝備</span></button>
+          <button id="btn-inv" class="mbtn" aria-label="道具"><i class="mi mi-inv"></i><span>道具</span></button>
+          <button id="btn-set" class="mbtn" aria-label="設定"><i class="mi mi-set"></i><span>設定</span></button>
+        </nav>
       </div>
-      <div class="hud-row">
-        <div class="hp"><div id="hp-fill" class="hp-fill"></div><span id="hp-text">0 / 0</span></div>
-        <button id="btn-equip" class="btn small">裝備</button>
-        <button id="btn-inv" class="btn small">道具</button>
-        <button id="btn-set" class="btn small" aria-label="設定">設定</button>
-      </div>
+      <div id="hud-steps" class="steps" aria-label="本層進度"></div>
+      <div class="hp"><i class="hp-label">HP</i><div class="hp-track"><div id="hp-fill" class="hp-fill"></div></div><span id="hp-text">0 / 0</span></div>
       <div id="hud-status" class="hud-status"></div>
     </header>
 
@@ -76,35 +76,33 @@
         <div class="bt-head"><span id="bt-name"></span><span id="bt-hptext" class="num"></span></div>
         <div class="bt-bar"><div id="bt-hp"></div></div>
         <div id="bt-status" class="bt-status"></div>
-        <p id="bt-intent" class="bt-intent" aria-live="polite"></p>
-        <p id="bt-behavior" class="bt-behavior"></p>
       </div>
+      <p id="bt-intent" class="bt-intent" aria-live="polite" hidden></p>
+      <p id="log" class="log" aria-live="polite"></p>
       <div id="floats" class="floats"></div>
       <div id="skill-banner" class="skill-banner" hidden></div>
     </div>
 
-    <p id="log" class="log" aria-live="polite"></p>
-
     <div id="ctrl-explore" class="ctrl">
-      <p class="ctrl-hint">往上、左、右滑動畫面選路，或按下方按鈕</p>
+      <p class="ctrl-hint">滑動畫面或按下方按鈕選路</p>
       <div class="dirs">
-        <button id="btn-l" class="dir" aria-label="左轉">◀<span>左</span></button>
-        <button id="btn-f" class="dir" aria-label="前進">▲<span>前</span></button>
-        <button id="btn-r" class="dir" aria-label="右轉">▶<span>右</span></button>
+        <button id="btn-l" class="dir" aria-label="左轉"><i class="arrow l"></i><span>左轉</span></button>
+        <button id="btn-f" class="dir" aria-label="前進"><i class="arrow f"></i><span>前進</span></button>
+        <button id="btn-r" class="dir" aria-label="右轉"><i class="arrow r"></i><span>右轉</span></button>
       </div>
     </div>
 
     <div id="ctrl-battle" class="ctrl" hidden>
-      <div class="order"><span>行動順序</span><div id="bt-order"></div></div>
+      <div class="order"><span>順序</span><div id="bt-order"></div></div>
       <div class="acts">
         <div class="act-row">
-          <button id="bt-attack" class="act attack">攻擊<small>點擊畫面也能攻擊</small></button>
-          <button id="bt-guard" class="act guard">防禦<small>傷害 −50%・冷卻 −1</small></button>
+          <button id="bt-attack" class="act attack">攻擊<small>點畫面也能攻擊</small></button>
+          <button id="bt-guard" class="act guard">防禦<small>減傷・冷卻 −1</small></button>
         </div>
         <div class="skills-row">
           <button class="sk-btn"></button><button class="sk-btn"></button><button class="sk-btn"></button>
         </div>
-        <button id="bt-item" class="act item">道具</button>
+        <button id="bt-item" class="act item"><i class="mi mi-inv"></i>道具<small>不消耗回合</small></button>
       </div>
     </div>
   </section>
