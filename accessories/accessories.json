@@ -81,7 +81,7 @@
    "atk": 5
   },
   "main_stat": "spd",
-  "affix": "戰鬥第一回合傷害 ×1.5；聖騎衝鋒 CD −1"
+  "affix": "戰鬥第一回合傷害 ×1.5；聖騎衝鋒 CD −2"
  },
  {
   "class_id": "knight",
@@ -338,7 +338,7 @@
    "crit": 3
   },
   "main_stat": "atk",
-  "affix": "女神審判 CD −2；生命全滿時傷害 ×1.2"
+  "affix": "女神審判 CD −3；生命全滿時傷害 ×1.2"
  },
  {
   "class_id": "cleric",

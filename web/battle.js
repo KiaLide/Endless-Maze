@@ -376,8 +376,8 @@ async function useSkill(i) {
   const sk = SKILLS[G.cls][i];
   let cd = sk.cd;
   if (B.skillHalf) cd = Math.ceil(cd / 2);
-  if (G.cls === 'knight' && i === 2 && hasAcc('騎兵號角')) cd -= 1;
-  if (G.cls === 'cleric' && i === 2 && hasAcc('審判天秤')) cd -= 2;
+  if (G.cls === 'knight' && i === 2 && hasAcc('騎兵號角')) cd -= 2;
+  if (G.cls === 'cleric' && i === 2 && hasAcc('審判天秤')) cd -= 3;
   P.cds[i] = Math.max(1, cd);
   if (hasAcc('賢者之石')) P.cds.forEach((v, j) => { if (j !== i && v > 0) P.cds[j]--; });
   const s = G.weapon.cls === G.cls ? 1 : 0.75;   // 非本職武器：效果 ×0.75
