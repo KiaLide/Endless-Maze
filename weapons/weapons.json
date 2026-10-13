@@ -8,7 +8,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 5,
+   "atk": 4,
    "def": 1
   },
   "icon": "icons/swordsman/01.png"
@@ -22,7 +22,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 6,
+   "atk": 4,
    "def": 1
   },
   "icon": "icons/swordsman/02.png"
@@ -36,7 +36,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 7,
+   "atk": 5,
    "def": 1
   },
   "icon": "icons/swordsman/03.png"
@@ -50,7 +50,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 8,
+   "atk": 6,
    "def": 2
   },
   "icon": "icons/swordsman/04.png"
@@ -64,7 +64,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 10,
+   "atk": 7,
    "def": 2
   },
   "icon": "icons/swordsman/05.png"
@@ -78,7 +78,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 11,
+   "atk": 8,
    "def": 2
   },
   "icon": "icons/swordsman/06.png"
@@ -92,7 +92,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 13,
+   "atk": 9,
    "def": 3
   },
   "icon": "icons/swordsman/07.png"
@@ -106,7 +106,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 16,
+   "atk": 11,
    "def": 3
   },
   "icon": "icons/swordsman/08.png"
@@ -120,7 +120,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 19,
+   "atk": 13,
    "def": 4
   },
   "icon": "icons/swordsman/09.png"
@@ -134,7 +134,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 22,
+   "atk": 16,
    "def": 4
   },
   "icon": "icons/swordsman/10.png"
@@ -148,7 +148,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 26,
+   "atk": 18,
    "def": 5
   },
   "icon": "icons/swordsman/11.png"
@@ -162,7 +162,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 31,
+   "atk": 22,
    "def": 6
   },
   "icon": "icons/swordsman/12.png"
@@ -176,7 +176,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 36,
+   "atk": 26,
    "def": 7
   },
   "icon": "icons/swordsman/13.png"
@@ -190,7 +190,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 43,
+   "atk": 30,
    "def": 8
   },
   "icon": "icons/swordsman/14.png"
@@ -204,7 +204,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 51,
+   "atk": 36,
    "def": 9
   },
   "icon": "icons/swordsman/15.png"
@@ -218,7 +218,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 60,
+   "atk": 42,
    "def": 11
   },
   "icon": "icons/swordsman/16.png"
@@ -232,7 +232,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 71,
+   "atk": 49,
    "def": 12
   },
   "icon": "icons/swordsman/17.png"
@@ -246,7 +246,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 83,
+   "atk": 58,
    "def": 14
   },
   "icon": "icons/swordsman/18.png"
@@ -260,7 +260,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 98,
+   "atk": 69,
    "def": 17
   },
   "icon": "icons/swordsman/19.png"
@@ -274,7 +274,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 116,
+   "atk": 81,
    "def": 20
   },
   "icon": "icons/swordsman/20.png"
@@ -288,7 +288,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 5,
+   "atk": 4,
    "hp": 5
   },
   "icon": "icons/knight/01.png"
@@ -302,7 +302,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 6,
+   "atk": 4,
    "hp": 6
   },
   "icon": "icons/knight/02.png"
@@ -316,7 +316,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 7,
+   "atk": 5,
    "hp": 7
   },
   "icon": "icons/knight/03.png"
@@ -330,7 +330,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 8,
+   "atk": 6,
    "hp": 8
   },
   "icon": "icons/knight/04.png"
@@ -344,7 +344,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 10,
+   "atk": 7,
    "hp": 9
   },
   "icon": "icons/knight/05.png"
@@ -358,7 +358,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 11,
+   "atk": 8,
    "hp": 11
   },
   "icon": "icons/knight/06.png"
@@ -372,7 +372,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 13,
+   "atk": 9,
    "hp": 13
   },
   "icon": "icons/knight/07.png"
@@ -386,7 +386,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 16,
+   "atk": 11,
    "hp": 15
   },
   "icon": "icons/knight/08.png"
@@ -400,7 +400,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 19,
+   "atk": 13,
    "hp": 18
   },
   "icon": "icons/knight/09.png"
@@ -414,7 +414,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 22,
+   "atk": 16,
    "hp": 21
   },
   "icon": "icons/knight/10.png"
@@ -428,7 +428,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 26,
+   "atk": 18,
    "hp": 24
   },
   "icon": "icons/knight/11.png"
@@ -442,7 +442,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 31,
+   "atk": 22,
    "hp": 28
   },
   "icon": "icons/knight/12.png"
@@ -456,7 +456,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 36,
+   "atk": 26,
    "hp": 33
   },
   "icon": "icons/knight/13.png"
@@ -470,7 +470,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 43,
+   "atk": 30,
    "hp": 38
   },
   "icon": "icons/knight/14.png"
@@ -484,7 +484,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 51,
+   "atk": 36,
    "hp": 45
   },
   "icon": "icons/knight/15.png"
@@ -498,7 +498,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 60,
+   "atk": 42,
    "hp": 53
   },
   "icon": "icons/knight/16.png"
@@ -512,7 +512,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 71,
+   "atk": 49,
    "hp": 62
   },
   "icon": "icons/knight/17.png"
@@ -526,7 +526,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 83,
+   "atk": 58,
    "hp": 72
   },
   "icon": "icons/knight/18.png"
@@ -540,7 +540,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 98,
+   "atk": 69,
    "hp": 84
   },
   "icon": "icons/knight/19.png"
@@ -554,7 +554,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 116,
+   "atk": 81,
    "hp": 99
   },
   "icon": "icons/knight/20.png"
@@ -568,7 +568,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 5,
+   "atk": 4,
    "crit": 0.5
   },
   "icon": "icons/rogue/01.png"
@@ -582,7 +582,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 6,
+   "atk": 4,
    "crit": 1.0
   },
   "icon": "icons/rogue/02.png"
@@ -596,7 +596,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 7,
+   "atk": 5,
    "crit": 1.5
   },
   "icon": "icons/rogue/03.png"
@@ -610,7 +610,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 8,
+   "atk": 6,
    "crit": 2.0
   },
   "icon": "icons/rogue/04.png"
@@ -624,7 +624,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 10,
+   "atk": 7,
    "crit": 2.5
   },
   "icon": "icons/rogue/05.png"
@@ -638,7 +638,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 11,
+   "atk": 8,
    "crit": 3.0
   },
   "icon": "icons/rogue/06.png"
@@ -652,7 +652,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 13,
+   "atk": 9,
    "crit": 3.5
   },
   "icon": "icons/rogue/07.png"
@@ -666,7 +666,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 16,
+   "atk": 11,
    "crit": 4.0
   },
   "icon": "icons/rogue/08.png"
@@ -680,7 +680,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 19,
+   "atk": 13,
    "crit": 4.5
   },
   "icon": "icons/rogue/09.png"
@@ -694,7 +694,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 22,
+   "atk": 16,
    "crit": 5.0
   },
   "icon": "icons/rogue/10.png"
@@ -708,7 +708,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 26,
+   "atk": 18,
    "crit": 5.5
   },
   "icon": "icons/rogue/11.png"
@@ -722,7 +722,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 31,
+   "atk": 22,
    "crit": 6.0
   },
   "icon": "icons/rogue/12.png"
@@ -736,7 +736,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 36,
+   "atk": 26,
    "crit": 6.5
   },
   "icon": "icons/rogue/13.png"
@@ -750,7 +750,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 43,
+   "atk": 30,
    "crit": 7.0
   },
   "icon": "icons/rogue/14.png"
@@ -764,7 +764,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 51,
+   "atk": 36,
    "crit": 7.5
   },
   "icon": "icons/rogue/15.png"
@@ -778,7 +778,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 60,
+   "atk": 42,
    "crit": 8.0
   },
   "icon": "icons/rogue/16.png"
@@ -792,7 +792,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 71,
+   "atk": 49,
    "crit": 8.5
   },
   "icon": "icons/rogue/17.png"
@@ -806,7 +806,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 83,
+   "atk": 58,
    "crit": 9.0
   },
   "icon": "icons/rogue/18.png"
@@ -820,7 +820,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 98,
+   "atk": 69,
    "crit": 9.5
   },
   "icon": "icons/rogue/19.png"
@@ -834,7 +834,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 116,
+   "atk": 81,
    "crit": 10.0
   },
   "icon": "icons/rogue/20.png"
@@ -848,7 +848,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 6
+   "atk": 4
   },
   "icon": "icons/wizard/01.png"
  },
@@ -861,7 +861,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 7
+   "atk": 5
   },
   "icon": "icons/wizard/02.png"
  },
@@ -874,7 +874,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 8
+   "atk": 6
   },
   "icon": "icons/wizard/03.png"
  },
@@ -887,7 +887,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 9
+   "atk": 7
   },
   "icon": "icons/wizard/04.png"
  },
@@ -900,7 +900,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 11
+   "atk": 8
   },
   "icon": "icons/wizard/05.png"
  },
@@ -913,7 +913,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 13
+   "atk": 9
   },
   "icon": "icons/wizard/06.png"
  },
@@ -926,7 +926,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 16
+   "atk": 11
   },
   "icon": "icons/wizard/07.png"
  },
@@ -939,7 +939,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 18
+   "atk": 13
   },
   "icon": "icons/wizard/08.png"
  },
@@ -952,7 +952,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 22
+   "atk": 15
   },
   "icon": "icons/wizard/09.png"
  },
@@ -965,7 +965,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 26
+   "atk": 18
   },
   "icon": "icons/wizard/10.png"
  },
@@ -978,7 +978,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 30
+   "atk": 21
   },
   "icon": "icons/wizard/11.png"
  },
@@ -991,7 +991,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 36
+   "atk": 25
   },
   "icon": "icons/wizard/12.png"
  },
@@ -1004,7 +1004,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 42
+   "atk": 29
   },
   "icon": "icons/wizard/13.png"
  },
@@ -1017,7 +1017,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 49
+   "atk": 35
   },
   "icon": "icons/wizard/14.png"
  },
@@ -1030,7 +1030,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 58
+   "atk": 41
   },
   "icon": "icons/wizard/15.png"
  },
@@ -1043,7 +1043,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 69
+   "atk": 48
   },
   "icon": "icons/wizard/16.png"
  },
@@ -1056,7 +1056,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 81
+   "atk": 57
   },
   "icon": "icons/wizard/17.png"
  },
@@ -1069,7 +1069,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 96
+   "atk": 67
   },
   "icon": "icons/wizard/18.png"
  },
@@ -1082,7 +1082,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 113
+   "atk": 79
   },
   "icon": "icons/wizard/19.png"
  },
@@ -1095,7 +1095,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 133
+   "atk": 93
   },
   "icon": "icons/wizard/20.png"
  },
@@ -1108,7 +1108,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 6
+   "atk": 4
   },
   "icon": "icons/berserker/01.png"
  },
@@ -1121,7 +1121,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 7
+   "atk": 5
   },
   "icon": "icons/berserker/02.png"
  },
@@ -1134,7 +1134,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 8
+   "atk": 6
   },
   "icon": "icons/berserker/03.png"
  },
@@ -1147,7 +1147,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 10
+   "atk": 7
   },
   "icon": "icons/berserker/04.png"
  },
@@ -1160,7 +1160,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 12
+   "atk": 8
   },
   "icon": "icons/berserker/05.png"
  },
@@ -1173,7 +1173,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 14
+   "atk": 10
   },
   "icon": "icons/berserker/06.png"
  },
@@ -1186,7 +1186,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 16
+   "atk": 11
   },
   "icon": "icons/berserker/07.png"
  },
@@ -1199,7 +1199,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 19
+   "atk": 13
   },
   "icon": "icons/berserker/08.png"
  },
@@ -1212,7 +1212,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 23
+   "atk": 16
   },
   "icon": "icons/berserker/09.png"
  },
@@ -1225,7 +1225,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 27
+   "atk": 19
   },
   "icon": "icons/berserker/10.png"
  },
@@ -1238,7 +1238,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 31
+   "atk": 22
   },
   "icon": "icons/berserker/11.png"
  },
@@ -1251,7 +1251,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 37
+   "atk": 26
   },
   "icon": "icons/berserker/12.png"
  },
@@ -1264,7 +1264,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 44
+   "atk": 31
   },
   "icon": "icons/berserker/13.png"
  },
@@ -1277,7 +1277,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 52
+   "atk": 36
   },
   "icon": "icons/berserker/14.png"
  },
@@ -1290,7 +1290,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 61
+   "atk": 43
   },
   "icon": "icons/berserker/15.png"
  },
@@ -1303,7 +1303,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 72
+   "atk": 50
   },
   "icon": "icons/berserker/16.png"
  },
@@ -1316,7 +1316,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 85
+   "atk": 59
   },
   "icon": "icons/berserker/17.png"
  },
@@ -1329,7 +1329,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 100
+   "atk": 70
   },
   "icon": "icons/berserker/18.png"
  },
@@ -1342,7 +1342,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 118
+   "atk": 83
   },
   "icon": "icons/berserker/19.png"
  },
@@ -1355,7 +1355,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 139
+   "atk": 98
   },
   "icon": "icons/berserker/20.png"
  },
@@ -1368,7 +1368,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 5,
+   "atk": 4,
    "spd": 1
   },
   "icon": "icons/fencer/01.png"
@@ -1382,7 +1382,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 6,
+   "atk": 4,
    "spd": 1
   },
   "icon": "icons/fencer/02.png"
@@ -1396,7 +1396,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 7,
+   "atk": 5,
    "spd": 2
   },
   "icon": "icons/fencer/03.png"
@@ -1410,7 +1410,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 8,
+   "atk": 6,
    "spd": 2
   },
   "icon": "icons/fencer/04.png"
@@ -1424,7 +1424,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 10,
+   "atk": 7,
    "spd": 3
   },
   "icon": "icons/fencer/05.png"
@@ -1438,7 +1438,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 11,
+   "atk": 8,
    "spd": 3
   },
   "icon": "icons/fencer/06.png"
@@ -1452,7 +1452,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 13,
+   "atk": 9,
    "spd": 4
   },
   "icon": "icons/fencer/07.png"
@@ -1466,7 +1466,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 16,
+   "atk": 11,
    "spd": 4
   },
   "icon": "icons/fencer/08.png"
@@ -1480,7 +1480,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 19,
+   "atk": 13,
    "spd": 5
   },
   "icon": "icons/fencer/09.png"
@@ -1494,7 +1494,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 22,
+   "atk": 16,
    "spd": 5
   },
   "icon": "icons/fencer/10.png"
@@ -1508,7 +1508,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 26,
+   "atk": 18,
    "spd": 6
   },
   "icon": "icons/fencer/11.png"
@@ -1522,7 +1522,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 31,
+   "atk": 22,
    "spd": 6
   },
   "icon": "icons/fencer/12.png"
@@ -1536,7 +1536,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 36,
+   "atk": 26,
    "spd": 7
   },
   "icon": "icons/fencer/13.png"
@@ -1550,7 +1550,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 43,
+   "atk": 30,
    "spd": 7
   },
   "icon": "icons/fencer/14.png"
@@ -1564,7 +1564,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 51,
+   "atk": 36,
    "spd": 8
   },
   "icon": "icons/fencer/15.png"
@@ -1578,7 +1578,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 60,
+   "atk": 42,
    "spd": 8
   },
   "icon": "icons/fencer/16.png"
@@ -1592,7 +1592,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 71,
+   "atk": 49,
    "spd": 9
   },
   "icon": "icons/fencer/17.png"
@@ -1606,7 +1606,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 83,
+   "atk": 58,
    "spd": 9
   },
   "icon": "icons/fencer/18.png"
@@ -1620,7 +1620,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 98,
+   "atk": 69,
    "spd": 10
   },
   "icon": "icons/fencer/19.png"
@@ -1634,7 +1634,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 116,
+   "atk": 81,
    "spd": 10
   },
   "icon": "icons/fencer/20.png"
@@ -1648,7 +1648,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 4,
+   "atk": 3,
    "hp": 5
   },
   "icon": "icons/cleric/01.png"
@@ -1662,7 +1662,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 5,
+   "atk": 4,
    "hp": 6
   },
   "icon": "icons/cleric/02.png"
@@ -1676,7 +1676,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 6,
+   "atk": 4,
    "hp": 7
   },
   "icon": "icons/cleric/03.png"
@@ -1690,7 +1690,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 7,
+   "atk": 5,
    "hp": 8
   },
   "icon": "icons/cleric/04.png"
@@ -1704,7 +1704,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 9,
+   "atk": 6,
    "hp": 9
   },
   "icon": "icons/cleric/05.png"
@@ -1718,7 +1718,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 10,
+   "atk": 7,
    "hp": 11
   },
   "icon": "icons/cleric/06.png"
@@ -1732,7 +1732,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 12,
+   "atk": 9,
    "hp": 13
   },
   "icon": "icons/cleric/07.png"
@@ -1746,7 +1746,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 14,
+   "atk": 10,
    "hp": 15
   },
   "icon": "icons/cleric/08.png"
@@ -1760,7 +1760,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 17,
+   "atk": 12,
    "hp": 18
   },
   "icon": "icons/cleric/09.png"
@@ -1774,7 +1774,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 20,
+   "atk": 14,
    "hp": 21
   },
   "icon": "icons/cleric/10.png"
@@ -1788,7 +1788,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 24,
+   "atk": 16,
    "hp": 24
   },
   "icon": "icons/cleric/11.png"
@@ -1802,7 +1802,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 28,
+   "atk": 19,
    "hp": 28
   },
   "icon": "icons/cleric/12.png"
@@ -1816,7 +1816,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 33,
+   "atk": 23,
    "hp": 33
   },
   "icon": "icons/cleric/13.png"
@@ -1830,7 +1830,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 39,
+   "atk": 27,
    "hp": 38
   },
   "icon": "icons/cleric/14.png"
@@ -1844,7 +1844,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 46,
+   "atk": 32,
    "hp": 45
   },
   "icon": "icons/cleric/15.png"
@@ -1858,7 +1858,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 54,
+   "atk": 38,
    "hp": 53
   },
   "icon": "icons/cleric/16.png"
@@ -1872,7 +1872,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 64,
+   "atk": 45,
    "hp": 62
   },
   "icon": "icons/cleric/17.png"
@@ -1886,7 +1886,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 75,
+   "atk": 53,
    "hp": 72
   },
   "icon": "icons/cleric/18.png"
@@ -1900,7 +1900,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 89,
+   "atk": 62,
    "hp": 84
   },
   "icon": "icons/cleric/19.png"
@@ -1914,7 +1914,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 104,
+   "atk": 73,
    "hp": 99
   },
   "icon": "icons/cleric/20.png"
@@ -1928,7 +1928,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 6,
+   "atk": 4,
    "eva": 0.5
   },
   "icon": "icons/witch/01.png"
@@ -1942,7 +1942,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 6,
+   "atk": 5,
    "eva": 1.0
   },
   "icon": "icons/witch/02.png"
@@ -1956,7 +1956,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 8,
+   "atk": 5,
    "eva": 1.5
   },
   "icon": "icons/witch/03.png"
@@ -1970,7 +1970,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 9,
+   "atk": 6,
    "eva": 2.0
   },
   "icon": "icons/witch/04.png"
@@ -1984,7 +1984,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 11,
+   "atk": 7,
    "eva": 2.5
   },
   "icon": "icons/witch/05.png"
@@ -1998,7 +1998,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 13,
+   "atk": 9,
    "eva": 3.0
   },
   "icon": "icons/witch/06.png"
@@ -2012,7 +2012,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 15,
+   "atk": 10,
    "eva": 3.5
   },
   "icon": "icons/witch/07.png"
@@ -2026,7 +2026,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 18,
+   "atk": 12,
    "eva": 4.0
   },
   "icon": "icons/witch/08.png"
@@ -2040,7 +2040,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 21,
+   "atk": 14,
    "eva": 4.5
   },
   "icon": "icons/witch/09.png"
@@ -2054,7 +2054,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 24,
+   "atk": 17,
    "eva": 5.0
   },
   "icon": "icons/witch/10.png"
@@ -2068,7 +2068,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 29,
+   "atk": 20,
    "eva": 5.5
   },
   "icon": "icons/witch/11.png"
@@ -2082,7 +2082,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 34,
+   "atk": 24,
    "eva": 6.0
   },
   "icon": "icons/witch/12.png"
@@ -2096,7 +2096,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 40,
+   "atk": 28,
    "eva": 6.5
   },
   "icon": "icons/witch/13.png"
@@ -2110,7 +2110,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 47,
+   "atk": 33,
    "eva": 7.0
   },
   "icon": "icons/witch/14.png"
@@ -2124,7 +2124,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 56,
+   "atk": 39,
    "eva": 7.5
   },
   "icon": "icons/witch/15.png"
@@ -2138,7 +2138,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 66,
+   "atk": 46,
    "eva": 8.0
   },
   "icon": "icons/witch/16.png"
@@ -2152,7 +2152,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 78,
+   "atk": 54,
    "eva": 8.5
   },
   "icon": "icons/witch/17.png"
@@ -2166,7 +2166,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 92,
+   "atk": 64,
    "eva": 9.0
   },
   "icon": "icons/witch/18.png"
@@ -2180,7 +2180,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 108,
+   "atk": 76,
    "eva": 9.5
   },
   "icon": "icons/witch/19.png"
@@ -2194,7 +2194,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 128,
+   "atk": 89,
    "eva": 10.0
   },
   "icon": "icons/witch/20.png"
@@ -2208,7 +2208,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 5,
+   "atk": 4,
    "crit": 0.5
   },
   "icon": "icons/ranger/01.png"
@@ -2222,7 +2222,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 6,
+   "atk": 4,
    "crit": 1.0
   },
   "icon": "icons/ranger/02.png"
@@ -2236,7 +2236,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 7,
+   "atk": 5,
    "crit": 1.5
   },
   "icon": "icons/ranger/03.png"
@@ -2250,7 +2250,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 8,
+   "atk": 6,
    "crit": 2.0
   },
   "icon": "icons/ranger/04.png"
@@ -2264,7 +2264,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 10,
+   "atk": 7,
    "crit": 2.5
   },
   "icon": "icons/ranger/05.png"
@@ -2278,7 +2278,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 11,
+   "atk": 8,
    "crit": 3.0
   },
   "icon": "icons/ranger/06.png"
@@ -2292,7 +2292,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 13,
+   "atk": 9,
    "crit": 3.5
   },
   "icon": "icons/ranger/07.png"
@@ -2306,7 +2306,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 16,
+   "atk": 11,
    "crit": 4.0
   },
   "icon": "icons/ranger/08.png"
@@ -2320,7 +2320,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 19,
+   "atk": 13,
    "crit": 4.5
   },
   "icon": "icons/ranger/09.png"
@@ -2334,7 +2334,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 22,
+   "atk": 16,
    "crit": 5.0
   },
   "icon": "icons/ranger/10.png"
@@ -2348,7 +2348,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 26,
+   "atk": 18,
    "crit": 5.5
   },
   "icon": "icons/ranger/11.png"
@@ -2362,7 +2362,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 31,
+   "atk": 22,
    "crit": 6.0
   },
   "icon": "icons/ranger/12.png"
@@ -2376,7 +2376,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 36,
+   "atk": 26,
    "crit": 6.5
   },
   "icon": "icons/ranger/13.png"
@@ -2390,7 +2390,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 43,
+   "atk": 30,
    "crit": 7.0
   },
   "icon": "icons/ranger/14.png"
@@ -2404,7 +2404,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 51,
+   "atk": 36,
    "crit": 7.5
   },
   "icon": "icons/ranger/15.png"
@@ -2418,7 +2418,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 60,
+   "atk": 42,
    "crit": 8.0
   },
   "icon": "icons/ranger/16.png"
@@ -2432,7 +2432,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 71,
+   "atk": 49,
    "crit": 8.5
   },
   "icon": "icons/ranger/17.png"
@@ -2446,7 +2446,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 83,
+   "atk": 58,
    "crit": 9.0
   },
   "icon": "icons/ranger/18.png"
@@ -2460,7 +2460,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 98,
+   "atk": 69,
    "crit": 9.5
   },
   "icon": "icons/ranger/19.png"
@@ -2474,7 +2474,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 116,
+   "atk": 81,
    "crit": 10.0
   },
   "icon": "icons/ranger/20.png"
@@ -2488,7 +2488,7 @@
   "material": "木",
   "rarity": "普通",
   "stats": {
-   "atk": 5,
+   "atk": 4,
    "eva": 0.5
   },
   "icon": "icons/monk/01.png"
@@ -2502,7 +2502,7 @@
   "material": "青銅",
   "rarity": "普通",
   "stats": {
-   "atk": 6,
+   "atk": 4,
    "eva": 1.0
   },
   "icon": "icons/monk/02.png"
@@ -2516,7 +2516,7 @@
   "material": "鐵",
   "rarity": "普通",
   "stats": {
-   "atk": 7,
+   "atk": 5,
    "eva": 1.5
   },
   "icon": "icons/monk/03.png"
@@ -2530,7 +2530,7 @@
   "material": "鋼",
   "rarity": "普通",
   "stats": {
-   "atk": 8,
+   "atk": 6,
    "eva": 2.0
   },
   "icon": "icons/monk/04.png"
@@ -2544,7 +2544,7 @@
   "material": "精鋼",
   "rarity": "優良",
   "stats": {
-   "atk": 10,
+   "atk": 7,
    "eva": 2.5
   },
   "icon": "icons/monk/05.png"
@@ -2558,7 +2558,7 @@
   "material": "白銀",
   "rarity": "優良",
   "stats": {
-   "atk": 11,
+   "atk": 8,
    "eva": 3.0
   },
   "icon": "icons/monk/06.png"
@@ -2572,7 +2572,7 @@
   "material": "王國",
   "rarity": "優良",
   "stats": {
-   "atk": 13,
+   "atk": 9,
    "eva": 3.5
   },
   "icon": "icons/monk/07.png"
@@ -2586,7 +2586,7 @@
   "material": "黑鐵",
   "rarity": "優良",
   "stats": {
-   "atk": 16,
+   "atk": 11,
    "eva": 4.0
   },
   "icon": "icons/monk/08.png"
@@ -2600,7 +2600,7 @@
   "material": "秘銀",
   "rarity": "稀有",
   "stats": {
-   "atk": 19,
+   "atk": 13,
    "eva": 4.5
   },
   "icon": "icons/monk/09.png"
@@ -2614,7 +2614,7 @@
   "material": "烈焰",
   "rarity": "稀有",
   "stats": {
-   "atk": 22,
+   "atk": 16,
    "eva": 5.0
   },
   "icon": "icons/monk/10.png"
@@ -2628,7 +2628,7 @@
   "material": "霜寒",
   "rarity": "稀有",
   "stats": {
-   "atk": 26,
+   "atk": 18,
    "eva": 5.5
   },
   "icon": "icons/monk/11.png"
@@ -2642,7 +2642,7 @@
   "material": "雷鳴",
   "rarity": "稀有",
   "stats": {
-   "atk": 31,
+   "atk": 22,
    "eva": 6.0
   },
   "icon": "icons/monk/12.png"
@@ -2656,7 +2656,7 @@
   "material": "翠玉",
   "rarity": "史詩",
   "stats": {
-   "atk": 36,
+   "atk": 26,
    "eva": 6.5
   },
   "icon": "icons/monk/13.png"
@@ -2670,7 +2670,7 @@
   "material": "黃金",
   "rarity": "史詩",
   "stats": {
-   "atk": 43,
+   "atk": 30,
    "eva": 7.0
   },
   "icon": "icons/monk/14.png"
@@ -2684,7 +2684,7 @@
   "material": "暗影",
   "rarity": "史詩",
   "stats": {
-   "atk": 51,
+   "atk": 36,
    "eva": 7.5
   },
   "icon": "icons/monk/15.png"
@@ -2698,7 +2698,7 @@
   "material": "聖光",
   "rarity": "史詩",
   "stats": {
-   "atk": 60,
+   "atk": 42,
    "eva": 8.0
   },
   "icon": "icons/monk/16.png"
@@ -2712,7 +2712,7 @@
   "material": "龍",
   "rarity": "傳說",
   "stats": {
-   "atk": 71,
+   "atk": 49,
    "eva": 8.5
   },
   "icon": "icons/monk/17.png"
@@ -2726,7 +2726,7 @@
   "material": "星辰",
   "rarity": "傳說",
   "stats": {
-   "atk": 83,
+   "atk": 58,
    "eva": 9.0
   },
   "icon": "icons/monk/18.png"
@@ -2740,7 +2740,7 @@
   "material": "混沌",
   "rarity": "傳說",
   "stats": {
-   "atk": 98,
+   "atk": 69,
    "eva": 9.5
   },
   "icon": "icons/monk/19.png"
@@ -2754,7 +2754,7 @@
   "material": "神",
   "rarity": "神話",
   "stats": {
-   "atk": 116,
+   "atk": 81,
    "eva": 10.0
   },
   "icon": "icons/monk/20.png"

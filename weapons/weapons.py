@@ -628,7 +628,7 @@ def sub_stat(kind, t):
 
 def weapon_stats(cls_id, t):
     mult, sub = WEAPON_STAT[cls_id]
-    st = {'atk': round(5 * 1.18 ** (t - 1) * mult)}
+    st = {'atk': round(5 * 1.18 ** (t - 1) * mult * 0.7)}   # 攻擊力 ×0.7：機制放大、數值縮小
     if sub: st[sub] = sub_stat(sub, t)
     return st
 

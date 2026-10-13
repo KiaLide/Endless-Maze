@@ -176,10 +176,10 @@ const STAT_NAMES = {hp:'生命',atk:'攻擊',def:'防禦',spd:'速度',crit:'爆
 // ============ 體質與傷害類型 ============
 // 每種體質對三種傷害類型的倍率：斬擊（物理職業）、魔法（法系職業）、持續（中毒、灼燒）
 const BODY = {
-  肉體:   {slash: 1.2, magic: 1.0, dot: 1.0, desc: '血肉之軀，刀劍砍得進去'},
-  靈體:   {slash: 0.8, magic: 1.2, dot: 1.0, desc: '沒有實體，刀劍容易穿過，怕魔法'},
-  構造體: {slash: 0.8, magic: 1.0, dot: 1.2, desc: '岩石、金屬、甲殼或人偶，砍不太動，怕腐蝕與灼燒'},
-  不死:   {slash: 1.0, magic: 1.2, dot: 0.8, desc: '早已死去，毒對牠效果差，怕魔法淨化'},
+  肉體:   {slash: 1.4, magic: 1.0, dot: 1.0, desc: '血肉之軀，刀劍砍得進去'},
+  靈體:   {slash: 0.7, magic: 1.4, dot: 1.0, desc: '沒有實體，刀劍容易穿過，怕魔法'},
+  構造體: {slash: 0.7, magic: 1.0, dot: 1.4, desc: '岩石、金屬、甲殼或人偶，砍不太動，怕腐蝕與灼燒'},
+  不死:   {slash: 1.0, magic: 1.4, dot: 0.7, desc: '早已死去，毒對牠效果差，怕魔法淨化'},
 };
 const DMG_NAMES = {slash: '斬擊', magic: '魔法', dot: '持續'};
 const CLASS_DMG = {wizard: 'magic', cleric: 'magic', witch: 'magic'};   // 其餘職業為斬擊

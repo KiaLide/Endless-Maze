@@ -32,6 +32,8 @@ const SKILL_BRIEF = {
   ranger0: '精準射擊，必定命中。', ranger1: '射擊並讓敵人長時間中毒。', ranger2: '大量箭矢連續落下。',
   monk0: '快速的多段連打。', monk1: '回復生命並在數回合內提升防禦。', monk2: '一陣百裂拳後接上昇龍收尾。',
 };
+// 第 20 階神話武器的特殊效果說明（不受非本職影響）
+function mythicLine(it, tag = 'p') { if (it.tier !== 20) return ''; const m = MYTHIC[it.cls]; return `<${tag} class="affix">神話・${m.name}：${m.text}（不受非本職影響）</${tag}>`; }
 // 狀態說明（只寫效果，不寫數值）
 const TIPS = {
   poison: '中毒：每回合開始時受到毒傷害。', burn: '灼燒：每回合開始時受到火焰傷害。', freeze: '凍結／暈眩：跳過下一次行動。',
@@ -42,7 +44,9 @@ const TIPS = {
   rage: '狂怒：攻擊大幅上升，防禦下降。', mikiriStance: '見切架式：下一次攻擊必定閃開並反擊。', aim: '瞄準：下一次瞄準射擊大幅強化並必定爆擊。',
   mirror: '鏡盾：下一次受到的攻擊會完全反彈給敵人。', potRage: '狂暴藥：攻擊上升，但受到的傷害也增加。',
   unyield: '不屈：這段期間受到的傷害會延後，之後分幾回合慢慢扣。', delay: '延遲傷害：不屈期間延後的傷害，之後每回合扣一部分。',
-  combo: '連擊：連續命中的攻擊會讓傷害越來越高；被攻擊命中就會中斷。中毒、灼燒不會中斷。',
+  combo: '連擊：連續命中的攻擊會讓傷害越來越高；被攻擊命中就會中斷。中毒、灼燒不會中斷。武鬥家的多段攻擊每打中一段都會累積。',
+  haste: '加速：速度上升，行動變快。', mercy: '慈悲：每回合開始時回復生命。', echo: '回響：上一個技能會在這回合以較弱的威力自動再施放一次。',
+  pain: '痛苦轉嫁：你受到的傷害，會在牠接下來的行動時以詛咒傷害還給牠。', future: '先見：看得到敵人接下來的數次行動。',
   lucky: '幸運金幣：這場戰鬥獲勝時，掉落更好、金幣更多。', phoenix: '不死鳥之羽：倒下時會自動復活一次。',
   poisonWalk: '中毒：每走一步都會扣生命。', barrier: '守護結界：擋下接下來的攻擊。',
   judge: '審判：使用技能時消耗，層數越多技能越痛。', pact: '血契：使用技能時消耗，層數越多技能越痛。', volt: '電荷：滿層時下一次攻擊追加落雷。',
@@ -497,7 +501,7 @@ function cmpCard(title, type, it, base) {
   if (!it) return `<div class="cmp-card empty"><div class="cmp-title">${title}</div><p>（無）</p></div>`;
   const r = rarityOf(type, it);
   let extra = '';
-  if (type === 'weapon') { const own = it.cls === G.cls; extra = `<p class="tag ${own ? 'good' : 'warn'}">${CHAR[it.cls].weapon_type}${own ? '・本職' : '・非本職（技能效果 ×0.75）'}</p>`; }
+  if (type === 'weapon') { const own = it.cls === G.cls; extra = `<p class="tag ${own ? 'good' : 'warn'}">${CHAR[it.cls].weapon_type}${own ? '・本職' : '・非本職（技能效果 ×0.75）'}</p>${mythicLine(it)}`; }
   if (type === 'acc') { const a = ACCS[it.idx]; extra = `<p class="tag">${a.class_name}・${a.style}${a.class_id === G.cls ? '' : '（非本職：技能詞條無效，其餘 ×0.75）'}</p><p class="affix">${a.affix}</p>`; }
   if (type === 'armor') extra = `<p class="tag">${ARMOR[it.set][0].set_name}・${ARMOR[it.set][0].type}</p>`;
   const tierT = type === 'acc' ? '' : `第 ${it.tier} 階・`;
@@ -635,7 +639,7 @@ async function openEquip() {
   if (busy && !B) return;
   const s = baseStats(), c = CHAR[G.cls];
   const row = (label, type, it) => it ? `<div class="eq-row">${equipIcon(type, it, 2)}<div><small>${label}</small><b style="color:${RARITY_COLOR[rarityOf(type, it)]}">${equipName(type, it)}</b>
-      <span>${type !== 'acc' ? `第 ${it.tier} 階・` : ''}數值 ${Math.round(it.roll * 100)}%・${statLine(equipStats(type, it))}</span>${type === 'acc' ? `<span class="affix">${ACCS[it.idx].affix}</span>` : ''}</div></div>`
+      <span>${type !== 'acc' ? `第 ${it.tier} 階・` : ''}數值 ${Math.round(it.roll * 100)}%・${statLine(equipStats(type, it))}</span>${type === 'acc' ? `<span class="affix">${ACCS[it.idx].affix}</span>` : ''}${type === 'weapon' ? mythicLine(it, 'span') : ''}</div></div>`
     : `<div class="eq-row empty"><span class="spr-blank"></span><div><small>${label}</small><b>（無）</b></div></div>`;
   const n = unlockedSkills(G.floor);
   const buffs = G.buffs.map(b => `<li class="${b.val > 0 ? 'good' : 'bad'}">${STAT_NAMES[b.stat]} ${b.val > 0 ? '+' : ''}${b.val}%（${{steps: `剩 ${b.left} 步`, floor: '本層內', long: '長時間', next: '下一場戰鬥'}[b.dur]}）</li>`).join('');
@@ -702,7 +706,7 @@ async function gameOver(mon) {
 
 
 // ---------- 說明頁 ----------
-const HELP_TABS = [['basic', '操作'], ['battle', '戰鬥'], ['class', '職業'], ['skill', '技能'], ['status', '狀態'], ['body', '體質'], ['acc', '飾品'], ['item', '道具'], ['event', '事件']];
+const HELP_TABS = [['basic', '操作'], ['battle', '戰鬥'], ['class', '職業'], ['skill', '技能'], ['status', '狀態'], ['body', '體質'], ['weapon', '武器'], ['acc', '飾品'], ['item', '道具'], ['event', '事件']];
 function helpBody(tab) {
   const dl = rows => `<dl class="help-dl">${rows.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl>`;
   if (tab === 'basic') return dl([
@@ -721,8 +725,8 @@ function helpBody(tab) {
     ['意圖預告', '敵人下一步要做什麼會先顯示出來。看到蓄力、強力攻擊時，可以防禦、打斷或先下手。'],
     ['蓄力', '所有怪物都可能蓄力：蓄力那次不攻擊，下一次行動會重擊。'],
     ['特殊技能', '精英與頭目的特殊技能會在第一次行動就發動，之後固定間隔再發動。'],
-    ['連擊', '連續命中的攻擊會讓傷害越來越高；被攻擊命中就中斷（防禦中被打也會中斷），中毒、灼燒不算。'],
-    ['弱點與破防', '用敵人體質的弱點類型攻擊會削減破防值，歸零時敵人破防：跳過行動並受到更多傷害。'],
+    ['連擊', '每次攻擊或技能命中 +1 層，每層傷害 +10%，最多 10 層。武鬥家改為多段攻擊每打中一段 +1 層，每層 +2.5%，最多 40 層。被攻擊命中就中斷（防禦中被打也會中斷），閃避、格擋、中毒、灼燒不算。'],
+    ['弱點與破防', '打中體質弱點傷害 ×1.4，打到抗性 ×0.7。用弱點類型攻擊會削減破防值，歸零時敵人破防：跳過下一次行動，期間受到的傷害 ×2。'],
   ]);
   if (tab === 'class') {
     const order = G ? [G.cls, ...CLASSES.filter(c => c !== G.cls)] : CLASSES;
@@ -739,11 +743,13 @@ function helpBody(tab) {
   }
   if (tab === 'skill') {
     const order = G ? [G.cls, ...CLASSES.filter(c => c !== G.cls)] : CLASSES;
-    return `<p class="hint">傷害 ＝ 你的攻擊 × 技能倍率 × 防禦減免 × 浮動（0.9～1.1）。防禦減免 ＝ 1 − 敵方防禦 ÷（敵方防禦 ＋ 50）。爆擊時 ×1.5。用非本職武器時，技能倍率與效果 ×0.75。另外會乘上連擊、體質弱點、破防等加成。</p>` +
+    return `<p class="hint">傷害 ＝ 你的攻擊 × 技能倍率 × 防禦減免 × 浮動（0.9～1.1）。防禦減免 ＝ 1 − 敵方防禦 ÷（敵方防禦 ＋ 50）。爆擊時 ×1.5。技能傷害另外整體 ×1.3（下面列的是原始倍率）。用非本職武器時，技能倍率與效果 ×0.75。另外會乘上連擊、體質弱點、破防等加成。</p>` +
       order.map(c => `<h4 class="help-h">${CHAR[c].class_name}${G && c === G.cls ? '（目前）' : ''}</h4>` +
         dl(SKILLS[c].map((s, i) => [`${s.name}<small>${unlockText(i)}・CD ${s.cd}</small>`, `${SKILL_BRIEF[c + i]}<br><span class="formula">${s.text}</span>`])) +
         `<p class="hint">被動・${CHAR[c].passive.name}：${CHAR[c].passive.effect}</p>`).join('');
   }
+  if (tab === 'weapon') return '<p class="hint">任何職業都能拿任何武器，非本職武器的技能效果 ×0.75。第 20 階的神話武器各有一個特殊效果，這個效果不受非本職影響，可以拿來跟其他職業混搭。</p>' +
+    dl(CLASSES.map(c => [`${WEAPON[c][19].name}<small>${CHAR[c].weapon_type}・${MYTHIC[c].name}</small>`, MYTHIC[c].text]));
   if (tab === 'event') return dl([
     ['一般事件', '走到某一步時自動發生，分好事與壞事。'],
     ['好事分級', GOOD_TIER.join(' → ') + '，越後面越少見、效果越大。'],
@@ -754,7 +760,7 @@ function helpBody(tab) {
   if (tab === 'status') return dl(Object.entries({
     中毒: TIPS.poison, 灼燒: TIPS.burn, '凍結／暈眩': TIPS.freeze, 減速: TIPS.slow, 詛咒: TIPS.cursed, 護盾: TIPS.shield, 破防: TIPS.broken,
     防禦中: TIPS.guard, 格擋: TIPS.parry, 煙幕: TIPS.smoke, 見切: TIPS.mikiri, 狂怒: TIPS.rage, 鏡盾: TIPS.mirror, 不屈: TIPS.unyield,
-    連擊: TIPS.combo, 不死鳥之羽: TIPS.phoenix,
+    連擊: TIPS.combo, 加速: TIPS.haste, 慈悲: TIPS.mercy, 回響: TIPS.echo, 痛苦轉嫁: TIPS.pain, 不死鳥之羽: TIPS.phoenix,
   }).map(([k, v]) => [k, v.replace(/^[^：]+：/, '')]));
   if (tab === 'body') return `<p class="hint">法師、聖女、魔女是魔法傷害，其他職業是斬擊傷害；中毒、灼燒是持續傷害。附魔道具可以改變傷害類型，但效果比本職稍弱。</p>` +
     dl(Object.keys(BODY).map(b => [b, bodyTip(b).replace(/^[^：]+：/, '')]));
@@ -901,6 +907,7 @@ const UI = {
     if (stHas(E, 'freeze')) tags.push(chip('凍結', 'bad', TIPS.freeze));
     if (stHas(E, 'slow')) tags.push(chip('減速', 'bad', TIPS.slow));
     if (stHas(E, 'cursed')) tags.push(chip('詛咒', 'bad', TIPS.cursed));
+    if (E.pain.length) tags.push(chip('痛苦轉嫁', 'bad', TIPS.pain));
     if (stHas(E, 'shield')) tags.push(chip('護盾', 'good', TIPS.shield));
     if (stSum(E, 'atkMod') < 0) tags.push(chip('攻擊↓', 'bad', TIPS.atkDown));
     if (stSum(E, 'defMod') < 0) tags.push(chip('防禦↓', 'bad', TIPS.defDown));
@@ -908,7 +915,7 @@ const UI = {
     $('#bt-status').innerHTML = tags.join('');
     const ii = intentInfo();
     const ie = $('#bt-intent'); ie.hidden = !ii;
-    if (ii) { ie.textContent = '下一步：' + ii.text; ie.classList.toggle('warn', ii.warn); }
+    if (ii) { ie.textContent = (mythic('ranger') ? '先見：' : '下一步：') + ii.text; ie.classList.toggle('warn', ii.warn); }
     const order = predictOrder(6);
     $('#bt-order').innerHTML = order.map(o => o === 'P' ? `<i class="me">${spr('hero:' + G.cls, 0.32)}</i>` : `<i class="foe">${spr('mon:' + E.name, 0.6)}</i>`).join('');
     // 玩家
@@ -920,6 +927,9 @@ const UI = {
     if (has('poison')) pt.push(chip('中毒', 'bad', TIPS.poison));
     if (has('burn')) pt.push(chip('灼燒', 'bad', TIPS.burn));
     if (has('slow')) pt.push(chip('減速', 'bad', TIPS.slow));
+    if (has('haste')) pt.push(chip('加速', 'good', TIPS.haste));
+    if (has('mercy')) pt.push(chip('慈悲', 'good', TIPS.mercy));
+    if (P.echo != null) pt.push(chip('回響・' + SKILLS[G.cls][P.echo].name, 'good', TIPS.echo));
     if (has('freeze')) pt.push(chip('凍結', 'bad', TIPS.freeze));
     if (has('guard')) pt.push(hasAcc('城塞之心') ? chip('架盾', 'good', TIPS.bulwarkGuard) : chip('防禦中', 'good', TIPS.guard));
     for (const [k, n] of [['shield', '護盾'], ['parry', '格擋'], ['smoke', '煙幕'], ['mikiri', '見切'], ['rage', '狂怒'], ['mikiriStance', '見切架式'], ['aim', '瞄準'], ['mirror', '鏡盾'], ['potRage', '狂暴藥'], ['unyield', '不屈']])
