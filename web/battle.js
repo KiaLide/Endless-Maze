@@ -384,22 +384,41 @@ async function enemyCounter(mult) {
   await eHit(mult, {counter: true});
 }
 
-// 防禦：部分飾品會把防禦換成別的動作
-async function doGuard() {
+// 防禦：部分飾品會把防禦換成別的動作；按鈕顯示與實際效果共用這個判斷
+function guardKind() {
   const {P} = B;
+  if (hasAcc('月影耳墜')) return 'mikiri';
+  if (ownAcc('鷹眼單片鏡')) return 'aim';
+  if (hasAcc('魔力護盾')) return 'mshield';
+  if (hasAcc('狂戰士之血') && hpFrac(P) < 0.3) return 'shout';
+  if (ownAcc('氣功念珠')) return 'qi';
+  if (hasAcc('城塞之心')) return 'bulwark';
+  if (hasAcc('居合之鍔')) return 'iai';
+  return 'guard';
+}
+const GUARD_INFO = {
+  guard:   {name: '防禦', sub: '減傷・冷卻 −1', tip: '防禦：到你下一次行動前，受到的傷害減半，並讓技能冷卻多減 1。'},
+  bulwark: {name: '架盾', sub: '大幅減傷・蓄力', tip: '架盾（城塞之心）：大幅減少受到的傷害，擋下的力量會加到下一次攻擊；技能冷卻多減 1。'},
+  iai:     {name: '納刀', sub: '減傷・下一擊拔刀', tip: '納刀（居合之鍔）：受到的傷害減半，下一次攻擊必定爆擊並強化；技能冷卻多減 1。'},
+  mikiri:  {name: '見切架式', sub: '必閃・反擊', tip: '見切架式（月影耳墜）：下一次攻擊必定閃開並反擊，強力攻擊也能閃；技能冷卻多減 1。'},
+  aim:     {name: '瞄準', sub: '強化瞄準射擊', tip: '瞄準（鷹眼單片鏡）：下一次瞄準射擊大幅強化並必定爆擊；這次不會減傷；技能冷卻多減 1。'},
+  mshield: {name: '魔力護盾', sub: '護盾・技能強化', tip: '魔力護盾：產生吸收傷害的護盾，護盾存在時技能更強；技能冷卻多減 1。'},
+  shout:   {name: '怒吼', sub: '下一擊必爆・吸血', tip: '怒吼（狂戰士之血，生命低時）：不減傷，下一次攻擊必定爆擊並吸取生命；技能冷卻多減 1。'},
+  qi:      {name: '運氣', sub: '回復・累積氣', tip: '運氣（氣功念珠）：回復生命並累積氣，氣功護體會依氣的層數持續更久；不減傷；技能冷卻多減 1。'},
+};
+async function doGuard() {
+  const {P} = B, kind = guardKind(), info = GUARD_INFO[kind];
   for (let i = 0; i < 3; i++) if (P.cds[i] > 0) P.cds[i]--;
-  let name = '防禦', msg = '受到傷害 −50%';
-  if (hasAcc('月影耳墜')) { stAdd(P, 'mikiriStance', 1, 999); name = '見切架式'; msg = '下一次攻擊必定閃開並反擊'; }
-  else if (ownAcc('鷹眼單片鏡')) { stAdd(P, 'aim', 1, 999); name = '瞄準'; msg = '下一次瞄準射擊傷害 ×2 且必定爆擊'; }
-  else if (hasAcc('魔力護盾')) { stAdd(P, 'shield', Math.round(atkOf(P) * 2 * accScale()), 999); name = '魔力護盾'; msg = '獲得護盾，護盾存在時技能傷害 +20%'; }
-  else if (hasAcc('狂戰士之血') && hpFrac(P) < 0.3) { P.shout = true; name = '怒吼'; msg = '下一次攻擊必定爆擊並吸取 30%'; }
-  else if (ownAcc('氣功念珠')) { healUnit(P, P.maxHp * 0.08); P.qi = Math.min(3, P.qi + 1); name = '運氣'; msg = `回復生命，氣 ×${P.qi}`; }
-  else {
-    stAdd(P, 'guard', 1, 999);
-    if (hasAcc('城塞之心')) { name = '架盾'; msg = '受到傷害 −75%，擋下的傷害化為下一擊的力量'; }
-    if (hasAcc('居合之鍔')) { P.iai = true; msg += '；下一擊拔刀必定爆擊 ×1.5'; }
+  switch (kind) {
+    case 'mikiri': stAdd(P, 'mikiriStance', 1, 999); break;
+    case 'aim': stAdd(P, 'aim', 1, 999); break;
+    case 'mshield': stAdd(P, 'shield', Math.round(atkOf(P) * 2 * accScale()), 999); break;
+    case 'shout': P.shout = true; break;
+    case 'qi': healUnit(P, P.maxHp * 0.08); P.qi = Math.min(3, P.qi + 1); break;
+    case 'iai': stAdd(P, 'guard', 1, 999); P.iai = true; break;
+    default: stAdd(P, 'guard', 1, 999);
   }
-  UI.float(P, name, 'status'); UI.log(`${G.name}：${name}（${msg}，技能冷卻 −1）`);
+  UI.float(P, info.name, 'status'); UI.log(`${G.name}：${info.name}`);
   await sleep(300);
 }
 

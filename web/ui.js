@@ -935,6 +935,12 @@ const UI = {
     if (stSum(P, 'evaMod')) pt.push(chip('閃避↑', 'good', TIPS.evaUp));
     if (G.phoenix) pt.push(chip('不死鳥之羽', 'good', TIPS.phoenix));
     $('#hud-status').innerHTML = pt.join('');
+    // 防禦按鈕：依飾品與狀態變成不同動作
+    const gi = GUARD_INFO[guardKind()], gb = $('#bt-guard');
+    gb.innerHTML = `${gi.name}<small>${gi.sub}</small>`; gb.dataset.tip = gi.tip;
+    gb.classList.toggle('alt', gi !== GUARD_INFO.guard);
+    $('#bt-attack').dataset.tip = '攻擊：用目前的武器普通攻擊。連續命中會累積連擊。';
+    $('#bt-item').dataset.tip = '道具：使用道具不消耗回合，用完還能繼續行動。';
     // 技能按鈕
     const n = unlockedSkills(G.floor);
     $$('.sk-btn').forEach((b, i) => {
