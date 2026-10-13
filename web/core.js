@@ -45,6 +45,7 @@ function newGame(name, cls) {
     merchantStep: -1,
     lastCastleBoss: null,
     kills: 0, hp: 1,
+    seenEv: {},           // 已遇過的事件（同類別遇完才重新洗牌）
   };
   G.hp = maxHp();
 }

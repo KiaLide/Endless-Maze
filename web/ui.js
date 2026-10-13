@@ -611,9 +611,32 @@ function saveBest() {
 // 事件分級：好事、壞事用籤詩的吉凶，選擇型事件用風險程度
 const GOOD_TIER = ['小吉', '中吉', '大吉', '天選'], BAD_TIER = ['小凶', '中凶', '大凶', '天譴'], CHOICE_TIER = ['尋常', '可疑', '危險', '命運'];
 function fxPreviewIcon(good) { return good ? 'misc:ev_good' : 'misc:ev_bad'; }
+// 不重複抽事件：先依原本的機率決定類別（好壞、強度），再從這個類別裡「還沒遇過」的事件抽；
+// 同類別全部遇過才重新洗牌。遇過的紀錄存在 G.seenEv，存檔會一起保存。
+function drawEvent(list, pool, ok = () => true) {
+  const all = list.filter(ok);
+  const sample = pick(all);
+  const cls = e => `${pool}:${e.good == null ? '' : e.good}:${e.tier}`;
+  const key = cls(sample);
+  G.seenEv = G.seenEv || {};
+  const seen = new Set(G.seenEv[key] || []);
+  let cand = all.filter(e => cls(e) === key && !seen.has(e.id));
+  if (!cand.length) { seen.clear(); cand = all.filter(e => cls(e) === key); }
+  const ev = pick(cand);
+  seen.add(ev.id); G.seenEv[key] = [...seen];
+  return ev;
+}
+// 抉擇結果：原本的結果 50%、同方向的變化 30%、相反的意外 20%
+const CHOICE_ODDS = [0.5, 0.3, 0.2];
+function rollOutcome(o) {
+  const outs = [[o[1], o[2], o[3]], ...(o[4] || [])];
+  let r = rnd(), acc = 0;
+  for (let i = 0; i < outs.length; i++) { acc += CHOICE_ODDS[i] / CHOICE_ODDS.slice(0, outs.length).reduce((a, b) => a + b, 0); if (r < acc) return outs[i]; }
+  return outs[0];
+}
 async function randomEvent() {
   const n = unlockedSkills(G.floor);
-  let ev; do { ev = pick(EVENTS); } while ((ev.req || 0) > n);
+  const ev = drawEvent(EVENTS, 'ev', e => (e.req || 0) <= n);
   scene.ev = fxPreviewIcon(ev.good);
   const tierName = (ev.good ? GOOD_TIER : BAD_TIER)[ev.tier];
   const res = applyFx(ev.fx, !ev.good);
@@ -625,17 +648,18 @@ async function randomEvent() {
   if (res.battle) await doBattle(res.battle);
 }
 async function choiceEvent() {
-  const ev = pick(CHOICES);
+  const n = unlockedSkills(G.floor);
+  const ev = drawEvent(CHOICES, 'ch', e => (e.req || 0) <= n);
   scene.ev = 'misc:ev_choice';
   const tierName = CHOICE_TIER[ev.tier];
   const i = await modal(`<div class="ev choice"><div class="ev-tag">抉擇・${tierName}</div>
     <div class="ev-icon">${spr('misc:ev_choice', 2)}</div><h3>${ev.name}</h3><p class="desc">${ev.desc}</p></div>`,
     ev.opts.map((o, k) => [o[0], k, 'opt']), 'center choice');
-  const o = ev.opts[i];
-  const res = applyFx(o[3], !o[2]);
+  const o = ev.opts[i], [rDesc, rGood, rFx] = rollOutcome(o);
+  const res = applyFx(rFx, !rGood);
   refreshHud();
-  await modal(`<div class="ev ${o[2] ? 'good' : 'bad'}"><div class="ev-tag">${o[2] ? '好結果' : '壞結果'}</div><h3>${ev.name}・${o[0]}</h3>
-    <p class="desc">${o[1]}</p><ul class="fx">${res.text.map(t => `<li>${t}</li>`).join('')}</ul></div>`, [['繼續', 1, 'primary']], 'center');
+  await modal(`<div class="ev ${rGood ? 'good' : 'bad'}"><div class="ev-tag">${rGood ? '好結果' : '壞結果'}</div><h3>${ev.name}・${o[0]}</h3>
+    <p class="desc">${rDesc}</p><ul class="fx">${res.text.map(t => `<li>${t}</li>`).join('')}</ul></div>`, [['繼續', 1, 'primary']], 'center');
   scene.ev = null;
   if (res.battle) await doBattle(res.battle);
 }
