@@ -41,17 +41,18 @@ const TIPS = {
   broken: '破防中：跳過下一次行動，這段期間受到的傷害大幅增加。', enraged: '狂暴：攻擊力上升。',
   guard: '防禦中：到你下一次行動前，受到的傷害減半；被攻擊命中仍會中斷連擊。', bulwarkGuard: '架盾：到你下一次行動前，大幅減少受到的傷害，擋下的力量會加到下一次攻擊。',
   parry: '格擋：擋下敵人下一次攻擊並反擊。', smoke: '煙幕：敵人下一次攻擊必定落空，你的下一擊必定爆擊。', mikiri: '見切：閃避提高，閃避成功時反擊。',
-  rage: '狂怒：攻擊大幅上升，防禦下降。', mikiriStance: '見切架式：下一次攻擊必定閃開並反擊。', aim: '瞄準：下一次瞄準射擊大幅強化並必定爆擊。',
+  rage: '狂怒：攻擊大幅上升，防禦下降。', mikiriStance: '見切架式：到你下一次行動前，蓄力重擊與強力攻擊必定閃開並強力反擊；一般攻擊只減半傷害。', aim: '瞄準：下一次瞄準射擊大幅強化並必定爆擊。',
   mirror: '鏡盾：下一次受到的攻擊會完全反彈給敵人。', potRage: '狂暴藥：攻擊上升，但受到的傷害也增加。',
   unyield: '不屈：這段期間受到的傷害會延後，之後分幾回合慢慢扣。', delay: '延遲傷害：不屈期間延後的傷害，之後每回合扣一部分。',
-  combo: '連擊：連續命中的攻擊會讓傷害越來越高；被攻擊命中就會中斷。中毒、灼燒不會中斷。武鬥家的多段攻擊每打中一段都會累積。',
+  combo: '連擊：每打中一段就累積，傷害越來越高；被攻擊命中就會中斷。中毒、灼燒不會中斷。多段攻擊多的職業每層加成較少、上限較高。',
   haste: '加速：速度上升，行動變快。', mercy: '慈悲：每回合開始時回復生命。', echo: '回響：上一個技能會在這回合以較弱的威力自動再施放一次。',
   pain: '痛苦轉嫁：你受到的傷害，會在牠接下來的行動時以詛咒傷害還給牠。', future: '先見：看得到敵人接下來的數次行動。',
   lucky: '幸運金幣：這場戰鬥獲勝時，掉落更好、金幣更多。', phoenix: '不死鳥之羽：倒下時會自動復活一次。',
   poisonWalk: '中毒：每走一步都會扣生命。', barrier: '守護結界：擋下接下來的攻擊。',
   judge: '審判：使用技能時消耗，層數越多技能越痛。', pact: '血契：使用技能時消耗，層數越多技能越痛。', volt: '電荷：滿層時下一次攻擊追加落雷。',
   qi: '氣：氣功護體會依層數持續更久。', bulwark: '架盾力量：會加到下一次攻擊上。', debt: '血債：之後的攻擊會依此回復生命。',
-  iai: '拔刀：下一次攻擊必定爆擊並強化。', shout: '怒吼：下一次攻擊必定爆擊並吸取生命。', holyMark: '審判印記：下一次攻擊強化並無視護盾。',
+  iai: '拔刀：下一次攻擊必定爆擊並強化。', shout: '怒吼：下一次攻擊必定爆擊並吸取生命。', holyMark: '聖印：每次回復生命累積，下一次攻擊消耗全部，層數越多越痛，並無視護盾。',
+  angel: '守護天使：完全擋下接下來的攻擊，數字是剩餘次數；擋下時不會中斷連擊。', undying: '不死吸血：狂怒期間攻擊會吸取生命，生命越低吸得越多。',
   chain: '連斬：連續普通攻擊會追加斬擊；用技能或防禦會歸零。', atkUp: '攻擊上升。', atkDown: '攻擊下降。', defUp: '防禦上升。', defDown: '防禦下降。', evaUp: '閃避上升。',
   evaDown: '閃避下降。', spdUp: '速度上升，行動變快。', spdDown: '速度下降，行動變慢。', hitUp: '命中上升。', hitDown: '命中下降，攻擊比較容易落空。',
   critUp: '爆擊率上升。', critDown: '爆擊率下降。',
@@ -61,7 +62,7 @@ const TIPS = {
   nextCrit: '必定爆擊：你的下一次攻擊必定爆擊。', hot: '持續回復：每回合開始時回復生命。', qigong: '氣功護體：防禦提升中。',
   summon: '深淵魔物：每次你行動後追擊敵人並吸取生命，數字是剩餘回合。', nextBoost: '下一擊強化：你的下一次攻擊傷害提高。',
   dragon: '龍紋：沒有受傷的回合會累積增傷，受到傷害就歸零。', rose: '薔薇：命中會累積，薔薇終舞會依層數強化。',
-  oath: '守誓之盾：防禦中可以完全擋下蓄力重擊或強力攻擊，數字是本場剩餘次數。', veteran: '老兵意志：本場戰鬥第一次受到致命傷時會撐住。',
+  oath: '守誓之盾：防禦中可以完全擋下蓄力重擊或強力攻擊，數字是本場剩餘次數。', veteran: '老兵反擊：下一次攻擊傷害大幅提高，並削減敵人的破防值。',
   unyieldReady: '不屈待命：生命第一次低於一定程度時，之後的傷害會延後承受。', cdhalf: '這場戰鬥使用技能後的冷卻減半。',
   nextFirst: '下一場戰鬥由你先攻。', nextEnemyFirst: '下一場戰鬥由敵人先攻。', nextEnemyHp: '下一個敵人的生命降低。',
   nextCdStart: '下一場戰鬥開始時，技能都在冷卻中。', dropGuard: '裝備保底：接下來幾步拿到的裝備，數值不會低於標準。',
@@ -82,7 +83,7 @@ function sureCrit() {
   if (P.iai || P.shout) return true;
   if (!P.firstAttackDone && hasAcc('居合之鍔')) return true;
   if (hasAcc('破軍護符') && E.charging) return true;
-  return hasAcc('影刃耳環') && it && !['attack', 'heavy', 'special', 'boom'].includes(it.k) && !(it.k === 'rand' && it.r === 0);
+  return shadowReady();
 }
 // 攻擊按鈕說明：依飾品變化
 function attackTip(P) {
@@ -813,7 +814,7 @@ function helpBody(tab) {
     ['意圖預告', '敵人下一步要做什麼會先顯示出來。看到蓄力、強力攻擊時，可以防禦、打斷或先下手。'],
     ['蓄力', '所有怪物都可能蓄力：蓄力那次不攻擊，下一次行動會重擊。'],
     ['特殊技能', '精英與頭目的特殊技能會在第一次行動就發動，之後固定間隔再發動。'],
-    ['連擊', '每次攻擊或技能命中 +1 層，每層傷害 +10%，最多 10 層。武鬥家改為多段攻擊每打中一段 +1 層，每層 +2.5%，最多 40 層。被攻擊命中就中斷（防禦中被打也會中斷），閃避、格擋、中毒、灼燒不算。'],
+    ['連擊', '每打中一段 +1 層（多段技能每段都算，反擊、追擊也算）。每層加成與上限依職業：騎士、法師、聖女、魔女每層 +10%、最多 10 層；劍士、盜賊、狂戰士、劍姬、遊俠每層 +5%、最多 20 層；武鬥家每層 +2.5%、最多 40 層。最多都是 +100%。被攻擊命中就中斷（防禦中被打也會中斷），閃避、格擋、中毒、灼燒不算。'],
     ['弱點與破防', '打中體質弱點傷害 ×1.4，打到抗性 ×0.7。用弱點類型攻擊會削減破防值，歸零時敵人破防：跳過下一次行動，期間受到的傷害 ×2。'],
   ]);
   if (tab === 'class') {
@@ -1040,7 +1041,10 @@ const UI = {
     if (hasAcc('龍紋腰帶') && P.dragonStack > 0) pt.push(chip(`龍紋 +${Math.round(P.dragonStack * 100)}%`, 'good', TIPS.dragon));
     if (hasAcc('薔薇胸針') && P.roseStacks > 0) pt.push(chip(`薔薇 ×${P.roseStacks}`, 'good', TIPS.rose));
     if (hasAcc('守誓者之盾')) pt.push(chip(`守誓 ${2 - P.oathBlocks}`, P.oathBlocks < 2 ? 'good' : '', TIPS.oath));
-    if (hasAcc('老兵勳章') && !P.veteranUsed) pt.push(chip('老兵意志', 'good', TIPS.veteran));
+    if (P.vetBreak) pt.push(chip('老兵反擊', 'good', TIPS.veteran));
+    if (P.holy) pt.push(chip(`聖印 ×${P.holy}`, 'good', TIPS.holyMark));
+    if (P.angel) pt.push(chip(`守護天使 ×${P.angel}`, 'good', TIPS.angel));
+    if (hasAcc('不死圖騰') && stHas(P, 'rage')) pt.push(chip('不死吸血', 'good', TIPS.undying));
     if (hasAcc('不屈紋章') && !P.unyieldUsed) pt.push(chip('不屈待命', 'good', TIPS.unyieldReady));
     if (B.skillHalf) pt.push(chip('技能冷卻減半', 'good', TIPS.cdhalf));
     for (const [k, n] of [['parry', '格擋'], ['smoke', '煙幕'], ['mikiri', '見切'], ['rage', '狂怒'], ['mikiriStance', '見切架式'], ['aim', '瞄準'], ['mirror', '鏡盾'], ['potRage', '狂暴藥'], ['unyield', '不屈']])
@@ -1049,7 +1053,7 @@ const UI = {
     if (B.enchant) pt.push(chip(`附魔・${DMG_NAMES[B.enchant]}`, 'good', B.enchant === 'dot' ? '附魔：每次攻擊讓敵人中毒。' : `附魔：攻擊改為${DMG_NAMES[B.enchant]}傷害（效果比本職稍弱）。`));
     if (B.lucky) pt.push(chip('幸運金幣', 'good', TIPS.lucky));
     const acc = [[P.judge && ownAcc('審判之槍穗'), `審判 ×${P.judge}`, 'judge'], [P.pact && ownAcc('血月墜飾'), `血契 ×${P.pact}`, 'pact'], [P.volt, `電荷 ×${P.volt}`, 'volt'], [P.qi, `氣 ×${P.qi}`, 'qi'],
-      [P.bulwark > 0, '架盾力量', 'bulwark'], [P.debt > 0, '血債', 'debt'], [P.iai, '拔刀', 'iai'], [P.shout, '怒吼', 'shout'], [P.holyMark, '審判印記', 'holyMark'], [P.chain > 0 && hasAcc('雙刃徽章'), `連斬 ${P.chain}`, 'chain']];
+      [P.bulwark > 0, '架盾力量', 'bulwark'], [P.debt > 0, '血債', 'debt'], [P.iai, '拔刀', 'iai'], [P.shout, '怒吼', 'shout'], [P.chain > 0 && hasAcc('雙刃徽章'), `連斬 ${P.chain}`, 'chain']];
     for (const [on, t, k] of acc) if (on) pt.push(chip(t, 'good', TIPS[k]));
     pt.push(...modChips(P));
     if (G.phoenix) pt.push(chip('不死鳥之羽', 'good', TIPS.phoenix));

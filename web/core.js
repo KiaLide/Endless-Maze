@@ -211,7 +211,6 @@ function dropTier(kind) {
 function rollRoll() {
   let lo = 0.85;
   if (G.dropFloor > 0) lo = 1.0;
-  if (hasAcc('狩獵護符')) lo = Math.max(lo, 0.85 + 0.10 * accScale());
   return Math.round((lo + rnd() * (1.15 - lo)) * 100) / 100;
 }
 function makeDrop(kind) {
