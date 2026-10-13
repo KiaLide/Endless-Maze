@@ -151,15 +151,20 @@ function initTips() {
   document.addEventListener('mouseout', e => { if (e.target.closest('[data-tip]')) hide(); });
   document.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el && !pressEl) showTip(el); });
   document.addEventListener('focusout', hide);
-  let pressEl = null, pressT0 = 0;
-  document.addEventListener('touchstart', e => { const el = e.target.closest('[data-tip]'); pressEl = el; pressT0 = Date.now(); const t = e.touches[0]; if (el) showTip(el, t && {x: t.clientX, y: t.clientY}); }, {passive: true});
-  // 長按按鈕只看說明，放開時不觸發按鈕
+  // 手機：按住 0.35 秒才顯示說明；顯示過說明的這次按壓，放開時不觸發按鈕
+  let pressEl = null, pressTimer = 0, pressShown = false;
+  document.addEventListener('touchstart', e => {
+    clearTimeout(pressTimer); pressShown = false;
+    const el = e.target.closest('[data-tip]'); pressEl = el;
+    const t = e.touches[0], pt = t && {x: t.clientX, y: t.clientY};
+    if (el) pressTimer = setTimeout(() => { if (pressEl === el) { pressShown = true; showTip(el, pt); } }, 350);
+  }, {passive: true});
   document.addEventListener('click', e => {
     const el = e.target.closest('[data-tip]');
-    if (el && el === pressEl && Date.now() - pressT0 > 400) { e.stopImmediatePropagation(); e.preventDefault(); }
-    pressEl = null;
+    if (el && el === pressEl && pressShown) { e.stopImmediatePropagation(); e.preventDefault(); }
+    pressEl = null; pressShown = false;
   }, true);
-  const end = () => hide();
+  const end = () => { clearTimeout(pressTimer); hide(); };
   document.addEventListener('touchend', end); document.addEventListener('touchmove', end, {passive: true}); document.addEventListener('touchcancel', end);
   document.addEventListener('contextmenu', e => { if (e.target.closest('[data-tip]')) e.preventDefault(); });
 }
