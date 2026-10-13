@@ -127,22 +127,32 @@ function chip(text, cls, tip) { return `<b class="chip ${cls}" data-tip="${esc(t
 const pct = v => `${v > 0 ? '+' : ''}${Math.round(v * 100)}%`;
 function initTips() {
   const tip = document.createElement('div'); tip.id = 'tip'; tip.hidden = true; $('#app').appendChild(tip);
-  const showTip = el => {
+  // 手機（pt 為手指位置）：放在手指上方，避開手指與手掌；上方放不下才放到手指下方較遠處
+  const showTip = (el, pt) => {
     tip.textContent = el.dataset.tip; tip.hidden = false;
     const r = el.getBoundingClientRect(), a = $('#app').getBoundingClientRect();
     const w = Math.min(260, a.width - 24); tip.style.maxWidth = w + 'px';
-    let x = r.left - a.left, y = r.bottom - a.top + 6;
+    let x, y;
+    if (pt) {
+      const px = pt.x - a.left, py = pt.y - a.top;
+      x = px - tip.offsetWidth / 2;
+      y = py - tip.offsetHeight - 56;
+      if (y < 8) y = py + 64;
+    } else {
+      x = r.left - a.left; y = r.bottom - a.top + 6;
+      if (y + tip.offsetHeight > a.height - 8) y = r.top - a.top - tip.offsetHeight - 6;
+    }
     x = Math.max(8, Math.min(x, a.width - tip.offsetWidth - 8));
-    if (y + tip.offsetHeight > a.height - 8) y = r.top - a.top - tip.offsetHeight - 6;
+    y = Math.max(8, Math.min(y, a.height - tip.offsetHeight - 8));
     tip.style.left = x + 'px'; tip.style.top = y + 'px';
   };
   const hide = () => { tip.hidden = true; };
   document.addEventListener('mouseover', e => { const el = e.target.closest('[data-tip]'); if (el && matchMedia('(hover: hover)').matches) showTip(el); });
   document.addEventListener('mouseout', e => { if (e.target.closest('[data-tip]')) hide(); });
-  document.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el) showTip(el); });
+  document.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el && !pressEl) showTip(el); });
   document.addEventListener('focusout', hide);
   let pressEl = null, pressT0 = 0;
-  document.addEventListener('touchstart', e => { const el = e.target.closest('[data-tip]'); pressEl = el; pressT0 = Date.now(); if (el) showTip(el); }, {passive: true});
+  document.addEventListener('touchstart', e => { const el = e.target.closest('[data-tip]'); pressEl = el; pressT0 = Date.now(); const t = e.touches[0]; if (el) showTip(el, t && {x: t.clientX, y: t.clientY}); }, {passive: true});
   // 長按按鈕只看說明，放開時不觸發按鈕
   document.addEventListener('click', e => {
     const el = e.target.closest('[data-tip]');
@@ -168,13 +178,16 @@ function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = fal
 
 // ---------- 通用視窗 ----------
 let modalResolve = null;
-function modal(html, buttons = [], cls = '') {
+// opts.cancel：點視窗外、返回鍵、Esc 時回傳的值（沒給就不能這樣關閉）；opts.tapOut = false 時只有返回鍵、Esc 能關
+let modalCancel = null;
+function modal(html, buttons = [], cls = '', opts = {}) {
   const m = $('#modal');
   m.className = 'modal ' + cls;
   $('#modal-body').innerHTML = html;
   const bar = $('#modal-btns'); bar.innerHTML = '';
+  modalCancel = 'cancel' in opts ? {v: opts.cancel, tap: opts.tapOut !== false} : null;
   return new Promise(res => {
-    modalResolve = v => { m.hidden = true; modalResolve = null; res(v); };
+    modalResolve = v => { m.hidden = true; modalResolve = null; modalCancel = null; res(v); };
     buttons.forEach(([label, val, style]) => {
       const b = document.createElement('button'); b.className = 'btn ' + (style || ''); b.textContent = label;
       b.onclick = () => modalResolve(val); bar.appendChild(b);
@@ -183,6 +196,19 @@ function modal(html, buttons = [], cls = '') {
     const first = bar.querySelector('button'); if (first) first.focus({preventScroll: true});
   });
 }
+
+function cancelModal(byTap) {
+  if (!modalResolve || !modalCancel || (byTap && !modalCancel.tap)) return false;
+  modalResolve(modalCancel.v); return true;
+}
+// 點視窗外（半透明背景）關閉
+document.addEventListener('click', e => { if (e.target.id === 'modal') cancelModal(true); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cancelModal(false); });
+// Android 返回鍵：有視窗時先關視窗（不能關的視窗就忽略返回鍵），沒有視窗才交給系統
+window.onAndroidBack = () => {
+  if (!$('#modal').hidden) { cancelModal(false); return true; }
+  return false;
+};
 
 // ============ 場景渲染（簡易光線投射） ============
 const VIEW_W = 160;
@@ -386,6 +412,7 @@ function refreshHud() {
   for (const k in agg) if (agg[k]) st.push(chip(`${STAT_NAMES[k]}${agg[k] > 0 ? '↑' : '↓'}`, agg[k] > 0 ? 'good' : 'bad', `${STAT_NAMES[k]}${agg[k] > 0 ? '上升' : '下降'}中（事件效果）。`));
   $('#hud-status').innerHTML = st.join('');
   cam.region = r;
+  renderMinimap();
 }
 
 // ============ 標題、命名、選角 ============
@@ -447,26 +474,90 @@ function setMode(m) {
   $('#battle-top').hidden = m !== 'battle';
   $('#scr-game').dataset.mode = m;
   if (m !== 'battle') $('#bt-intent').hidden = true;
+  if (G) renderMinimap();
   requestAnimationFrame(fitView);
 }
 
 async function go(dir) {
   if (busy || !G || !$('#modal').hidden || $('#scr-game').hidden) return;
-  busy = true;
+  const rt = ensureRoutes();
+  if (!rt[dir]) { toast('頭目就在前方，只能直走'); return; }
+  busy = true; renderMinimap();
   try {
     scene.ev = null; scene.mon = null;
     await animateMove(dir);
-    await encounter();
+    await encounter(rt[dir]);
     if (G && G.hp > 0) await afterStep();
   } finally { busy = false; refreshHud(); }
 }
 
-async function encounter() {
-  const bossStep = G.floor % 5 === 0 && G.step === 9;
-  if (bossStep) { await doBattle('boss'); return; }
-  if (G.step === G.merchantStep) { await merchant(); return; }
-  if (chance(0.5)) { await doBattle(chance(0.1) ? 'elite' : 'normal'); return; }
-  if (chance(0.5)) await randomEvent(); else await choiceEvent();
+// ---------- 路線預告：每一步事先決定三條路各會遇到什麼 ----------
+// battle 戰鬥、elite 精英、event 隨機事件、choice 抉擇事件、shop 暗商、boss 頭目
+const ROUTE_INFO = {
+  battle: {name: '戰鬥', tip: '戰鬥：會遇到一般怪物。戰鬥是裝備與金幣的主要來源。'},
+  elite:  {name: '精英', tip: '精英戰鬥：比一般怪物強得多，但掉落更好。'},
+  event:  {name: '事件', tip: '隨機事件：可能是好事，也可能是壞事，走過去才知道。'},
+  choice: {name: '抉擇', tip: '抉擇事件：會給你三個選項，選完才揭曉結果。'},
+  shop:   {name: '暗商', tip: '暗商：可以買賣道具與裝備。這一層只有這條路會遇到。'},
+  boss:   {name: '頭目', tip: '頭目：這一層的守關者，只能直走面對。'},
+};
+function rollRouteType() { return chance(0.5) ? (chance(0.1) ? 'elite' : 'battle') : chance(0.5) ? 'event' : 'choice'; }
+function ensureRoutes() {
+  const key = `${G.floor}-${G.step}`;
+  if (G.routes && G.routes.key === key) return G.routes;
+  const rt = {key};
+  if (G.floor % 5 === 0 && G.step === 9) { rt.f = 'boss'; G.routes = rt; return rt; }
+  for (const d of ['l', 'f', 'r']) rt[d] = rollRouteType();
+  const isBattle = t => t === 'battle' || t === 'elite';
+  // 每兩次選路至少出現一次戰鬥：上一次沒有戰鬥路線，這次保證一條
+  if (G.noBattleRoute && !['l', 'f', 'r'].some(d => isBattle(rt[d]))) rt[pick(['l', 'f', 'r'])] = 'battle';
+  if (G.step === G.merchantStep) {   // 暗商只在其中一條路
+    const ds = ['l', 'f', 'r'].filter(d => !isBattle(rt[d]) || ['l', 'f', 'r'].filter(x => isBattle(rt[x])).length > 1);
+    rt[pick(ds.length ? ds : ['l', 'f', 'r'])] = 'shop';
+  }
+  G.noBattleRoute = !['l', 'f', 'r'].some(d => isBattle(rt[d]));
+  G.routes = rt; return rt;
+}
+async function encounter(type) {
+  if (type === 'boss') { await doBattle('boss'); return; }
+  if (type === 'shop') { await merchant(); return; }
+  if (type === 'battle' || type === 'elite') { await doBattle(type === 'elite' ? 'elite' : 'normal'); return; }
+  if (type === 'event') await randomEvent(); else await choiceEvent();
+}
+// 小地圖圖標（像素風 SVG）
+function routeIcon(t) {
+  const P = {
+    battle: '<path d="M3 3l10 10M13 3L3 13M2 11l3 3M11 14l3-3" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="square"/>',
+    elite: '<path d="M3 3l10 10M13 3L3 13M2 11l3 3M11 14l3-3" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="square"/>',
+    event: '<path d="M5 5a3 3 0 1 1 4 2.8c-.8.4-1 .9-1 1.7V11" stroke="currentColor" stroke-width="1.9" fill="none"/><rect x="7" y="12.4" width="2" height="2" fill="currentColor"/>',
+    choice: '<path d="M8 1.5L14.5 8 8 14.5 1.5 8z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 5.2L10.8 8 8 10.8 5.2 8z" fill="currentColor"/>',
+    shop: '<circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 4.5v7M6 6.2h3.2a1.2 1.2 0 0 1 0 2.4H6.8a1.2 1.2 0 0 0 0 2.4H10" stroke="currentColor" stroke-width="1.4" fill="none"/>',
+    boss: '<path d="M3 7a5 5 0 0 1 10 0v3h-2v3H5v-3H3z" fill="currentColor"/><rect x="5" y="7" width="2" height="2" fill="#120e17"/><rect x="9" y="7" width="2" height="2" fill="#120e17"/>',
+  };
+  return `<svg viewBox="0 0 16 16" aria-hidden="true">${P[t]}</svg>`;
+}
+function renderMinimap() {
+  const mm = $('#minimap'); if (!mm) return;
+  const show = G && !B && $('#scr-game').dataset.mode === 'explore' && !busy;
+  mm.hidden = !show;
+  if (!show) { $$('.dir').forEach(b => { b.classList.remove('blocked'); const i = b.querySelector('.dir-ico'); if (i) i.remove(); }); return; }
+  const rt = ensureRoutes();
+  const node = (d, cls) => {
+    const t = rt[d]; if (!t) return `<span class="mm-node ${cls} none"></span>`;
+    const info = ROUTE_INFO[t];
+    return `<span class="mm-node ${cls} rt-${t}" data-tip="${esc((d === 'l' ? '左路' : d === 'f' ? '前方' : '右路') + '・' + info.tip)}" tabindex="0">${routeIcon(t)}${t === 'elite' ? '<em>精英</em>' : ''}</span>`;
+  };
+  mm.innerHTML = `<svg class="mm-paths" viewBox="0 0 80 64" aria-hidden="true">
+      ${rt.l ? '<path d="M40 52 V34 H14"/>' : ''}${rt.f ? '<path d="M40 52 V12"/>' : ''}${rt.r ? '<path d="M40 52 V34 H66"/>' : ''}</svg>
+    ${node('l', 'mm-l')}${node('f', 'mm-f')}${node('r', 'mm-r')}<span class="mm-me"></span>`;
+  // 方向按鈕也標上圖標；頭目那一步左右不能走
+  for (const d of ['l', 'f', 'r']) {
+    const b = $('#btn-' + d), t = rt[d];
+    b.classList.toggle('blocked', !t);
+    let i = b.querySelector('.dir-ico'); if (!i) { i = document.createElement('i'); i.className = 'dir-ico'; b.appendChild(i); }
+    i.className = 'dir-ico' + (t ? ' rt-' + t : ''); i.innerHTML = t ? routeIcon(t) : '';
+    b.dataset.tip = t ? ROUTE_INFO[t].tip : '頭目就在前方，只能直走。';
+  }
 }
 
 async function afterStep() {
@@ -498,7 +589,7 @@ async function floorClear() {
     const r = regionIdx(G.floor);
     parts.push(`<p class="region">進入新地區：<b>${REGIONS[r].name}</b>${G.floor === 51 ? '<br><span>無限地城開始了，怪物會越來越強。</span>' : ''}</p>`);
   }
-  if (G.merchantStep >= 0) parts.push('<p class="hint">這一層的某一步會遇到暗商。</p>');
+  if (G.merchantStep >= 0) parts.push('<p class="hint">這一層的某一步，會有一條路通往暗商。</p>');
   refreshHud();
   await modal(`<div class="banner"><h2>地下 ${G.floor} 層</h2>${parts.join('')}</div>`, [['繼續', 1, 'primary']], 'center');
 }
@@ -630,16 +721,17 @@ async function merchant() {
   scene.mon = 'misc:merchant';
   const F = floorF(G.floor), disc = hasAcc('金幣袋') ? 1 - 0.2 * accScale() : 1;
   const priceOf = id => Math.round(itemBasePrice(id) * F * disc);
+  // 10 項商品：前兩項固定是小藥水、中藥水（不會賣完），其餘每次刷新重新擺貨
   const rollGoods = () => {
-    const goods = [];
-    for (let i = 0; i < 2; i++) {
+    const goods = ['小藥水', '中藥水'].map(id => ({type: 'item', item: id, price: priceOf(id), fixed: true}));
+    for (let i = 0; i < 3; i++) {
       const t = clamp(Math.round(G.floor / 2) + ri(0, 2), 1, 20);
       const it = chance(0.5) ? {type: 'weapon', item: {cls: chance(0.5) ? G.cls : pick(CLASSES), tier: t, roll: rollRoll()}} : {type: 'armor', item: {set: pick(ARMOR_SETS), tier: t, roll: rollRoll()}};
       goods.push({...it, price: Math.round(t * 20 * disc)});
     }
     { const own = chance(0.5); const pool = ACCS.map((a, i) => i).filter(i => own ? ACCS[i].class_id === G.cls : ACCS[i].class_id !== G.cls);
       goods.push({type: 'acc', item: {idx: pick(pool), roll: rollRoll()}, price: Math.round(150 * F * disc)}); }
-    for (let i = 0; i < 2; i++) { const id = rollItemId('normal').replace(/^(生命|力量|守護|迅捷|慧眼|幻影)之種$/, '中藥水').replace('女神之種', '大藥水'); goods.push({type: 'item', item: id, price: priceOf(id)}); }
+    for (let i = 0; i < 3; i++) { const id = rollItemId('normal').replace(/^(生命|力量|守護|迅捷|慧眼|幻影)之種$/, '中藥水').replace('女神之種', '大藥水'); goods.push({type: 'item', item: id, price: priceOf(id)}); }
     { const r = rnd(); const id = r < 0.05 ? '女神之種' : r < 0.3 ? SEED_NAMES[pick(['hp', 'atk', 'def', 'spd', 'crit', 'eva'])] : r < 0.7 ? rollSpecial('珍品') : pick(['小藥水', '中藥水']); goods.push({type: 'item', item: id, price: priceOf(id)}); }
     return goods;
   };
@@ -648,10 +740,11 @@ async function merchant() {
   let refreshes = 0;
   const refreshCost = () => Math.round(20 * F * Math.pow(2, refreshes));
   let tab = 'buy';
+  const shopScroll = {};
   while (true) {
     refreshHud();
     const tabs = `<div class="shop-tabs" role="tablist">${[['buy', '購買'], ['sell', '出售']].map(([k, n]) => `<button class="shop-tab${tab === k ? ' on' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${n}</button>`).join('')}</div>`;
-    const buyList = `<div class="shop-list">${goods.map((g, i) => {
+    const buyList = `<div class="shop-list shop-scroll">${goods.map((g, i) => {
       const name = g.type === 'item' ? g.item : equipName(g.type, g.item);
       let sub;
       if (g.type === 'item') sub = `<small>${itemDesc(g.item)}</small>`;
@@ -661,21 +754,25 @@ async function merchant() {
         sub = `<small>${head}</small>${a ? `<small class="affix">${a.affix}</small>` : ''}<small class="vs">比目前：</small>${deltaHtml(g.type, g.item, curEquip(g.type))}`;
       }
       const poor = G.gold < g.price;
-      return `<button class="shop-item${poor ? ' poor' : ''}" data-i="${i}" ${g.sold ? 'disabled' : ''}>${g.type === 'item' ? spr(itemIcon(g.item), 2) : equipIcon(g.type, g.item, 2)}
+      return `<button class="shop-item${poor ? ' poor' : ''}${g.fixed ? ' fixed' : ''}" data-i="${i}" ${g.sold ? 'disabled' : ''}>${g.type === 'item' ? spr(itemIcon(g.item), 2) : equipIcon(g.type, g.item, 2)}
         <span class="si-name">${name}${sub}</span><span class="si-price">${g.sold ? '售出' : g.price}</span></button>`;
     }).join('')}</div>
-      <button class="btn shop-refresh" data-refresh="1" ${G.gold < refreshCost() ? 'disabled' : ''}>刷新商品　<b class="gold">${refreshCost()}</b> 金幣</button>`;
-    const sellList = `<p class="desc">點一下賣掉 1 個。</p>
+      <button class="btn shop-refresh" data-refresh="1" ${G.gold < refreshCost() ? 'disabled' : ''}>刷新商品（藥水以外）　<b class="gold">${refreshCost()}</b> 金幣</button>`;
+    const sellList = `<div class="shop-scroll"><p class="desc">點一下賣掉 1 個。</p>
       <div class="inv-grid">${G.inv.length ? G.inv.map((it, i) => `<button class="slot" data-sellitem="${i}">${spr(itemIcon(it.id), 2)}<span>${it.id} ×${it.n}</span><b class="gold">+${itemSellValue(it.id)}</b></button>`).join('') : '<p class="desc">道具欄是空的</p>'}</div>
       <h4 class="shop-h">裝備</h4>
-      <div class="shop-sell">${G.armor ? `<button class="btn small" data-sell="armor">賣掉${equipName('armor', G.armor)} +${sellValue('armor', G.armor)}</button>` : ''}${G.acc ? `<button class="btn small" data-sell="acc">賣掉${equipName('acc', G.acc)} +${sellValue('acc', G.acc)}</button>` : ''}<p class="desc">武器不能賣（不能空手）。</p></div>`;
+      <div class="shop-sell">${G.armor ? `<button class="btn small" data-sell="armor">賣掉${equipName('armor', G.armor)} +${sellValue('armor', G.armor)}</button>` : ''}${G.acc ? `<button class="btn small" data-sell="acc">賣掉${equipName('acc', G.acc)} +${sellValue('acc', G.acc)}</button>` : ''}<p class="desc">武器不能賣（不能空手）。</p></div></div>`;
     const html = `<div class="shop"><h3>暗商</h3><p class="desc">「要買點什麼嗎？」　持有 <b class="gold">${G.gold}</b> 金幣</p>${tabs}${tab === 'buy' ? buyList : sellList}</div>`;
-    const v = await modal(html, [['離開', 'leave', 'primary']], 'wide');
+    // 視窗固定，只有商品清單捲動；重畫時保留捲動位置
+    const pv = modal(html, [['離開', 'leave', 'primary']], 'wide shopwin', {cancel: 'leave', tapOut: false});
+    const sc = $('.shop-scroll'), tb = tab;
+    if (sc) { sc.scrollTop = shopScroll[tb] || 0; sc.onscroll = () => { shopScroll[tb] = sc.scrollTop; }; }
+    const v = await pv;
     if (v === 'leave') break;
     if (typeof v === 'string' && v.startsWith('tab:')) { tab = v.slice(4); continue; }
     if (v === 'refresh') {
       const c = refreshCost(); if (G.gold < c) continue;
-      G.gold -= c; refreshes++; goods = rollGoods(); toast(`商品刷新了（-${c} 金幣）`); continue;
+      G.gold -= c; refreshes++; goods = rollGoods(); shopScroll.buy = 0; toast(`商品刷新了（-${c} 金幣）`); continue;
     }
     if (typeof v === 'string' && v.startsWith('sellitem:')) {
       const slot = G.inv[+v.slice(9)]; if (!slot) continue;
@@ -691,14 +788,14 @@ async function merchant() {
       if (G.gold < g.price) { toast('金幣不夠，可以到「出售」賣掉用不到的道具'); continue; }
       if (!canStack(g.item)) { toast(G.inv.some(s => s.id === g.item) ? `${g.item}已經有 5 個了` : '道具欄已滿，先賣掉一些道具'); continue; }
       addItem(g.item);
-      G.gold -= g.price; g.sold = true; toast(`買下 ${g.item}`); continue;
+      G.gold -= g.price; if (!g.fixed) g.sold = true; toast(`買下 ${g.item}`); continue;
     }
     // 裝備：先跟目前的比較，再決定要不要買
     const cur = curEquip(g.type), back = cur ? sellValue(g.type, cur) : 0, enough = G.gold + back >= g.price;
     const pick2 = await modal(`<div class="cmp"><h3>${{weapon: '武器', armor: '防具', acc: '飾品'}[g.type]}・${g.price} 金幣</h3>
       <div class="cmp-row">${cmpCard('目前', g.type, cur)}${cmpCard('商品', g.type, g.item, cur)}</div>
       <p class="desc">${cur ? `買下後，舊裝備自動換成 ${back} 金幣。` : ''}持有 ${G.gold} 金幣${enough ? '' : '，不夠買（可以到「出售」賣掉用不到的道具）'}</p></div>`,
-      enough ? [[`買下並裝備（${g.price}）`, 'buy', 'primary'], ['返回', 'back']] : [['返回', 'back', 'primary']], 'wide');
+      enough ? [[`買下並裝備（${g.price}）`, 'buy', 'primary'], ['返回', 'back']] : [['返回', 'back', 'primary']], 'wide', {cancel: 'back'});
     if (pick2 !== 'buy') continue;
     G.gold += back - g.price; g.sold = true;
     withMaxHpChange(() => { if (g.type === 'weapon') G.weapon = g.item; else if (g.type === 'armor') G.armor = g.item; else G.acc = g.item; });
@@ -732,7 +829,7 @@ async function openEquip() {
     <ul class="skills">${SKILLS[G.cls].map((k, i) => `<li class="${i < n ? '' : 'locked'}"><b>${k.name}</b><span>${i < n ? `CD ${k.cd}・${k.text}` : unlockText(i)}</span></li>`).join('')}</ul>
     ${buffs || G.poison || G.phoenix ? `<ul class="buffs">${buffs}${G.poison ? '<li class="bad">中毒中</li>' : ''}${G.phoenix ? '<li class="good">持有不死鳥之羽</li>' : ''}</ul>` : ''}
     <p class="seeds">永久之種：${['hp', 'atk', 'def', 'spd', 'crit', 'eva'].map(k => `${STAT_NAMES[k]} ${G.seeds[k]}`).join('、')}</p>
-  </div>`, [['關閉', 1, 'primary']], 'wide');
+  </div>`, [['關閉', 1, 'primary']], 'wide', {cancel: 1});
 }
 
 // 現在不能用的原因（null 表示可以用）
@@ -746,11 +843,11 @@ function itemWhyNot(id, inBattle) {
 async function openInventory(inBattle) {
   if (!inBattle && busy) return null;
   while (true) {
-    if (!G.inv.length) { await modal('<div class="inv"><h3>道具欄</h3><p class="desc">背包是空的。</p></div>', [['關閉', null, 'primary']], 'wide'); return null; }
+    if (!G.inv.length) { await modal('<div class="inv"><h3>道具欄</h3><p class="desc">背包是空的。</p></div>', [['關閉', null, 'primary']], 'wide', {cancel: null}); return null; }
     const v = await modal(`<div class="inv"><h3>道具欄 <small>${G.inv.length} / 6 格</small></h3>
       <div class="inv-list">${G.inv.map((s, i) => { const why = itemWhyNot(s.id, inBattle); return `<button class="inv-item${why ? ' off' : ''}" data-use="${i}"${why ? ` data-tip="${esc(why)}"` : ''}>${spr(itemIcon(s.id), 2)}<span><b>${s.id}</b> ×${s.n}<small>${itemDesc(s.id)}</small></span><em>${why ? '不能用' : '使用'}</em></button>`; }).join('')}</div>
       ${inBattle ? '<p class="hint">使用道具不消耗回合，用完可以繼續行動。</p>' : '<p class="hint">標示「戰鬥中」的特殊道具只能在戰鬥裡使用。</p>'}</div>`,
-      [['關閉', null, 'primary']], 'wide');
+      [['關閉', null, 'primary']], 'wide', {cancel: null});
     if (v == null) return null;
     if (inBattle) return v;
     await useItemOutside(v); refreshHud();
@@ -799,7 +896,9 @@ const HELP_TABS = [['basic', '操作'], ['battle', '戰鬥'], ['class', '職業'
 function helpBody(tab) {
   const dl = rows => `<dl class="help-dl">${rows.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl>`;
   if (tab === 'basic') return dl([
-    ['選路', '手機在畫面上往上、左、右滑動；電腦用方向鍵或 W、A、D。每一步會遇到戰鬥或事件，10 步為一層。'],
+    ['選路', '手機在畫面上往上、左、右滑動；電腦用方向鍵或 W、A、D。10 步為一層。'],
+    ['路線預告', '右上角的小地圖標出三條路各會遇到什麼：⚔ 戰鬥（紅框是精英）、? 隨機事件、◆ 抉擇事件，暗商那一步會有一條路通往暗商，頭目那一步只能直走。連續兩次選路中至少會出現一次戰鬥路線。方向按鈕上也有同樣的圖標。'],
+    ['小視窗', '道具、說明、設定等視窗，點視窗外、按手機返回鍵或電腦 Esc 都能關閉。暗商視窗只能用「離開」或返回鍵關閉，避免誤觸。'],
     ['樓層', '每 5 層最後一步是頭目；第 3、6、9…層會在某一步遇到暗商。每過一層回復部分生命。'],
     ['裝備', '武器、防具、飾品各一格。撿到裝備時可以比較後換上或換成金幣。非本職武器的技能效果較弱。'],
     ['道具欄', '6 格，同種道具只佔一格、最多 5 個，點哪一格就用哪一格。'],
@@ -876,7 +975,7 @@ function helpBody(tab) {
 async function openHelp() {
   let tab = 'basic';
   while (true) {
-    const v = await modal(`<div class="help"><h3>說明</h3><div class="help-tabs" role="tablist">${HELP_TABS.map(([k, n]) => `<button class="help-tab${k === tab ? ' on' : ''}" role="tab" aria-selected="${k === tab}" data-help="${k}">${n}</button>`).join('')}</div><div class="help-body">${helpBody(tab)}</div></div>`, [['返回', 0, 'primary']], 'wide');
+    const v = await modal(`<div class="help"><h3>說明</h3><div class="help-tabs" role="tablist">${HELP_TABS.map(([k, n]) => `<button class="help-tab${k === tab ? ' on' : ''}" role="tab" aria-selected="${k === tab}" data-help="${k}">${n}</button>`).join('')}</div><div class="help-body">${helpBody(tab)}</div></div>`, [['返回', 0, 'primary']], 'wide', {cancel: 0});
     if (typeof v === 'string' && v.startsWith('help:')) { tab = v.slice(5); continue; }
     return;
   }
@@ -898,7 +997,7 @@ async function pickSlot(title) {
   const btns = [];
   for (let i = 1; i <= SAVE_SLOTS; i++) btns.push([slotText(i), i, 'opt slot-btn']);
   btns.push(['返回', 0]);
-  const v = await modal(`<div class="banner"><h3>${title}</h3><p class="hint">存檔只保存在這台裝置上。</p></div>`, btns, 'center choice');
+  const v = await modal(`<div class="banner"><h3>${title}</h3><p class="hint">存檔只保存在這台裝置上。</p></div>`, btns, 'center choice', {cancel: 0});
   return v || null;
 }
 function saveGame(i) {
@@ -921,7 +1020,7 @@ function loadGame(i) {
 async function doSave() {
   const i = await pickSlot('存檔'); if (!i) return;
   if (readSlot(i)) {
-    const ok = await modal(`<div class="banner"><h3>覆蓋存檔？</h3><p>${esc(slotText(i))}</p></div>`, [['覆蓋', 1, 'primary'], ['取消', 0]], 'center');
+    const ok = await modal(`<div class="banner"><h3>覆蓋存檔？</h3><p>${esc(slotText(i))}</p></div>`, [['覆蓋', 1, 'primary'], ['取消', 0]], 'center', {cancel: 0});
     if (!ok) return;
   }
   toast(saveGame(i) ? `已存到欄位 ${i}` : '存檔失敗：這個環境不允許保存資料');
@@ -930,7 +1029,7 @@ async function doLoad(fromTitle) {
   const i = await pickSlot('讀取'); if (!i) return false;
   if (!readSlot(i)) { toast('這個欄位是空的'); return false; }
   if (!fromTitle) {
-    const ok = await modal('<div class="banner"><h3>讀取存檔？</h3><p>目前沒有存檔的進度會遺失。</p></div>', [['讀取', 1, 'primary'], ['取消', 0]], 'center');
+    const ok = await modal('<div class="banner"><h3>讀取存檔？</h3><p>目前沒有存檔的進度會遺失。</p></div>', [['讀取', 1, 'primary'], ['取消', 0]], 'center', {cancel: 0});
     if (!ok) return false;
   }
   if (!loadGame(i)) { toast('存檔損毀，無法讀取'); return false; }
@@ -946,7 +1045,7 @@ async function openSettings() {
   if (!G || !$('#modal').hidden) return;
   if (B && !B.over) {   // 戰鬥中：只能看說明
     while (true) {
-      const v = await modal('<div class="banner"><h3>設定</h3><p class="hint">戰鬥中不能存檔、讀取或回到標題。</p></div>', [['說明', 'help', 'opt'], ['關閉', 0, 'primary']], 'center choice');
+      const v = await modal('<div class="banner"><h3>設定</h3><p class="hint">戰鬥中不能存檔、讀取或回到標題。</p></div>', [['說明', 'help', 'opt'], ['關閉', 0, 'primary']], 'center choice', {cancel: 0});
       if (v === 'help') { await openHelp(); continue; }
       return;
     }
@@ -955,12 +1054,12 @@ async function openSettings() {
   busy = true;
   try {
     while (true) {
-      const v = await modal('<div class="banner"><h3>設定</h3></div>', [['存檔', 'save', 'opt'], ['讀取', 'load', 'opt'], ['說明', 'help', 'opt'], ['回到標題', 'title', 'opt'], ['關閉', 0, 'primary']], 'center choice');
+      const v = await modal('<div class="banner"><h3>設定</h3></div>', [['存檔', 'save', 'opt'], ['讀取', 'load', 'opt'], ['說明', 'help', 'opt'], ['回到標題', 'title', 'opt'], ['關閉', 0, 'primary']], 'center choice', {cancel: 0});
       if (v === 'save') { await doSave(); continue; }
       if (v === 'load') { if (await doLoad(false)) return; continue; }
       if (v === 'help') { await openHelp(); continue; }
       if (v === 'title') {
-        const ok = await modal('<div class="banner"><h3>回到標題？</h3><p>目前沒有存檔的進度會遺失。</p></div>', [['回到標題', 1, 'primary'], ['取消', 0]], 'center');
+        const ok = await modal('<div class="banner"><h3>回到標題？</h3><p>目前沒有存檔的進度會遺失。</p></div>', [['回到標題', 1, 'primary'], ['取消', 0]], 'center', {cancel: 0});
         if (ok) { backToTitle(); return; }
         continue;
       }

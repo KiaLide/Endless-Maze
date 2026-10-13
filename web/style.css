@@ -384,3 +384,28 @@ body { background: var(--ink); }
 .inv-item.off { opacity: .5; }
 .inv-item.off em { color: var(--dim); }
 .eq-row .tag.warn { display: inline-block; margin-left: 6px; font-size: 11px; }
+/* ===== 路線預告小地圖 ===== */
+.minimap { position: absolute; top: 6px; right: 6px; width: 92px; height: 74px; z-index: 3;
+  background: rgba(10, 8, 14, .82); border: 2px solid #050308; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--bronze), 0 3px 0 rgba(0,0,0,.5); }
+.mm-paths { position: absolute; left: 6px; top: 5px; width: 80px; height: 64px; }
+.mm-paths path { fill: none; stroke: #6b5a3a; stroke-width: 3; stroke-dasharray: 3 2; }
+.mm-me { position: absolute; left: 42px; bottom: 7px; width: 8px; height: 8px; background: var(--gold); box-shadow: 0 0 0 2px #050308; }
+.mm-node { position: absolute; width: 22px; height: 22px; display: grid; place-items: center; background: #1b1522; border: 2px solid #050308;
+  box-shadow: inset 0 0 0 1px #6b5a3a; border-radius: 3px; pointer-events: auto; }
+.mm-node svg, .dir-ico svg { width: 14px; height: 14px; display: block; }
+.mm-node.none { display: none; }
+.mm-l { left: 4px; top: 27px; } .mm-f { left: 35px; top: 3px; } .mm-r { right: 4px; top: 27px; }
+.mm-node em { position: absolute; bottom: -11px; left: 50%; transform: translateX(-50%); font-style: normal; font-size: 9px; line-height: 1; color: #ff6b5b; white-space: nowrap; text-shadow: 0 1px 0 #000; }
+.rt-battle { color: #e8d7a8; } .rt-elite { color: #ff6b5b; } .mm-node.rt-elite { box-shadow: inset 0 0 0 1px #ff6b5b; border-color: #5a0d0d; }
+.rt-event { color: #7fc8ff; } .rt-choice { color: #c89bff; } .rt-shop { color: var(--gold); } .rt-boss { color: #ff4b4b; }
+.dir { position: relative; }
+.dir-ico { position: absolute; top: 5px; right: 6px; }
+.dir.blocked { opacity: .35; }
+/* ===== 暗商：視窗固定，只有清單捲動 ===== */
+.modal.shopwin .modal-card { display: flex; flex-direction: column; height: 100%; max-height: 640px; overflow: hidden; }
+.modal.shopwin #modal-body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.modal.shopwin .shop { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.modal.shopwin .shop-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; align-content: start; padding-right: 2px; }
+.modal.shopwin .shop-refresh { flex: none; margin-top: 8px; }
+.modal.shopwin .modal-btns { flex: none; }
+.shop-item.fixed { border-color: #4a6b3a; }
